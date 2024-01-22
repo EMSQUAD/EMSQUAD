@@ -1,16 +1,24 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import EMSquadTitle from './Login'; 
+import { StyleSheet, View } from 'react-native'; 
+import LoginScreen from './Login';
+import HomeScreen from './Home';
+
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EMSquadTitle />
+      {/* <LoginScreen /> */}
+      <HomeScreen />
       <StatusBar style="auto" />
     </View>
   );
 }
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
