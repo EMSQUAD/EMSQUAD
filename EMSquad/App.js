@@ -1,12 +1,12 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import EMSquadTitle from './Login'; 
+import LoginScreen from './Login'; 
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EMSquadTitle />
+      <LoginScreen />
       <StatusBar style="auto" />
     </View>
   );
