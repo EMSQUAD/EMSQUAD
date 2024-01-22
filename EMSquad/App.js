@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import EMSquadTitle from './EMSquadTitle'; // Assuming EMSquadTitle component is in the same directory
+import EMSquadTitle from './Login'; 
 
 export default function App() {
   return (
