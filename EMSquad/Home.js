@@ -18,13 +18,14 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width:100,
+    width: 100,
     height: 50
   },
-  Image: {
-    width: 20,
+  image: {  // Corrected the name to "image"
+    width: 50,  // Adjusted width to 50 (adjust it as needed)
     height: 50,
   },
 });
+
 
 export default HomeScreen;
