@@ -1,40 +1,77 @@
-import React, { useState, useRef } from "react";
-import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, Image, TouchableOpacity, StyleSheet, Button, Text } from "react-native";
 import { Audio } from "expo-av";
 
 const HomeScreen = () => {
-  const [buttonColor, setButtonColor] = useState("red");
+  const [alarmActive, setAlarmActive] = useState(false);
   const pressTimer = useRef(null);
+  const alarmSound = useRef(new Audio.Sound());
+
+  const loadSound = async () => {
+    try {
+      await alarmSound.current.loadAsync(
+        require("./assets/security-alarm.mp3")
+      );
+    } catch (error) {
+      console.error("Error loading sound:", error);
+    }
+  };
 
   const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("./assets/security-alarm.mp3")
-    );
-    await sound.playAsync();
+    try {
+      await alarmSound.current.playAsync();
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
+  };
+
+  const startAlarm = async () => {
+    await alarmSound.current.unloadAsync(); 
+    await loadSound();
+    setAlarmActive(true);
+    playSound();
+  };
+
+  const stopAlarm = async () => {
+    setAlarmActive(false);
+    await alarmSound.current.stopAsync();
   };
 
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
-      setButtonColor("green");
-      playSound();
+      startAlarm();
     }, 3000);
   };
 
   const handleButtonPressOut = () => {
     clearTimeout(pressTimer.current);
-    // Add your logic for the end of the press here if needed
   };
+
+  useEffect(() => {
+    loadSound();
+
+    return () => {
+      if (alarmSound.current) {
+        alarmSound.current.unloadAsync();
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
       <Image source={require("./assets/logo.png")} style={styles.image} />
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: buttonColor }]}
+        style={[styles.button]}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
       >
-        {/* Your button content goes here */}
+        <Image source={require("./assets/emergency.png")} style={styles.buttonImage} />
+        <Text style={styles.buttonText}>אירוע אמת</Text>
       </TouchableOpacity>
+
+      {alarmActive && (
+        <Button title="Stop Alarm" onPress={stopAlarm} />
+      )}
     </View>
   );
 };
@@ -60,12 +97,25 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   button: {
-    marginTop: 20,
+    position: 'absolute',
+    top: 220,
+    left: 100,
     width: 200,
     height: 200,
     borderRadius: 100,
+    backgroundColor: 'red',
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonImage: {
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
+  },
+  buttonText: {
+    color: 'white',
+    marginTop: 10,
+    fontSize: 24,
   },
 });
 
