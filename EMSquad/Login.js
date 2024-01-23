@@ -1,20 +1,37 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Username:', username);
-    console.log('Password:', password);
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log('Login successful');
+      } else {
+        console.error('Login failed:', data.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
+  
 
   return (
     <View style={styles.container}>
+      <Image source={require("./assets/logo.png")} style={styles.logo} />
       <View style={styles.titleContainer}>
-        <Text style={styles.blueText}>EM</Text>
-        <Text style={styles.redText}>SQUAD</Text>
       </View>
       <TextInput
         style={styles.input}
@@ -44,24 +61,19 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2C2C2D',
+    backgroundColor: '#090909',
     padding: 16,
   },
   titleContainer: {
     flexDirection: 'row',
     marginBottom: 20,
   },
-  blueText: {
-    top: -250,
-    color: '#FFF9E4',
-    fontSize: 44,
-    fontWeight: 'bold',
-  },
-  redText: {
-    top: -250,
-    color: 'red',
-    fontSize: 44,
-    fontWeight: 'bold',
+  logo: {
+    position: 'absolute',
+    top: 140,
+    width: 200,
+    height: 50,
+    resizeMode: "contain",
   },
   input: {
     height: 40,
