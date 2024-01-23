@@ -7,7 +7,6 @@ const globalStyles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
-  // Add more global styles as needed
 });
 
 export default globalStyles;
