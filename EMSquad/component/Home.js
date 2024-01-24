@@ -1,32 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Image, TouchableOpacity, StyleSheet, Button, Text } from "react-native";
-import { Audio } from "expo-av";
+import { loadSound, playSound, stopSound } from "./SoundUtils"; 
+import NavBar from "./Navbar";
 
 const HomeScreen = () => {
   const [alarmActive, setAlarmActive] = useState(false);
   const pressTimer = useRef(null);
-  const alarmSound = useRef(new Audio.Sound());
-
-  const loadSound = async () => {
-    try {
-      await alarmSound.current.loadAsync(
-        require("./assets/security-alarm.mp3")
-      );
-    } catch (error) {
-      console.error("Error loading sound:", error);
-    }
-  };
-
-  const playSound = async () => {
-    try {
-      await alarmSound.current.playAsync();
-    } catch (error) {
-      console.error("Error playing sound:", error);
-    }
-  };
 
   const startAlarm = async () => {
-    await alarmSound.current.unloadAsync(); 
+    await stopSound(); 
     await loadSound();
     setAlarmActive(true);
     playSound();
@@ -34,7 +16,7 @@ const HomeScreen = () => {
 
   const stopAlarm = async () => {
     setAlarmActive(false);
-    await alarmSound.current.stopAsync();
+    await stopSound();
   };
 
   const handleButtonPressIn = () => {
@@ -48,34 +30,32 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    loadSound();
+    loadSound(); 
 
     return () => {
-      if (alarmSound.current) {
-        alarmSound.current.unloadAsync();
-      }
+      stopSound(); 
     };
   }, []);
 
   return (
     <View style={styles.container}>
-      <Image source={require("./assets/logo.png")} style={styles.image} />
+      <Image source={require("../assets/logo.png")} style={styles.image} />
       <TouchableOpacity
         style={[styles.button]}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
       >
-        <Image source={require("./assets/emergency.png")} style={styles.buttonImage} />
+        <Image source={require("../assets/emergency.png")} style={styles.buttonImage} />
         <Text style={styles.buttonText}>אירוע אמת</Text>
       </TouchableOpacity>
 
       {alarmActive && (
         <Button title="Stop Alarm" onPress={stopAlarm} />
       )}
+      <NavBar />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
@@ -99,7 +79,7 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     top: 220,
-    left: 100,
+    left: 105,
     width: 200,
     height: 200,
     borderRadius: 100,
