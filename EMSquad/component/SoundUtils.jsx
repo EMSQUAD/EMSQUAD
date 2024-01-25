@@ -6,7 +6,7 @@ const loadSound = async () => {
   try {
     alarmSound = new Audio.Sound();
     await alarmSound.loadAsync(
-      require("../assets/security-alarm.mp3")
+      require("../assets/sounds/security-alarm.mp3")
     );
   } catch (error) {
     console.error("Error loading sound:", error);

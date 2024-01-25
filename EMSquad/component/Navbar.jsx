@@ -3,10 +3,10 @@ import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 
 const NavBar = () => {
   const navOptions = [
-    { icon: require("../assets/settings.png"), text: "הגדרות" },
-    { icon: require("../assets/task.png"), text: "משימות" },
-    { icon: require("../assets/home.png"), text: "בית" },
-    { icon: require("../assets/chat.png"), text: "צ'אט" },
+    { icon: require("../assets/images/settings.png"), text: "הגדרות" },
+    { icon: require("../assets/images/task.png"), text: "משימות" },
+    { icon: require("../assets/images/home.png"), text: "בית" },
+    { icon: require("../assets/images/chat.png"), text: "צ'אט" },
   ];
 
   return (
@@ -24,7 +24,7 @@ const NavBar = () => {
 const styles = StyleSheet.create({
     container: {
       position: 'absolute',
-      bottom: -710,
+      bottom: -790,
       left: 7,
       flexDirection: "row",
       justifyContent: "center",
@@ -37,6 +37,18 @@ const styles = StyleSheet.create({
       backgroundColor: "#060606",
       borderColor: "red",
       borderRadius: 20,
+
+      // position: 'absolute',
+      // bottom: 0,
+      // left: 0,
+      // flexDirection: "row",
+      // justifyContent: "center",
+      // alignItems: "center",
+      // width: "100%",
+      // paddingVertical: 10,
+      // paddingHorizontal: 20,
+      // backgroundColor: "#060606",
+      // borderRadius: 20,
     },
     optionContainer: {
       alignItems: "center",

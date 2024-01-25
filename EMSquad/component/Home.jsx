@@ -43,46 +43,62 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../assets/logo.png")} style={styles.image} />
+     
+    <Image source={require("../assets/images/logo.png")} style={styles.logo} />
+    
+    
       <TouchableOpacity
         style={[styles.button]}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
       >
-        <Image source={require("../assets/emergency.png")} style={styles.buttonImage} />
+        <Image source={require("../assets/images/emergency.png")} style={styles.buttonImage} />
         <Text style={styles.buttonText}>אירוע אמת</Text>
 
       </TouchableOpacity>
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-        <Image source={require("../assets/kangaroo.png")} style={styles.buttonLeftImageSmall} />
+        <Image source={require("../assets/images/kangaroo.png")} style={styles.buttonLeftImageSmall} />
         <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.seconderyRightButton} onPress={press}>
-        <Image source={require("../assets/team.png")} style={styles.buttonRightImageSmall} />
+        <Image source={require("../assets/images/team.png")} style={styles.buttonRightImageSmall} />
         <Text style={styles.buttonRightTextSmall}>צוות</Text>
       </TouchableOpacity>
-
+    
       {alarmActive && (
         <Button title="Stop Alarm" onPress={stopAlarm} />
       )}
+      
       <NavBar />
     </View>
+    
   );
 };
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 0,
-    width: "100%",
-    height: 190,
+     top: 0,
+     width: "100%",
+    //  height: 190,
+     justifyContent: "space-between",
+    alignItems: "center", 
     paddingTop: 16,
     paddingLeft: 16,
     backgroundColor: "#060606",
     borderRadius: 20,
     borderBottomRightRadius: 90,
     borderBottomLeftRadius: 90,
-    alignSelf: "flex-start",
+    alignSelf: "flex-start", 
+  
+  },
+
+  logo: {
+    flex:1,
+    width: 300,
+    height: 100,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
   image: {
     marginTop: 40,
