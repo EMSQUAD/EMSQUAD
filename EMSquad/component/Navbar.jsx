@@ -24,7 +24,7 @@ const NavBar = () => {
 const styles = StyleSheet.create({
     container: {
       position: 'absolute',
-      bottom: -790,
+      bottom: -740,
       left: 7,
       flexDirection: "row",
       justifyContent: "center",
