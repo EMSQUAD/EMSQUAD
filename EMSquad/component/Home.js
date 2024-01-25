@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Image, TouchableOpacity, StyleSheet, Button, Text } from "react-native";
-import { loadSound, playSound, stopSound } from "./SoundUtils"; 
+import { loadSound, playSound, stopSound } from "./SoundUtils";
 import NavBar from "./Navbar";
 
 const HomeScreen = () => {
@@ -8,7 +8,7 @@ const HomeScreen = () => {
   const pressTimer = useRef(null);
 
   const startAlarm = async () => {
-    await stopSound(); 
+    await stopSound();
     await loadSound();
     setAlarmActive(true);
     playSound();
@@ -29,11 +29,15 @@ const HomeScreen = () => {
     clearTimeout(pressTimer.current);
   };
 
+  const press = () => {
+    console.log("pressed");
+  };
+
   useEffect(() => {
-    loadSound(); 
+    loadSound();
 
     return () => {
-      stopSound(); 
+      stopSound();
     };
   }, []);
 
@@ -47,6 +51,16 @@ const HomeScreen = () => {
       >
         <Image source={require("../assets/emergency.png")} style={styles.buttonImage} />
         <Text style={styles.buttonText}>אירוע אמת</Text>
+
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
+        <Image source={require("../assets/kangaroo.png")} style={styles.buttonLeftImageSmall} />
+        <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.seconderyRightButton} onPress={press}>
+        <Image source={require("../assets/team.png")} style={styles.buttonRightImageSmall} />
+        <Text style={styles.buttonRightTextSmall}>צוות</Text>
       </TouchableOpacity>
 
       {alarmActive && (
@@ -97,6 +111,44 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 24,
   },
+  seconderyLeftButton: {
+    position: 'absolute',
+    top: 400,
+    left: 40,
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonLeftImageSmall: {
+    width: 40,
+    height: 40,
+  },
+  buttonLeftTextSmall: {
+    color: 'white',
+    fontSize: 14,
+  },
+  seconderyRightButton: {
+    position: 'absolute',
+    top: 400,
+    right: 40,
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonRightImageSmall: {
+    width: 40,
+    height: 40,
+  },
+  buttonRightTextSmall: {
+    color: 'white',
+    fontSize: 14,
+  }
 });
 
 export default HomeScreen;
