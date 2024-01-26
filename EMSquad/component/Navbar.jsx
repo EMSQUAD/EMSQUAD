@@ -24,7 +24,7 @@ const NavBar = () => {
 const styles = StyleSheet.create({
     container: {
       position: 'absolute',
-      bottom: -740,
+      bottom: -720,
       left: 7,
       flexDirection: "row",
       justifyContent: "center",
@@ -37,18 +37,6 @@ const styles = StyleSheet.create({
       backgroundColor: "#060606",
       borderColor: "red",
       borderRadius: 20,
-
-      // position: 'absolute',
-      // bottom: 0,
-      // left: 0,
-      // flexDirection: "row",
-      // justifyContent: "center",
-      // alignItems: "center",
-      // width: "100%",
-      // paddingVertical: 10,
-      // paddingHorizontal: 20,
-      // backgroundColor: "#060606",
-      // borderRadius: 20,
     },
     optionContainer: {
       alignItems: "center",
