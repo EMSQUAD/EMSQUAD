@@ -134,6 +134,8 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
+    borderWidth: 2,
+    borderColor: 'pink',
     backgroundColor: 'red',
     justifyContent: "center",
     alignItems: "center",
@@ -141,8 +143,6 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 100,
     height: 100,
-    border: 2,
-    borderColor: 'white',
     resizeMode: "contain",
   },
   buttonText: {
