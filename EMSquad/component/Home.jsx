@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, Button, Text, Touchable } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 import NavBar from "./Navbar";
 import GreetingMessage from "./DateMessage";
+// import Training from "./Training";
 
 const HomeScreen = () => {
   const [alarmActive, setAlarmActive] = useState(false);
   const pressTimer = useRef(null);
-
 
   const startAlarm = async () => {
     await stopSound();
@@ -32,7 +32,8 @@ const HomeScreen = () => {
   };
 
   const press = () => {
-    console.log("pressed");
+    console.log("Pressed");
+    console.log("Alarm sent...");
   };
 
   useEffect(() => {
@@ -49,20 +50,28 @@ const HomeScreen = () => {
       <Image source={require("../assets/images/logo.png")} style={styles.logo} />
 
       <TouchableOpacity style={styles.presonInfo} onPress={press}>
-        <Image source={require("../assets/images/person.png")} style={styles.presonInfoImage}/>
+        <Image source={require("../assets/images/person.png")} style={styles.presonInfoImage} />
       </TouchableOpacity>
 
       <GreetingMessage />
 
 
       <TouchableOpacity
-        style={[styles.button]}
+        style={styles.button}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
       >
-        <Image source={require("../assets/images/emergency.png")} style={styles.buttonImage} />
-        <Text style={styles.buttonText}>אירוע אמת</Text>
-
+        <Image
+          source={require("../assets/images/symbol1.png")}
+          style={styles.backgroundImage}
+        />
+        <View style={styles.contentContainer}>
+          <Image
+            source={require("../assets/images/emergency.png")}
+            style={styles.buttonImage}
+          />
+          <Text style={styles.buttonText}>אירוע אמת</Text>
+        </View>
       </TouchableOpacity>
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
         <Image source={require("../assets/images/kangaroo.png")} style={styles.buttonLeftImageSmall} />
@@ -81,7 +90,7 @@ const HomeScreen = () => {
           </View>
         </TouchableOpacity>
       )}
-
+      {/* <Training /> */}
       <NavBar />
     </View>
 
@@ -129,23 +138,35 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 220,
-    left: 105,
-    width: 200,
+    width: 205,
     height: 200,
-    borderRadius: 100,
-    borderWidth: 2,
+    top: 210,
+    left: 115,
+    borderWidth: 0,
+    borderRadius: 40,
     borderColor: 'pink',
-    backgroundColor: 'red',
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  backgroundImage: {
+    position: 'relative',
+    width: 540,
+    height: 540,
+    left: 5,
+  },
+  contentContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonImage: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
+    left: -10,
+    width: 90,
+    height: 90,
   },
   buttonText: {
+    left: -10,
     color: 'white',
     marginTop: 10,
     fontSize: 24,
@@ -194,7 +215,7 @@ const styles = StyleSheet.create({
     left: 115,
     width: 150,
     height: 50,
-    backgroundColor: 'red', 
+    backgroundColor: 'red',
     padding: 12,
     borderRadius: 8,
   },
