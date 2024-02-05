@@ -28,7 +28,10 @@ const styles = StyleSheet.create({
     greetingContainer: {
         position: 'absolute',
         top: '75%',
-        left: '35%',
+        left: '15%',
+        width: 300,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     greetingText: {
         color: 'white',
