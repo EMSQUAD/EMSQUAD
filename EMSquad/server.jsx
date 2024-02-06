@@ -1,28 +1,39 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { PTChannelManager } = require('ptt-framework'); // Replace 'ptt-framework' with the actual name of the PTT framework package
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-const users = [
-  { username: 'user1', password: 'password1' },
-  { username: 'user2', password: 'password2' },
-];
+// Initialize the channel manager
+let channelManager;
 
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
+async function initializeChannelManager() {
+    try {
+        channelManager = await PTChannelManager.channelManager({ delegate: null, restorationDelegate: null });
+        console.log('Channel manager initialized successfully');
+    } catch (error) {
+        console.error('Error initializing channel manager:', error);
+    }
+}
 
-  const user = users.find((u) => u.username === username && u.password === password);
+initializeChannelManager();
 
-  if (user) {
-    res.json({ success: true, message: 'Login successful' });
-  } else {
-    res.status(401).json({ success: false, message: 'Invalid username or password' });
-  }
+// Handle POST request to join a channel
+app.post('/join-channel', async (req, res) => {
+    const { channelUUID, channelDescriptor } = req.body;
+
+    try {
+        await channelManager.requestJoinChannel(channelUUID, channelDescriptor);
+        res.json({ success: true, message: 'Joined channel successfully' });
+    } catch (error) {
+        console.error('Error joining channel:', error);
+        res.status(500).json({ success: false, message: 'Failed to join channel' });
+    }
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });
