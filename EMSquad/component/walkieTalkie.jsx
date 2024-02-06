@@ -1,118 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { View, Pressable, Text, Platform } from 'react-native';
-import { Audio } from 'expo-av';
-import { io } from 'socket.io-client';
+import React, { useState } from 'react';
+import { Button, PermissionsAndroid } from 'react-native';
+import { RTCPeerConnection, mediaDevices } from 'react-native-webrtc';
 
-const WalkieTalkie = () => {
+const App = () => {
+  const [stream, setStream] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [recording, setRecording] = useState(null);
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    setupSocket();
-    setupAudio();
-    return cleanup;
-  }, []);
-
-  const setupSocket = () => {
-    const socket = io('http://your-server-ip:3000');
-    setSocket(socket);
-
-    socket.on('audioStream', (audioData) => {
-      // Handle received audio stream
-    });
-  };
-
-  const setupAudio = async () => {
-    await Audio.requestPermissionsAsync();
-    Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      playsInSilentModeIOS: true,
-    });
-  };
+  const [peerConnection, setPeerConnection] = useState(null);
 
   const startRecording = async () => {
-    if (Platform.OS === 'ios') {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true, // Allow recording in the background
-      });
-    }
-  
-    const recording = new Audio.Recording();
     try {
-      await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
-      await recording.startAsync();
-      setRecording(recording);
-      setIsRecording(true);
-  
-      // Start streaming audio to the server
-      recording.setOnRecordingStatusUpdate(async (status) => {
-        if (status.canRecord) {
-          const uri = recording.getURI();
-          try {
-            const response = await fetch(uri);
-            if (!response.ok) {
-              throw new Error('Failed to fetch audio data');
-            }
-            const blob = await response.blob();
-            const audioData = await new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result);
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-            socket.emit('audioStream', audioData); 
-          } catch (error) {
-            console.error('Error sending audio data to server', error);
-          }
-        }
-      });
-    } catch (error) {
-      console.error('Failed to start recording', error);
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        {
+          title: 'Audio Recording Permission',
+          message: 'App needs access to your microphone to record audio.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const audioStream = await mediaDevices.getUserMedia({ audio: true });
+        setStream(audioStream);
+        const pc = new RTCPeerConnection();
+        pc.addStream(audioStream);
+        setPeerConnection(pc);
+        setIsRecording(true);
+      } else {
+        console.log('Permission denied');
+      }
+    } catch (err) {
+      console.error('Failed to start recording:', err);
     }
   };
-  
-  
 
-  const stopRecording = async () => {
+  const stopRecording = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    if (peerConnection) {
+      peerConnection.close();
+    }
+    setStream(null);
+    setPeerConnection(null);
     setIsRecording(false);
-    try {
-      await recording.stopAndUnloadAsync();
-      const uri = recording.getURI();
-      // Send audio file to server
-    } catch (error) {
-      console.error('Failed to stop recording', error);
-    }
   };
 
-  const cleanup = async () => {
-    if (recording) {
-      await recording.stopAndUnloadAsync();
+  const handleRecordButtonPress = () => {
+    if (!isRecording) {
+      startRecording();
+    } else {
+      stopRecording();
     }
   };
 
   return (
-    <View>
-      <Pressable
-        onPressIn={startRecording}
-        onPressOut={stopRecording}
-        style={({ pressed }) => ({
-          backgroundColor: pressed ? 'gray' : 'blue',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 10,
-          borderRadius: 5,
-          margin: 10,
-        })}
-      >
-        <Text style={{ color: 'white' }}>
-          {isRecording ? 'Release to stop recording' : 'Press and hold to record'}
-        </Text>
-      </Pressable>
-    </View>
+    <Button
+      title={isRecording ? 'Stop Recording' : 'Start Recording'}
+      onPress={handleRecordButtonPress}
+    />
   );
 };
 
-export default WalkieTalkie;
+export default App;

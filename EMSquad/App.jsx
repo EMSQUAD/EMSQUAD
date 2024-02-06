@@ -9,8 +9,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* <LoginScreen /> */}
-      <HomeScreen />
-      {/* <WalkieTalkie /> */}
+      {/* <HomeScreen /> */}
+      <WalkieTalkie />
       <StatusBar style="auto" />
     </View>
   );
