@@ -3,7 +3,9 @@ import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 import NavBar from "./Navbar";
 import GreetingMessage from "./DateMessage";
-// import Training from "./Training";
+import Training from "./Training";
+import PersonalTraking from "./PersonalTraking";
+
 
 const HomeScreen = () => {
   const [alarmActive, setAlarmActive] = useState(false);
@@ -24,7 +26,7 @@ const HomeScreen = () => {
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
       startAlarm();
-    }, 2000);
+    }, 1500);
   };
 
   const handleButtonPressOut = () => {
@@ -90,7 +92,8 @@ const HomeScreen = () => {
           </View>
         </TouchableOpacity>
       )}
-      {/* <Training /> */}
+      <Training />
+      <PersonalTraking />
       <NavBar />
     </View>
 
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
     left: -10,
     color: 'white',
     marginTop: 10,
-    fontSize: 24,
+    fontSize: 20,
   },
   seconderyLeftButton: {
     position: 'absolute',
