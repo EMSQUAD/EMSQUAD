@@ -1,39 +1,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { PTChannelManager } = require('ptt-framework'); // Replace 'ptt-framework' with the actual name of the PTT framework package
+const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
+const wsPort = 8000;
 
 app.use(bodyParser.json());
 
-// Initialize the channel manager
-let channelManager;
+// WebSocket server setup
+const wss = new WebSocket.Server({ port: wsPort });
 
-async function initializeChannelManager() {
-    try {
-        channelManager = await PTChannelManager.channelManager({ delegate: null, restorationDelegate: null });
-        console.log('Channel manager initialized successfully');
-    } catch (error) {
-        console.error('Error initializing channel manager:', error);
-    }
-}
-
-initializeChannelManager();
-
-// Handle POST request to join a channel
-app.post('/join-channel', async (req, res) => {
-    const { channelUUID, channelDescriptor } = req.body;
-
-    try {
-        await channelManager.requestJoinChannel(channelUUID, channelDescriptor);
-        res.json({ success: true, message: 'Joined channel successfully' });
-    } catch (error) {
-        console.error('Error joining channel:', error);
-        res.status(500).json({ success: false, message: 'Failed to join channel' });
-    }
+wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(message) {
+        console.log('received: %s', message);
+        wss.clients.forEach(function each(client) {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
+    });
 });
 
+// Start the Express server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+    console.log(`WebSocket server is running at ws://localhost:${wsPort}`);
 });

@@ -3,7 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import LoginScreen from './component/Login'; 
 import HomeScreen from './component/Home';
-import WalkieTalkie from "./component/walkieTalkie";
+import WalkieTalkie from './component/walkieTalkie';
+
 
 export default function App() {
   return (
