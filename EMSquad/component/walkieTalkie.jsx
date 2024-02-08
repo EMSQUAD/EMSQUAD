@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Button } from 'react-native';
 import { w3cwebsocket as WebSocket } from 'websocket';
 
 const WalkieTalkie = () => {
-  const [channelName, setChannelName] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [error, setError] = useState(null);
+  const [recordStartTime, setRecordStartTime] = useState(null);
+  const [recordDuration, setRecordDuration] = useState(0);
+  const [recordedAudio, setRecordedAudio] = useState([]);
 
-  const client = new WebSocket('ws://localhost:8000');
+  // WebSocket endpoint (you can replace it with your own WebSocket server URL)
+  const wsEndpoint = 'wss://echo.websocket.org/';
+
+  // Create a new WebSocket client
+  const client = new WebSocket(wsEndpoint);
 
   // Function to handle start of audio streaming
   const startRecording = () => {
     // Start recording audio and send it to the server
     setIsRecording(true);
+    setRecordStartTime(Date.now()); // Set start time of recording
     // Send a message to the server to indicate start of recording
     client.send(JSON.stringify({ type: 'start' }));
   };
@@ -24,6 +31,33 @@ const WalkieTalkie = () => {
     // Send a message to the server to indicate end of recording
     client.send(JSON.stringify({ type: 'stop' }));
   };
+
+  // Function to handle playback of recorded audio
+  const playRecordedAudio = () => {
+    // Play the recorded audio (you can implement this functionality)
+    console.log('Playing recorded audio');
+  };
+
+  // Format duration to HH:MM:SS
+  const formatDuration = (duration) => {
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration % 3600) / 60);
+    const seconds = Math.floor(duration % 60);
+    return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+  };
+
+  // Update record duration every second while recording
+  useEffect(() => {
+    let interval;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordDuration(Math.floor((Date.now() - recordStartTime) / 1000));
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isRecording, recordStartTime]);
 
   // Handle WebSocket events
   client.onopen = () => {
@@ -46,8 +80,14 @@ const WalkieTalkie = () => {
         <Text style={{ color: 'white', fontWeight: 'bold' }}>{isRecording ? 'Recording...' : 'Press and hold to talk'}</Text>
       </TouchableOpacity>
 
+      {/* Display record duration */}
+      <Text style={{ marginTop: 10 }}>{`Recorded: ${formatDuration(recordDuration)}`}</Text>
+
+      {/* Button to play recorded audio */}
+      <Button title="Play Recorded Audio" onPress={playRecordedAudio} disabled={!recordedAudio.length} />
+      
       {/* Display error messages if any */}
-      {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
+      {error && <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text>}
     </View>
   );
 };

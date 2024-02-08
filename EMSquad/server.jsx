@@ -11,14 +11,26 @@ app.use(bodyParser.json());
 // WebSocket server setup
 const wss = new WebSocket.Server({ port: wsPort });
 
+let audioStream = null;
+
 wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
         console.log('received: %s', message);
-        wss.clients.forEach(function each(client) {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(message);
+        const data = JSON.parse(message);
+        if (data.type === 'start') {
+            // Start recording audio stream
+            audioStream = [];
+        } else if (data.type === 'stop') {
+            // Stop recording audio stream and broadcast to clients
+            if (audioStream) {
+                wss.clients.forEach(function each(client) {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({ type: 'audio', data: audioStream }));
+                    }
+                });
+                audioStream = null;
             }
-        });
+        }
     });
 });
 
