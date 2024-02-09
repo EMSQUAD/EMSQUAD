@@ -7,86 +7,151 @@ const WalkieTalkie = () => {
   const [error, setError] = useState(null);
   const [recordStartTime, setRecordStartTime] = useState(null);
   const [recordDuration, setRecordDuration] = useState(0);
-  const [recordedAudio, setRecordedAudio] = useState([]);
+  const [recordedAudio, setRecordedAudio] = useState(null);
+  const [audioPlayer, setAudioPlayer] = useState(null);
+  const [webSocketOpen, setWebSocketOpen] = useState(false);
+  const [client, setClient] = useState(null);
 
   // WebSocket endpoint (you can replace it with your own WebSocket server URL)
   const wsEndpoint = 'wss://echo.websocket.org/';
 
-  // Create a new WebSocket client
-  const client = new WebSocket(wsEndpoint);
+  useEffect(() => {
+    // Create a new WebSocket client when the component mounts
+    const newClient = new WebSocket(wsEndpoint);
 
-  // Function to handle start of audio streaming
+    // Handle WebSocket events
+    newClient.onopen = () => {
+      console.log('WebSocket Client Connected');
+      setWebSocketOpen(true);
+      setClient(newClient);
+    };
+
+    newClient.onerror = (error) => {
+      console.error('Connection Error: ', error);
+      setError('Failed to connect to server. Please try again.');
+    };
+
+    newClient.onclose = () => {
+      console.log('WebSocket Connection Closed');
+      setWebSocketOpen(false);
+    };
+
+    newClient.onmessage = (message) => {
+      // Log the received message data
+      console.log('Received message:', message.data);
+      
+      // Check if the message is valid JSON
+      if (message.data.startsWith('{')) {
+        // Handle incoming messages
+        try {
+          const data = JSON.parse(message.data);
+          if (data.type === 'audio') {
+            setRecordedAudio(data.data);
+            console.log('Recorded audio set:', data.data);
+          }
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+          // Handle JSON parse error gracefully
+          console.log('Invalid JSON message received:', message.data);
+        }
+      } else {
+        // Handle non-JSON messages gracefully
+        console.log('Non-JSON message received:', message.data);
+      }
+    };
+    
+    // Clean up function to close WebSocket connection when component unmounts
+    return () => {
+      if (newClient && newClient.readyState === WebSocket.OPEN) {
+        newClient.close();
+      }
+      // Clean up audio player
+      if (audioPlayer) {
+        audioPlayer.stop();
+        audioPlayer.release();
+      }
+    };
+  }, []); // Empty dependency array to ensure effect runs only once
+
   const startRecording = () => {
-    // Start recording audio and send it to the server
+    console.log('Starting recording...');
     setIsRecording(true);
-    setRecordStartTime(Date.now()); // Set start time of recording
-    // Send a message to the server to indicate start of recording
-    client.send(JSON.stringify({ type: 'start' }));
+    setRecordStartTime(Date.now());
+  
+    // Check if client is initialized before sending message
+    if (client && client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ action: 'start' }));
+      console.log('Sent start recording message to server.');
+    } else {
+      console.log('WebSocket client is not ready.');
+    }
   };
-
-  // Function to handle end of audio streaming
+  
   const stopRecording = () => {
-    // Stop recording audio and streaming
+    console.log('Stopping recording...');
     setIsRecording(false);
-    // Send a message to the server to indicate end of recording
-    client.send(JSON.stringify({ type: 'stop' }));
+  
+    // Calculate recording duration
+    const recordingDuration = Date.now() - recordStartTime;
+    console.log('Recording duration:', recordingDuration);
+  
+    // Check if client is initialized before sending message
+    if (client && client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ action: 'stop', duration: recordingDuration }));
+      console.log('Sent stop recording message to server.');
+    } else {
+      console.log('WebSocket client is not ready.');
+    }
   };
+  
 
-  // Function to handle playback of recorded audio
   const playRecordedAudio = () => {
-    // Play the recorded audio (you can implement this functionality)
-    console.log('Playing recorded audio');
+    console.log('Playing recorded audio...');
+    console.log('Recorded audio:', recordedAudio);
+    if (recordedAudio) {
+      const player = new Audio();
+      player.src = `data:audio/wav;base64,${recordedAudio}`;
+      player.play();
+      setAudioPlayer(player);
+    } else {
+      console.log('No recorded audio available.');
+    }
   };
 
-  // Format duration to HH:MM:SS
   const formatDuration = (duration) => {
-    const hours = Math.floor(duration / 3600);
-    const minutes = Math.floor((duration % 3600) / 60);
-    const seconds = Math.floor(duration % 60);
-    return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    const minutes = Math.floor(duration / 60000);
+    const seconds = Math.floor((duration % 60000) / 1000);
+    const milliseconds = Math.floor((duration % 1000) / 10);
+    return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}:${milliseconds < 10 ? '0' + milliseconds : milliseconds}`;
   };
 
-  // Update record duration every second while recording
   useEffect(() => {
     let interval;
     if (isRecording) {
       interval = setInterval(() => {
-        setRecordDuration(Math.floor((Date.now() - recordStartTime) / 1000));
-      }, 1000);
+        setRecordDuration(Date.now() - recordStartTime);
+      }, 10); // Update every 10 milliseconds for accurate duration
     } else {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [isRecording, recordStartTime]);
 
-  // Handle WebSocket events
-  client.onopen = () => {
-    console.log('WebSocket Client Connected');
-  };
-
-  client.onerror = (error) => {
-    console.error('Connection Error: ', error);
-    setError('Failed to connect to server. Please try again.');
-  };
-
   return (
     <View>
       <TouchableOpacity
         onPressIn={startRecording}
         onPressOut={stopRecording}
-        disabled={isRecording} // Disable button while recording
+        disabled={isRecording || !webSocketOpen}
         style={{ padding: 10, backgroundColor: isRecording ? 'red' : 'green', borderRadius: 5 }}
       >
         <Text style={{ color: 'white', fontWeight: 'bold' }}>{isRecording ? 'Recording...' : 'Press and hold to talk'}</Text>
       </TouchableOpacity>
 
-      {/* Display record duration */}
       <Text style={{ marginTop: 10 }}>{`Recorded: ${formatDuration(recordDuration)}`}</Text>
 
-      {/* Button to play recorded audio */}
-      <Button title="Play Recorded Audio" onPress={playRecordedAudio} disabled={!recordedAudio.length} />
-      
-      {/* Display error messages if any */}
+      <Button title="Play Recorded Audio" onPress={playRecordedAudio} disabled={!recordedAudio} />
+
       {error && <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text>}
     </View>
   );
