@@ -86,7 +86,7 @@ const HomeScreen = () => {
       </TouchableOpacity>
 
       {alarmActive && (
-        <TouchableOpacity onPress={stopAlarm} style={styles.stpButtonContainer}>
+        <TouchableOpacity onPress={stopAlarm} style={[styles.stpButtonContainer , { zIndex: 999 }]}>
           <View style={styles.stpButton}>
             <Text style={styles.stpButtonText}>Stop Alarm</Text>
           </View>

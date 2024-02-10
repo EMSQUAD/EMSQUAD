@@ -1,36 +1,60 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { PTChannelManager } = require('ptt-framework'); // Replace 'ptt-framework' with the actual name of the PTT framework package
+const fetch = require('node-fetch');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-// Initialize the channel manager
-let channelManager;
+let recordedAudio = null;
 
-async function initializeChannelManager() {
-    try {
-        channelManager = await PTChannelManager.channelManager({ delegate: null, restorationDelegate: null });
-        console.log('Channel manager initialized successfully');
-    } catch (error) {
-        console.error('Error initializing channel manager:', error);
+app.post('/startRecording', (req, res) => {
+    console.log('Recording started...');
+    res.sendStatus(200);
+});
+
+app.post('/stopRecording', (req, res) => {
+    console.log('Recording stopped.');
+    recordedAudio = req.body.audioData;
+    res.sendStatus(200);
+});
+
+app.get('/getRecordedAudio', (req, res) => {
+    if (recordedAudio) {
+        res.send({ audioData: recordedAudio });
+    } else {
+        res.status(404).send('No recorded audio available');
     }
-}
+});
 
-initializeChannelManager();
+app.post('/sendAudioMessage', async (req, res) => {
+    const { channelId, authToken } = req.body;
+    const audioData = recordedAudio; // Get recorded audio data from the previous requests
 
-// Handle POST request to join a channel
-app.post('/join-channel', async (req, res) => {
-    const { channelUUID, channelDescriptor } = req.body;
+    if (!channelId || !authToken || !audioData) {
+        return res.status(400).send('Missing channelId, authToken, or audioData');
+    }
 
     try {
-        await channelManager.requestJoinChannel(channelUUID, channelDescriptor);
-        res.json({ success: true, message: 'Joined channel successfully' });
+        const response = await fetch('https://api.zellowork.com/v1/channels/' + channelId + '/audio_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'audio/x-wav',
+                'Authorization': 'Bearer ' + authToken
+            },
+            body: audioData
+        });
+        
+        if (response.ok) {
+            res.sendStatus(200);
+        } else {
+            const data = await response.json();
+            res.status(response.status).send(data);
+        }
     } catch (error) {
-        console.error('Error joining channel:', error);
-        res.status(500).json({ success: false, message: 'Failed to join channel' });
+        console.error('Failed to send audio message:', error);
+        res.status(500).send('Failed to send audio message');
     }
 });
 
