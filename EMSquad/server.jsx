@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const fetch = require('node-fetch');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-let recordedAudioPath = null;
+let recordedAudio = null;
 
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
@@ -16,29 +16,45 @@ app.post('/startRecording', (req, res) => {
 
 app.post('/stopRecording', (req, res) => {
     console.log('Recording stopped.');
-    // Save recorded audio data to a file
-    const audioData = req.body.audioData;
-    if (audioData) {
-        fs.writeFile('recorded_audio.wav', audioData, 'base64', (err) => {
-            if (err) {
-                console.error('Failed to save recorded audio:', err);
-                res.status(500).send('Failed to save recorded audio');
-            } else {
-                recordedAudioPath = 'recorded_audio.wav';
-                res.sendStatus(200);
-            }
-        });
-    } else {
-        res.status(400).send('No audio data received');
-    }
+    recordedAudio = req.body.audioData;
+    res.sendStatus(200);
 });
 
 app.get('/getRecordedAudio', (req, res) => {
-    if (recordedAudioPath) {
-        // Serve the recorded audio file
-        res.sendFile(recordedAudioPath, { root: __dirname });
+    if (recordedAudio) {
+        res.send({ audioData: recordedAudio });
     } else {
         res.status(404).send('No recorded audio available');
+    }
+});
+
+app.post('/sendAudioMessage', async (req, res) => {
+    const { channelId, authToken } = req.body;
+    const audioData = recordedAudio; // Get recorded audio data from the previous requests
+
+    if (!channelId || !authToken || !audioData) {
+        return res.status(400).send('Missing channelId, authToken, or audioData');
+    }
+
+    try {
+        const response = await fetch('https://api.zellowork.com/v1/channels/' + channelId + '/audio_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'audio/x-wav',
+                'Authorization': 'Bearer ' + authToken
+            },
+            body: audioData
+        });
+        
+        if (response.ok) {
+            res.sendStatus(200);
+        } else {
+            const data = await response.json();
+            res.status(response.status).send(data);
+        }
+    } catch (error) {
+        console.error('Failed to send audio message:', error);
+        res.status(500).send('Failed to send audio message');
     }
 });
 
