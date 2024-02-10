@@ -1,59 +1,47 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const WebSocket = require('ws');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
-const wsPort = 8000;
 
 app.use(bodyParser.json());
 
-// WebSocket server setup
-const wss = new WebSocket.Server({ port: wsPort });
+let recordedAudioPath = null;
 
-let audioStream = null;
-
-wss.on('connection', function connection(ws) {
-    console.log('WebSocket Client Connected');
-  
-    ws.on('message', function incoming(message) {
-        console.log('Received message:', message);
-        try {
-            const data = JSON.parse(message);
-            if (data.type === 'start') {
-                // Start recording audio stream
-                audioStream = [];
-                console.log('Recording started...');
-            } else if (data.type === 'stop') {
-                // Stop recording audio stream and broadcast to clients
-                if (audioStream) {
-                    wss.clients.forEach(function each(client) {
-                        if (client.readyState === WebSocket.OPEN) {
-                            client.send(JSON.stringify({ type: 'audio', data: audioStream }));
-                        }
-                    });
-                    audioStream = null;
-                    console.log('Recording stopped.');
-                }
-            }
-        } catch (error) {
-            console.error('Error parsing JSON:', error);
-            // Handle non-JSON messages gracefully
-            console.log('Non-JSON message received:', message);
-        }
-    });
-  
-    ws.on('error', function(error) {
-        console.error('WebSocket error:', error);
-    });
-  
-    ws.on('close', function() {
-        console.log('WebSocket connection closed');
-    });
+app.post('/startRecording', (req, res) => {
+    console.log('Recording started...');
+    res.sendStatus(200);
 });
 
-// Start the Express server
+app.post('/stopRecording', (req, res) => {
+    console.log('Recording stopped.');
+    // Save recorded audio data to a file
+    const audioData = req.body.audioData;
+    if (audioData) {
+        fs.writeFile('recorded_audio.wav', audioData, 'base64', (err) => {
+            if (err) {
+                console.error('Failed to save recorded audio:', err);
+                res.status(500).send('Failed to save recorded audio');
+            } else {
+                recordedAudioPath = 'recorded_audio.wav';
+                res.sendStatus(200);
+            }
+        });
+    } else {
+        res.status(400).send('No audio data received');
+    }
+});
+
+app.get('/getRecordedAudio', (req, res) => {
+    if (recordedAudioPath) {
+        // Serve the recorded audio file
+        res.sendFile(recordedAudioPath, { root: __dirname });
+    } else {
+        res.status(404).send('No recorded audio available');
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-    console.log(`WebSocket server is running at ws://localhost:${wsPort}`);
 });
