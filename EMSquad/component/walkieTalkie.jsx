@@ -1,4 +1,3 @@
-// walkietalkie.jsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Button } from 'react-native';
 import { Audio } from 'expo-av';
