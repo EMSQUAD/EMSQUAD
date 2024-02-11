@@ -1,26 +1,21 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import LoginScreen from './component/Login'; 
-import HomeScreen from './component/Home';
-import WalkieTalkie from "./component/walkieTalkie";
+import { SafeAreaView, StyleSheet } from 'react-native';
+import WalkieTalkie from './component/walkieTalkie';
 
-export default function App() {
+const App = () => {
   return (
-    <View style={styles.container}>
-      {/* <LoginScreen /> */}
-      <HomeScreen />
-      {/* <WalkieTalkie /> */}
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <WalkieTalkie />
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#141414',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
 });
+
+export default App;

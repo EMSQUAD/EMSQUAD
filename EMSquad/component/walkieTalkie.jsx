@@ -1,116 +1,119 @@
 import React, { useState, useEffect } from 'react';
-import { View, Pressable, Text, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Button } from 'react-native';
 import { Audio } from 'expo-av';
-import { io } from 'socket.io-client';
 
 const WalkieTalkie = () => {
   const [isRecording, setIsRecording] = useState(false);
-  const [recording, setRecording] = useState(null);
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    setupSocket();
-    setupAudio();
-    return cleanup;
-  }, []);
-
-  const setupSocket = () => {
-    const socket = io('http://your-server-ip:3000');
-    setSocket(socket);
-
-    socket.on('audioStream', (audioData) => {
-      // Handle received audio stream
-    });
-  };
-
-  const setupAudio = async () => {
-    await Audio.requestPermissionsAsync();
-    Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      playsInSilentModeIOS: true,
-    });
-  };
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [sound, setSound] = useState(null);
+  const [recordedAudio, setRecordedAudio] = useState(null);
+  const [channelId, setChannelId] = useState('');
+  const [authToken, setAuthToken] = useState('');
 
   const startRecording = async () => {
-    if (Platform.OS === 'ios') {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true, // Allow recording in the background
-      });
-    }
-  
+    console.log('Starting recording...');
+    setIsRecording(true);
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      shouldDuckAndroid: true,
+      staysActiveInBackground: true,
+      playThroughEarpieceAndroid: false,
+    });
+
     const recording = new Audio.Recording();
     try {
       await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync();
-      setRecording(recording);
-      setIsRecording(true);
-  
-      // Start streaming audio to the server
-      recording.setOnRecordingStatusUpdate(async (status) => {
-        if (status.canRecord) {
-          const uri = recording.getURI();
-          try {
-            const response = await fetch(uri);
-            if (!response.ok) {
-              throw new Error('Failed to fetch audio data');
-            }
-            const blob = await response.blob();
-            const audioData = await new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result);
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-            socket.emit('audioStream', audioData); 
-          } catch (error) {
-            console.error('Error sending audio data to server', error);
-          }
-        }
-      });
+      setRecordedAudio(recording);
     } catch (error) {
-      console.error('Failed to start recording', error);
+      console.error('Failed to start recording:', error);
     }
   };
-  
-  
 
   const stopRecording = async () => {
+    console.log('Stopping recording...');
     setIsRecording(false);
     try {
-      await recording.stopAndUnloadAsync();
-      const uri = recording.getURI();
-      // Send audio file to server
+      await recordedAudio.stopAndUnloadAsync();
+      const uri = recordedAudio.getURI();
+      const audioData = await fetch(uri);
+      const blob = await audioData.blob();
+      setRecordedAudio(null);
+      sendAudioMessage(blob);
     } catch (error) {
-      console.error('Failed to stop recording', error);
+      console.error('Failed to stop recording:', error);
     }
   };
 
-  const cleanup = async () => {
-    if (recording) {
-      await recording.stopAndUnloadAsync();
+  const sendAudioMessage = async (audioData) => {
+    console.log('Sending audio message...');
+    if (!channelId || !authToken) {
+      console.error('Channel ID or auth token is missing.');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('channelId', channelId);
+      formData.append('authToken', authToken);
+      formData.append('audioData', audioData);
+
+      const response = await fetch('http://localhost:3000/sendAudioMessage', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log('Audio message sent successfully.');
+      } else {
+        console.error('Failed to send audio message:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Failed to send audio message:', error);
     }
   };
+
+  const playRecordedAudio = async () => {
+    console.log('Playing recorded audio...');
+    setIsPlaying(true);
+
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: recordedAudio.getURI() },
+        { shouldPlay: true }
+      );
+      setSound(sound);
+    } catch (error) {
+      console.error('Failed to play recorded audio:', error);
+    } finally {
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
 
   return (
     <View>
-      <Pressable
+      <TouchableOpacity
         onPressIn={startRecording}
         onPressOut={stopRecording}
-        style={({ pressed }) => ({
-          backgroundColor: pressed ? 'gray' : 'blue',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 10,
-          borderRadius: 5,
-          margin: 10,
-        })}
+        disabled={isRecording || isPlaying}
+        style={{ padding: 10, backgroundColor: isRecording ? 'red' : 'green', borderRadius: 5 }}
       >
-        <Text style={{ color: 'white' }}>
-          {isRecording ? 'Release to stop recording' : 'Press and hold to record'}
-        </Text>
-      </Pressable>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>{isRecording ? 'Recording...' : 'Press and hold to talk'}</Text>
+      </TouchableOpacity>
+
+      <Button title="Play Recorded Audio" onPress={playRecordedAudio} disabled={isRecording || isPlaying} />
+
     </View>
   );
 };

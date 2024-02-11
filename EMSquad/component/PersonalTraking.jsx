@@ -39,18 +39,18 @@ const PersonalTracking = () => {
                 <BarChart
                     data={chartData}
                     width={340}
-                    height={100}
+                    height={115}
                     yAxisSuffix="%"
                     chartConfig={{
                         backgroundGradientFrom: '#c0c0c0',
                         backgroundGradientTo: 'white',
                         decimalPlaces: 0,
                         color: (opacity = 1) => getRandomColor(),
-                        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                        labelColor: (opacity = 1) => 'black',
                     }}
                     style={styles.barChart}
-                    verticalLabelRotation={30} // Adjust rotation if necessary
-                    fromZero={true} // Ensure bars start from zero
+                    verticalLabelRotation={30} 
+                    fromZero={true}
                 />
             </View>
         </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         top: 660,
         alignSelf: 'center',
         width: 350,
-        height: 150, // Adjust height to accommodate title and chart
+        height: 150, 
         backgroundColor: '#c0c0c0',
         borderColor: 'gray',
         borderWidth: 2,
@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        marginTop: 0, // Add margin to separate title and chart
+        marginTop: 0, 
     },
     barChart: {
         borderRadius: 10,
         position: 'relative',
-        bottom: 0,
+        bottom: 5,
     },
 });
 
