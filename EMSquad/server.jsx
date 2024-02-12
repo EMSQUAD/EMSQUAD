@@ -17,7 +17,17 @@ let recordedAudio = null;
 //     console.log('Recording started...');
 //     res.sendStatus(200);
 // });
-const uuid = require('uuid');
+
+const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+mongoose.connect(connectionUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+
+
+
+
 
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
