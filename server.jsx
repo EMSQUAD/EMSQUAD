@@ -1,11 +1,11 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
+import express from 'express';
+import { json } from 'body-parser';
+import fetch from 'node-fetch';
 
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json());
+app.use(json());
 
 let recordedAudio = null;
 

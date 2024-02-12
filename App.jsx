@@ -1,8 +1,10 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import WalkieTalkie from './component/walkieTalkie';
+// import Permisions from './component/permissions';
+import WalkieTalkie from './component/walkie_talkie';
 
 const App = () => {
+  
   return (
     <SafeAreaView style={styles.container}>
       <WalkieTalkie />
