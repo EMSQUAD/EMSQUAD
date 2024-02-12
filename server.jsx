@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const mongoose = require('mongoose');
-const fetch = require('node-fetch');
 const uuid = require('uuid');
 require('dotenv').config();
 
@@ -18,11 +17,11 @@ let recordedAudio = null;
 //     res.sendStatus(200);
 // });
 
-const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-mongoose.connect(connectionUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+// mongoose.connect(connectionUrl, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
 
 
