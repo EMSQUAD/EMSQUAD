@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
+const mongoose = require('mongoose');
+const fetch = require('node-fetch');
+const uuid = require('uuid');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
@@ -8,6 +12,12 @@ const port = 3000;
 app.use(bodyParser.json());
 
 let recordedAudio = null;
+
+// app.post('/startRecording', (req, res) => {
+//     console.log('Recording started...');
+//     res.sendStatus(200);
+// });
+const uuid = require('uuid');
 
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
