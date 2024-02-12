@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
 const fetch = require('node-fetch');
 const uuid = require('uuid');
-// require('dotenv').config();
+require('dotenv').config();
+const mongoose = require('mongoose');
+
+
 
 const app = express();
 const port = 3000;
@@ -12,19 +14,11 @@ app.use(bodyParser.json());
 
 let recordedAudio = null;
 
+
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
     res.sendStatus(200);
 });
-
-// const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-// mongoose.connect(connectionUrl, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-
-
 
 
 
