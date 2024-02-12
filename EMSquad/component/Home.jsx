@@ -1,11 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Button, Text } from "react-native";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 import NavBar from "./Navbar";
-import GreetingMessage from "./DateMessage";
-import Training from "./Training";
-import PersonalTraking from "./PersonalTraking";
-
 
 const HomeScreen = () => {
   const [alarmActive, setAlarmActive] = useState(false);
@@ -26,7 +22,7 @@ const HomeScreen = () => {
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
       startAlarm();
-    }, 1500);
+    }, 3000);
   };
 
   const handleButtonPressOut = () => {
@@ -34,8 +30,7 @@ const HomeScreen = () => {
   };
 
   const press = () => {
-    console.log("Pressed");
-    console.log("Alarm sent...");
+    console.log("pressed");
   };
 
   useEffect(() => {
@@ -48,32 +43,18 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-
-      <Image source={require("../assets/images/logo.png")} style={styles.logo} />
-
-      <TouchableOpacity style={styles.presonInfo} onPress={press}>
-        <Image source={require("../assets/images/person.png")} style={styles.presonInfoImage} />
-      </TouchableOpacity>
-
-      <GreetingMessage />
-
-
+     
+    <Image source={require("../assets/images/logo.png")} style={styles.logo} />
+    
+    
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button]}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
       >
-        <Image
-          source={require("../assets/images/symbol1.png")}
-          style={styles.backgroundImage}
-        />
-        <View style={styles.contentContainer}>
-          <Image
-            source={require("../assets/images/emergency.png")}
-            style={styles.buttonImage}
-          />
-          <Text style={styles.buttonText}>אירוע אמת</Text>
-        </View>
+        <Image source={require("../assets/images/emergency.png")} style={styles.buttonImage} />
+        <Text style={styles.buttonText}>אירוע אמת</Text>
+
       </TouchableOpacity>
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
         <Image source={require("../assets/images/kangaroo.png")} style={styles.buttonLeftImageSmall} />
@@ -84,50 +65,36 @@ const HomeScreen = () => {
         <Image source={require("../assets/images/team.png")} style={styles.buttonRightImageSmall} />
         <Text style={styles.buttonRightTextSmall}>צוות</Text>
       </TouchableOpacity>
-
+    
       {alarmActive && (
-        <TouchableOpacity onPress={stopAlarm} style={[styles.stpButtonContainer , { zIndex: 999 }]}>
-          <View style={styles.stpButton}>
-            <Text style={styles.stpButtonText}>Stop Alarm</Text>
-          </View>
-        </TouchableOpacity>
+        <Button title="Stop Alarm" onPress={stopAlarm} />
       )}
-      <Training />
-      <PersonalTraking />
+      
       <NavBar />
     </View>
-
+    
   );
 };
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 0,
-    width: "100%",
-    height: 190,
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+     top: 0,
+     width: "100%",
+     height: 190,
+     justifyContent: "space-between",
+    alignItems: "flex-start", 
     paddingTop: 16,
     paddingLeft: 16,
     backgroundColor: "#060606",
     borderRadius: 20,
     borderBottomRightRadius: 100,
     borderBottomLeftRadius: 100,
-    alignSelf: "flex-start",
+    alignSelf: "flex-start", 
+  
+  },
 
-  },
-  presonInfoImage: {
-    position: 'absolute',
-    top: 50,
-    left: 305,
-    width: 40,
-    height: 40,
-  },
   logo: {
-    position: 'absolute',
-    top: 30,
-    left: 15,
-    flex: 1,
+    flex:1,
     width: 200,
     height: 100,
     resizeMode: "contain",
@@ -141,38 +108,24 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    width: 205,
+    top: 220,
+    left: 105,
+    width: 200,
     height: 200,
-    top: 210,
-    left: 115,
-    borderWidth: 0,
-    borderRadius: 40,
-    borderColor: 'pink',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  backgroundImage: {
-    position: 'relative',
-    width: 540,
-    height: 540,
-    left: 5,
-  },
-  contentContainer: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 100,
+    backgroundColor: 'red',
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonImage: {
-    left: -10,
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
   },
   buttonText: {
-    left: -10,
     color: 'white',
     marginTop: 10,
-    fontSize: 20,
+    fontSize: 24,
   },
   seconderyLeftButton: {
     position: 'absolute',
@@ -211,23 +164,7 @@ const styles = StyleSheet.create({
   buttonRightTextSmall: {
     color: 'white',
     fontSize: 14,
-  },
-  stpButton: {
-    position: 'absolute',
-    top: 500,
-    left: 115,
-    width: 150,
-    height: 50,
-    backgroundColor: 'red',
-    padding: 12,
-    borderRadius: 8,
-  },
-  stpButtonText: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center',
-    alignItems: 'center',
-  },
+  }
 });
 
 export default HomeScreen;

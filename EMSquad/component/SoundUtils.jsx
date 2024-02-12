@@ -28,7 +28,7 @@ const stopSound = async () => {
     if (alarmSound) {
       await alarmSound.stopAsync();
       await alarmSound.unloadAsync();
-      alarmSound = null; 
+      alarmSound = null; // Reset the sound instance
     }
   } catch (error) {
     console.error("Error stopping sound:", error);
