@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "emsquad",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
@@ -31,9 +30,8 @@
     "socket.io-client": "^4.7.4",
     "websocket": "^1.0.34"
   },
-=======
->>>>>>> 35a5eb0f9f4b02ea74519aa316934fab4a1a48e1
   "devDependencies": {
-    "expo-cli": "^6.3.10"
-  }
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
 }
