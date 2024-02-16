@@ -3,12 +3,24 @@ const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const uuid = require('uuid');
 require('dotenv').config();
-const mongoose = require('mongoose');
+const logger = require('morgan');
 
 
 
 const app = express();
 const port = 3000;
+
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(logger('dev'));
+
+const {userRouter} = require('./router/user.router');
+app.use("/user", userRouter);
+
+
+
 
 app.use(bodyParser.json());
 
@@ -19,8 +31,6 @@ app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
     res.sendStatus(200);
 });
-
-
 
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
