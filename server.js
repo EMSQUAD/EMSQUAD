@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const uuid = require('uuid');
+const { default: UserList } = require('./component/UserList');
 require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
@@ -46,6 +47,17 @@ app.post('/stopRecording', (req, res) => {
     res.sendStatus(200);
 });
 
+// Route to get the list of users
+app.get('/users', async (req, res) => {
+    try {
+        // Fetch the list of users from the MongoDB collection
+        const users = await UserList.find({}, 'name'); // Assuming 'User' is your Mongoose model for users
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Failed to fetch user list:', error);
+        res.status(500).send('Failed to fetch user list');
+    }
+}); 
 // Route to send audio message
 app.post('/sendAudioMessage', async (req, res) => {
     const { channelId, audioData } = req.body;
