@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-const uuid = require('uuid');
-require('dotenv').config();
+// const uuid = require('uuid');
 const logger = require('morgan');
 
 
@@ -16,16 +16,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
+// app.get('/', (req, res) => {
+//     res.send('Welcome to the EMSQUAD API');
+//   })
+
 const {userRouter} = require('./router/user.router');
-app.use("/user", userRouter);
+app.use('/user', userRouter);
 
-
+const{eventRouter}=require('./router/event.router');
+app.use('/event',eventRouter);
 
 
 app.use(bodyParser.json());
-
 let recordedAudio = null;
-
 
 app.post('/startRecording', (req, res) => {
     console.log('Recording started...');
