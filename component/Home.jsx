@@ -81,7 +81,7 @@ const HomeScreen = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.seconderyRightButton} onPress={press}>
-        <Image source={require("../assets/images/team.png")} style={styles.buttonRightImageSmall} />
+        <Image source={require("../assets/images/team.png")}  style={styles.buttonRightImageSmall} />
         <Text style={styles.buttonRightTextSmall}>צוות</Text>
       </TouchableOpacity>
 
