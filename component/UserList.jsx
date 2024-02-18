@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 
 const UserList = ({ onUserSelect }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // קבלת רשימת משתמשים מ-MongoDB
     const fetchUsers = async () => {
       const response = await fetch('mongodb://localhost:3000/user');
       const data = await response.json();
@@ -14,7 +13,7 @@ const UserList = ({ onUserSelect }) => {
     fetchUsers();
   }, []);
 
-  constrenderItem = ({ item }) => {
+  const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.userItem}
