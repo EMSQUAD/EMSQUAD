@@ -6,16 +6,9 @@ const UserList = ({ onUserSelect }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/users');
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
+      const response = await fetch('mongodb://localhost:3000/user');
+      const data = await response.json();
+      setUsers(data);
     };
     fetchUsers();
   }, []);
