@@ -7,6 +7,7 @@ const WokitokiService = () => {
   const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
+    // Event listeners for connect, disconnect, and message events
     socket.on('connect', () => {
       console.log('Socket connected');
     });
@@ -19,6 +20,7 @@ const WokitokiService = () => {
       console.log('Received message:', data);
     });
 
+    // Cleanup function to remove event listeners
     return () => {
       socket.off('connect');
       socket.off('disconnect');
@@ -27,7 +29,8 @@ const WokitokiService = () => {
   }, []);
 
   const init = () => {
-    // ...
+    // Connect to the WebSocket server
+    socket.connect();
   };
 
   const startRecording = (user) => {

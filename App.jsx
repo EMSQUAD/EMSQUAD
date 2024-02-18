@@ -54,19 +54,19 @@ const App = () => {
   };
 
   return (
-    <div>
-      <TalkButton
+    <View>
+    <TalkButton
         isRecording={isRecording}
         onRecordStart={onStartRecording}
         onRecordStop={onStopRecording}
       />
+    <View style={styles.container}>
       <UserList onUserSelect={onUserSelect} />
-      <View style={styles.container}>
         <Button title="הקלט" onPress={onStartRecording} />
         <Button title="עצור" onPress={onStopRecording} />
         <Button title="נגן" onPress={onPlayRecording} />
       </View>
-    </div>
+      </View>
   );
 };
 

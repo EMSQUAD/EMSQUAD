@@ -3,8 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const uuid = require('uuid');
-const { default: UserList } = require('./component/UserList');
-require('dotenv').config(); // Load environment variables from .env file
+// const UserList = require('./component/UserList');
+const logger = require('morgan');
 
 const app = express();
 const port = process.env.PORT || 3000;
