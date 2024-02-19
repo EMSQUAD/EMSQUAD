@@ -5,8 +5,9 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 // import  WalkieTalkie2 from './component/walkieTalki2';
 // import WalkieTalkie2 from './component/walkieTalki2';  // Update the import
 import WalkieTalkiePTT from './component/walkieTalkie.component';
-// import UserList from './component/UserList';
 
+
+import List from './component/List';
 
 const App = () => {
   return (

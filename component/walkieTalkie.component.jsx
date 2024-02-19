@@ -138,6 +138,7 @@ const WalkieTalkiePTT = () => {
     const [allowsRecordingIOS, setAllowsRecordingIOS] = useState(true);
 
     useEffect(() => {
+    
         async function setAudioMode() {
             try {
                 await Audio.setAudioModeAsync({
@@ -148,7 +149,7 @@ const WalkieTalkiePTT = () => {
                 console.error('Failed to set audio mode:', error);
             }
         }
-
+  
         setAudioMode();
     }, [allowsRecordingIOS]);
 

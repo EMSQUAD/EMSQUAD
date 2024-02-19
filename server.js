@@ -6,10 +6,8 @@ const fetch = require('node-fetch');
 const logger = require('morgan');
 
 
-
 const app = express();
 const port = 3000;
-
 
 
 app.use(express.json());
@@ -87,3 +85,4 @@ app.post('/sendAudioMessage', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
