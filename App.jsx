@@ -10,8 +10,6 @@ import UserListComponent from './component/DisplayUsers.component';
 // import UserList from './component/UserList';
 
 
-import List from './component/List';
-
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
