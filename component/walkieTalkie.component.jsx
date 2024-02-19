@@ -5,7 +5,6 @@ import { Audio } from 'expo-av';
 const WalkieTalkiePTT = () => {
     const [recording, setRecording] = React.useState();
     const [recordings, setRecordings] = React.useState([]);
-
     async function startRecording() {
         console.log('startRecording called');
         try {
