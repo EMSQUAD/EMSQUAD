@@ -1,10 +1,13 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 // import WalkieTalkie from './component/walkieTalkie';
-// import HomeScreen from './component/Home';
+import HomeScreen from './component/Home';
 // import  WalkieTalkie2 from './component/walkieTalki2';
 // import WalkieTalkie2 from './component/walkieTalki2';  // Update the import
-import WalkieTalkiePTT from './component/walkieTalkie.component';
+// import WalkieTalkiePTT from './component/walkieTalkie.component';
+import UserListComponent from './component/DisplayUsers.component';
+// import EventListComponent from './component/DisplayEvents.component';
+// import UserList from './component/UserList';
 
 
 import List from './component/List';
@@ -14,8 +17,10 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       {/* <WalkieTalkie /> */
       // <HomeScreen />
+      <UserListComponent />
+      // <EventListComponent />
     // <WalkieTalkie2/>
-    <WalkieTalkiePTT/>
+    // <WalkieTalkiePTT/>
     }
     </SafeAreaView>
   );
