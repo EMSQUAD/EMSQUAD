@@ -51,9 +51,7 @@ const UserListComponent = () => {
                     <View style={styles.userInfo}>
                         <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>
                         <Text style={styles.userInfoText}>{`Phone: ${user.phone}`}</Text>
-                        <Text style={styles.userInfoText}>{`Type: ${user.type_user}`}</Text>
                         <Text style={styles.userInfoText}>{`Status: ${user.status_ability}`}</Text>
-                        <Text style={styles.userInfoText}>{`Certifications: ${user.certifications}`}</Text>
                     </View>
                 </TouchableOpacity>
             ))}
@@ -65,8 +63,7 @@ const UserListComponent = () => {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1, // Ensure content can grow
-        height: '85%', // 85% of container height
-        width: '100%'
+        width: '95%',
     },
     container: {
         flex: 1,
@@ -82,7 +79,7 @@ const styles = StyleSheet.create({
     card: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#D9D9D9',
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        width: '100%', // Spread across width
+        width: '100%',
     },
     image: {
         width: 70,
