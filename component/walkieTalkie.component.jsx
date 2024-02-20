@@ -121,7 +121,7 @@ const WalkieTalkiePTT = () => {
                         Recording #{index + 1} | {recordingLine.duration}
                     </Text>
                     <TouchableOpacity onPress={playRecording}>
-                        <Text style={{ color: 'white' }}>Play</Text>
+                        <Text style={styles.playButton}>Play</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -134,12 +134,13 @@ const WalkieTalkiePTT = () => {
 
     return (
         <View>
+            <Text style={styles.title}>Walkie-Talkie PTT</Text>
             <TouchableOpacity
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
                 style={styles.button}
             >
-                <Text style={styles.buttonText}>{recording ? 'Recording...' : 'Press and Hold to Record'}</Text>
+                <Text style={styles.buttonText}>{recording ? 'Recording...' : 'Press and Hold'}</Text>
             </TouchableOpacity>
             {getRecordingLines()}
             <Button title={recordings.length > 0 ? 'Clear Recordings' : ''} onPress={clearRecording} />
@@ -149,16 +150,21 @@ const WalkieTalkiePTT = () => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'lightgray',
-        paddingVertical: 20,
-        paddingHorizontal: 40,
+        backgroundColor: 'red',
+        height: 250,
+        width: 250,
+        // paddingVertical: 20,
+        // paddingHorizontal: 40,
         borderRadius: 10,
         marginBottom: 20,
+        borderRadius: 250,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 30,
         fontWeight: 'bold',
+        color: 'white'
     },
     row: {
         flexDirection: 'row',
@@ -171,7 +177,21 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 15,
         color: 'white'
+    },
+    title: {
+        position: 'absolute',
+        top: -190,
+        left: -20,
+        color: 'white',
+        fontSize: 40,
+    },
+    playButton: {
+        fontSize: 30,
+        color: 'white',
+        padding: 10,
+        backgroundColor: 'gray',
     }
+
 })
 
 export default WalkieTalkiePTT;
