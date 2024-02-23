@@ -8,6 +8,7 @@ import WalkieTalkiePTT from './component/walkieTalkie.component';
 // import UserListComponent from './component/DisplayUsers.component';
 // import EventListComponent from './component/DisplayEvents.component';
 // import UserList from './component/UserList';
+import ChatScreen from './component/ChatScreen';
 
 
 const App = () => {
@@ -18,7 +19,8 @@ const App = () => {
       // <UserListComponent />
       // <EventListComponent />
     // <WalkieTalkie2/>
-    <WalkieTalkiePTT/>
+    // <WalkieTalkiePTT/>
+    <ChatScreen/>
     }
     </SafeAreaView>
   );
