@@ -33,7 +33,7 @@ const Training = () =>{
 const styles = StyleSheet.create({
     Training: {
         position: 'absolute',
-        top: 500,
+        top: 460,
         alignSelf: 'center',
         display: 'flex',
         flexDirection: 'column',

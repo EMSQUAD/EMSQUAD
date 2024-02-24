@@ -1,37 +1,87 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-// import WalkieTalkie from './component/walkieTalkie';
-import HomeScreen from './component/Home';
-// import  WalkieTalkie2 from './component/walkieTalki2';
-// import WalkieTalkie2 from './component/walkieTalki2';  // Update the import
-import WalkieTalkiePTT from './component/walkieTalkie.component';
-// import UserListComponent from './component/DisplayUsers.component';
-// import EventListComponent from './component/DisplayEvents.component';
-// import UserList from './component/UserList';
+// import React from "react";
+import { SafeAreaView, StyleSheet, StatusBar,Dimensions,View  } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./component/Home.component";
 
+// import NavBar from "./component/Navbar";
+// import Header from "./component/Header";
+import UserListComponent from "./component/DisplayUsers.component";
+import EventListComponent from "./component/DisplayEvents.component";
+import React, { useEffect } from "react";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
+  
+  useEffect(() => {
+    // console.log('App height:', Dimensions.get('window').height);
+  }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <WalkieTalkie /> */
-      // <HomeScreen />
-      // <UserListComponent />
-      // <EventListComponent />
-    // <WalkieTalkie2/>
-    <WalkieTalkiePTT/>
-    }
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <StatusBar hidden translucent backgroundColor="transparent" />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              header: () => null, // Hide the header
+  
+            }}
+          />
+          <Stack.Screen
+            name="Users"
+            component={UserListComponent}
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: 'black', 
+              },
+              headerTitle: 'צאטים',
+              headerTitleStyle: {
+                color: 'white', 
+                fontSize: 20, 
+                fontWeight: 'bold', 
+              },
+              headerBackTitle: 'חזור', 
+            }} 
+          />
+
+<Stack.Screen
+            name="Events"
+            component={EventListComponent}
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: 'black', 
+              },
+              headerTitle: 'אירועים',
+              headerTitleStyle: {
+                color: 'white', 
+                fontSize: 20, 
+                fontWeight: 'bold', 
+              },
+              headerBackTitle: 'חזור', 
+            }} 
+          />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* <Header /> */}
+      {/* <NavBar /> */}
+    {/* </SafeAreaView> */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#292424',
-
+   flex: 1,
+   paddingTop: StatusBar.currentHeight, 
   },
 });
 
 export default App;
+

@@ -11,7 +11,10 @@ const UserListComponent = () => {
 
     const fetchUsersFromAPI = async () => {
         try {
-            const response = await fetch('http://30.30.11.142:3000/user');
+            // const response = await fetch('http://30.30.11.142:3000/user');
+            // const response = await fetch('http://localhost:3000/user');
+            const response = await fetch('http://10.0.0.9:3000/user');
+
             if (!response.ok) {
                 throw new Error('Failed to fetch users');
             }
@@ -63,7 +66,9 @@ const UserListComponent = () => {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1, // Ensure content can grow
-        width: '95%',
+        width: '100%',
+
+        
     },
     container: {
         flex: 1,
