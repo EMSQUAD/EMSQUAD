@@ -8,6 +8,7 @@ const WalkieTalkiePTT = () => {
     const [allowsRecordingIOS, setAllowsRecordingIOS] = useState(true);
 
     useEffect(() => {
+    
         async function setAudioMode() {
             try {
                 await Audio.setAudioModeAsync({
@@ -18,7 +19,7 @@ const WalkieTalkiePTT = () => {
                 console.error('Failed to set audio mode:', error);
             }
         }
-
+  
         setAudioMode();
     }, [allowsRecordingIOS]);
 
@@ -148,14 +149,57 @@ const WalkieTalkiePTT = () => {
 }
 
 const styles = StyleSheet.create({
+    // button: {
+    //     backgroundColor: 'red',
+    //     height: 250,
+    //     width: 250,
+    //     // paddingVertical: 20,
+    //     // paddingHorizontal: 40,
+    //     borderRadius: 10,
+    //     marginBottom: 20,
+    //     borderRadius: 250,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    // },
+    // buttonText: {
+    //     fontSize: 30,
+    //     fontWeight: 'bold',
+    //     color: 'white'
+    // },
+    // row: {
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     marginLeft: -50,
+    //     marginRight: 0
+    // },
+    // fill: {
+    //     flex: 1,
+    //     margin: 15,
+    //     color: 'white'
+    // },
+    // title: {
+    //     position: 'absolute',
+    //     top: -190,
+    //     left: -20,
+    //     color: 'white',
+    //     fontSize: 40,
+    // },
+    // playButton: {
+    //     fontSize: 30,
+    //     color: 'white',
+    //     padding: 10,
+    //     backgroundColor: 'gray',
+    // }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     button: {
         backgroundColor: 'red',
         height: 250,
         width: 250,
-        // paddingVertical: 20,
-        // paddingHorizontal: 40,
-        borderRadius: 10,
-        marginBottom: 20,
         borderRadius: 250,
         justifyContent: 'center',
         alignItems: 'center',
@@ -163,33 +207,12 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: 'white'
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: -50,
-        marginRight: 0
-    },
-    fill: {
-        flex: 1,
-        margin: 15,
-        color: 'white'
+        color: 'white',
     },
     title: {
-        position: 'absolute',
-        top: -190,
-        left: -20,
         color: 'white',
         fontSize: 40,
     },
-    playButton: {
-        fontSize: 30,
-        color: 'white',
-        padding: 10,
-        backgroundColor: 'gray',
-    }
 
 })
 

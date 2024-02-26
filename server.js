@@ -5,11 +5,10 @@ const fetch = require('node-fetch');
 // const uuid = require('uuid');
 const logger = require('morgan');
 
-
+// const User = require('./models/user.model');
 
 const app = express();
 const port = 3000;
-
 
 
 app.use(express.json());
@@ -20,14 +19,55 @@ app.use(logger('dev'));
 //     res.send('Welcome to the EMSQUAD API');
 //   })
 
-const {userRouter} = require('./router/user.router');
+// const {userRouter} = require('./router/user.router');
+// app.use('/user', userRouter);
+
+// const{eventRouter}=require('./router/event.router');
+// app.use('/event',eventRouter);
+
+const {userRouter} = require('./Server/router/user.router');
 app.use('/user', userRouter);
 
-const{eventRouter}=require('./router/event.router');
+
+const{eventRouter}=require('./Server/router/event.router');
 app.use('/event',eventRouter);
 
 
+
+
 app.use(bodyParser.json());
+
+/////////////////////////////
+
+// app.post('/authenticate', async (req, res) => {
+    // const { id_use, password } = req.body;
+  
+    // try {
+//       const user = await User.findOne({ id_use });
+  
+//       if (!user) {
+//         return res.json({ success: false, message: 'User not found' });
+//       }
+  
+//       const passwordMatch = await bcrypt.compare(password, user.password);
+  
+//       if (passwordMatch) {
+//         return res.json({ success: true, message: 'Login successful', user });
+//       } else {
+//         return res.json({ success: false, message: 'Incorrect password' });
+//       }
+//     } catch (error) {
+//       console.error('Error during authentication:', error);
+//       return res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+//   });
+//   //////////////////////////
+
+
+
+
+
+
 let recordedAudio = null;
 
 app.post('/startRecording', (req, res) => {
@@ -87,3 +127,4 @@ app.post('/sendAudioMessage', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
