@@ -445,7 +445,7 @@ import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
-import jsonData from "../db/message.json";
+import jsonData from "../Server/db/message.json";
 
 // const Card = ({ name, description,width, onPress}) => (
 // <TouchableOpacity onPress={onPress}>

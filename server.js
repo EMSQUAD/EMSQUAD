@@ -19,11 +19,20 @@ app.use(logger('dev'));
 //     res.send('Welcome to the EMSQUAD API');
 //   })
 
-const {userRouter} = require('./router/user.router');
+// const {userRouter} = require('./router/user.router');
+// app.use('/user', userRouter);
+
+// const{eventRouter}=require('./router/event.router');
+// app.use('/event',eventRouter);
+
+const {userRouter} = require('./Server/router/user.router');
 app.use('/user', userRouter);
 
-const{eventRouter}=require('./router/event.router');
+
+const{eventRouter}=require('./Server/router/event.router');
 app.use('/event',eventRouter);
+
+
 
 
 app.use(bodyParser.json());
