@@ -6,7 +6,7 @@ import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 const NavBar = ({navigation}) => {
   const navOptions = [
     { icon: require("../assets/images/settings.png"), text: "הגדרות" },
-    { icon: require("../assets/images/task.png"), text: "משימות" },
+    { icon: require("../assets/images/task.png"), text: "אירועים" },
     { icon: require("../assets/images/home.png"), text: "בית" },
     { icon: require("../assets/images/chat.png"), text: "צ'אט" },
   ];
@@ -24,7 +24,7 @@ const NavBar = ({navigation}) => {
               } else if (option.text === "צ'אט") {
                 navigation.navigate("Users");
               }
-              else if (option.text === "משימות") {
+              else if (option.text === "אירועים") {
                 navigation.navigate("Events");
               }
             }}
@@ -39,22 +39,23 @@ const NavBar = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      position: 'absolute',
-      // bottom: -40,
-      bottom: 0,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "100%",
-      paddingBottom: 30,
-      paddingHorizontal: 30,
-      paddingVertical: 10,
-      height: "12%",
-      backgroundColor: "#060606",
-      borderColor: "red",
-      borderRadius: 20,
-    },
+  container: {
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    paddingBottom: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    height: "12%",
+    backgroundColor: "#060606",
+    borderColor: "red",
+    borderRadius: 20,
+    zIndex: 999, // Set a high value to ensure it appears on top
+  },
+  
     optionContainer: {
       alignItems: "center",
       flex: 1, 

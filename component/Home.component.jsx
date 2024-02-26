@@ -461,7 +461,7 @@ const Card = ({ name, description, selected, onSelect,width}) => (
     style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
     onPress={onSelect}
   >
- <Text style={[styles.cardTitle, { textAlign: 'right' }]}>{name}</Text>
+ <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
      <Text style={styles.cardDescription}>{description}</Text>
   </TouchableOpacity>
 );
@@ -494,7 +494,7 @@ export default function Home({ navigation }) {
     pressTimer.current = setTimeout(() => {
       startAlarm();
       openModal(); 
-    }, 1500);
+    }, 800);
   };
 
   const handleButtonPressOut = () => {
@@ -524,7 +524,7 @@ export default function Home({ navigation }) {
   // Function to calculate the width based on the content's length
   const calculateCardWidth = (content) => {
     const charWidth = 10; // Adjust as needed
-    const minWidth = 230; // Minimum width to prevent very narrow cards
+    const minWidth = 380; // Minimum width to prevent very narrow cards
     const calculatedWidth = Math.max(content.length * charWidth, minWidth);
     return calculatedWidth;
   };
@@ -601,6 +601,7 @@ export default function Home({ navigation }) {
             {/* Map through the jsonData array and display each item */}
             {jsonData.map((item, index) => (
               <Card
+                style={styles.emergencyData}
                 key={index}
                 name={item.name}
                 description={item.description}
@@ -611,16 +612,16 @@ export default function Home({ navigation }) {
             ))}
             <View style={styles.buttonRow}>
               <TouchableOpacity
-                style={{ ...styles.openButton, backgroundColor: "#FF5733" }}
-                onPress={closeModal}
-              >
-                <Text style={styles.textStyle}>בטל</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ ...styles.openButton, backgroundColor: "#4CAF50" }}
+                style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
                 onPress={() => sendData()}
               >
                 <Text style={styles.textStyle}>שלח</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ ...styles.openButton, backgroundColor: "#FFA800" }}
+                onPress={closeModal}
+              >
+                <Text style={styles.textStyle}>בטל</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -741,9 +742,12 @@ const styles = StyleSheet.create({
 
   modalView: {
     margin: 0,
-    backgroundColor: "white",
+    backgroundColor: '#999999',
     borderRadius: 20,
     padding: 35,
+    top: 25,
+    width: '100%',
+    height: '70%',
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -758,30 +762,29 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 30,
     textAlign: "center",
-
   },
-
-  
   card: {
     backgroundColor: '#D9D9D9',
-    borderRadius: 10,
+    borderRadius: 15,
     padding: 16,
     margin: 8,
     elevation: 3,
-    width: '100%', // Set width to 100%
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 8,
   },
   cardDescription: {
-    fontSize: 16,
+    fontSize: 26,
+  },
+  emergencyData: {
+    textAlign: 'center',
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+    height: 100,
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -789,12 +792,14 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     margin: 10,
-    width: 100,
+    width: 160,
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
+    fontWeight: '300',
+    paddingTop: 10,
     textAlign: "center",
+    fontSize: 30,
   },
 
 });

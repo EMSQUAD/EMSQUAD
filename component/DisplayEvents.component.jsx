@@ -95,7 +95,7 @@ const EventListComponent = () => {
 
   const fetchEventsFromAPI = async () => {
     try {
-      const response = await fetch('http://localhost:3000/event');
+      const response = await fetch('https://emsquad.onrender.com/event');
 
       if (!response.ok) {
         throw new Error("Failed to fetch events");
