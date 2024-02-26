@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Keyboard, ImageBackground, Alert } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
@@ -9,6 +9,7 @@ const ChatScreen = () => {
   const [text, setText] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [persons, setPersons] = useState([]);
 
   const textInputRef = useRef(null);
 
@@ -20,6 +21,18 @@ const ChatScreen = () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
+  }, []);
+  useEffect(() => {
+    const fetchPersons = async () => {
+      try {
+        const response = await axios.get('http://30.30.11.142:3000/user');
+        setPersons(response.data);
+      } catch (error) {
+        console.error('Error fetching persons: ', error);
+      }
+    };
+
+    fetchPersons();
   }, []);
 
   const fetchMessages = async () => {
@@ -133,6 +146,14 @@ const ChatScreen = () => {
     }
   };
 
+  const renderMessageBubble = (props) => {
+    return (
+      <View style={{ backgroundColor: props.currentMessage.firstMessageOfDay ? '#f0f0f0' : 'transparent' }}>
+        <Bubble {...props} />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground source={require('../assets/images/chatImage.jpg')} style={styles.backgroundImage}>
@@ -140,7 +161,7 @@ const ChatScreen = () => {
           messages={messages}
           onSend={newMessages => onSend(newMessages)}
           user={{ _id: 1 }}
-          placeholder="Type a message..."
+          placeholder="כתוב משהו..."
           alwaysShowSend
           renderAvatar={null}
           renderUsernameOnMessage
@@ -153,6 +174,7 @@ const ChatScreen = () => {
           keyboardShouldPersistTaps="never"
           onPressActionButton={handlePlusButtonPress}
           bottomOffset={34}
+          renderBubble={renderMessageBubble}
         />
         {showOptions && (
           <View style={styles.optionsContainer}>
@@ -189,6 +211,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     borderRadius: 10,
     marginRight: 10,
+    height: 20,
+    textAlign: 'right',
+    paddingRight: 10,
+    paddingTop: 5,
   },
   sendButton: {
     alignItems: 'center',
