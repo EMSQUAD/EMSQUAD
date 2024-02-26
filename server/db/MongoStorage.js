@@ -25,11 +25,12 @@ const path = require("path");
 module.exports = class MongoStorage extends EventEmitter {
   constructor(entity) {
     super();
-    this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1);
+    this.entityName = entity.charAt(0).toLowerCase() + entity.slice(1);
     this.model = require(path.join(
       __dirname,
       `../models/${this.entityName}.model`
-    ));
+      ));
+      console.log(this.entityName)
     this.connect();
   }
 
