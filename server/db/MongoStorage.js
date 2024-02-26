@@ -30,7 +30,6 @@ module.exports = class MongoStorage extends EventEmitter {
       __dirname,
       `../models/${this.entityName}.model`
       ));
-      console.log(this.entityName)
     this.connect();
   }
 
