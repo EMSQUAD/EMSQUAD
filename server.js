@@ -25,11 +25,11 @@ app.use(logger('dev'));
 // const{eventRouter}=require('./router/event.router');
 // app.use('/event',eventRouter);
 
-const {userRouter} = require('./Server/router/user.router');
+const {userRouter} = require('./server/router/user.router');
 app.use('/user', userRouter);
 
 
-const{eventRouter}=require('./Server/router/event.router');
+const{eventRouter}=require('./server/router/event.router');
 app.use('/event',eventRouter);
 
 

@@ -1,4 +1,5 @@
-const EventRepository = require("../repository/event.repository");
+const EventRepository = require("../repository/event.repostory");
+
 const eventRepository = new EventRepository();
 const {
   ServerError,
