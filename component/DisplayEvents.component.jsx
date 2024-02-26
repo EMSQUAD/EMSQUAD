@@ -95,8 +95,8 @@ const EventListComponent = () => {
 
   const fetchEventsFromAPI = async () => {
     try {
-      const response = await fetch('http://10.0.0.9:3000/event');
-      // const response = await fetch("http://30.30.11.142:3000/event");
+      const response = await fetch('http://localhost:3000/event');
+
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }
