@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-// const uuid = require('uuid');
 const logger = require('morgan');
-
-// const User = require('./models/user.model');
+const bcrypt = require('bcrypt');
+const { User } = require('./Server/models/user.model'); // Import your User model
 
 const app = express();
 const port = 3000;
@@ -14,16 +13,8 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
+app.use(bodyParser.json());
 
-// app.get('/', (req, res) => {
-//     res.send('Welcome to the EMSQUAD API');
-//   })
-
-// const {userRouter} = require('./router/user.router');
-// app.use('/user', userRouter);
-
-// const{eventRouter}=require('./router/event.router');
-// app.use('/event',eventRouter);
 
 const {userRouter} = require('./server/router/user.router');
 app.use('/user', userRouter);
@@ -34,38 +25,30 @@ app.use('/event',eventRouter);
 
 
 
-
 app.use(bodyParser.json());
 
-/////////////////////////////
-
-// app.post('/authenticate', async (req, res) => {
-    // const { id_use, password } = req.body;
+app.post('/user', async (req, res) => {
+    const { id_use, password } = req.body;
   
-    // try {
-//       const user = await User.findOne({ id_use });
+    try {
+      const user = await User.findOne({ id_use });
   
-//       if (!user) {
-//         return res.json({ success: false, message: 'User not found' });
-//       }
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
   
-//       const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(password, user.password);
   
-//       if (passwordMatch) {
-//         return res.json({ success: true, message: 'Login successful', user });
-//       } else {
-//         return res.json({ success: false, message: 'Incorrect password' });
-//       }
-//     } catch (error) {
-//       console.error('Error during authentication:', error);
-//       return res.status(500).json({ success: false, message: 'Internal Server Error' });
-//     }
-//   });
-//   //////////////////////////
-
-
-
-
+      if (passwordMatch) {
+        return res.json({ success: true, message: 'Login successful', user });
+      } else {
+        return res.status(401).json({ success: false, message: 'Incorrect password' });
+      }
+    } catch (error) {
+      console.error('Error during authentication:', error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  });
 
 
 let recordedAudio = null;

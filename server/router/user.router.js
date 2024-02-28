@@ -5,15 +5,15 @@ const { Router } = require('express');
 
 const userRouter = Router();
 
-//get all users 
+// GET all users 
 userRouter.get('/', userController.getAllUsers);
-//get user by id
- userRouter.get('/:id', userController.getUserById);
-// //create user
- userRouter.post('/', userController.createUser);
-// //update user
- userRouter.put('/:id', userController.updateUser);
-// //delete user
- userRouter.delete('/:id', userController.deleteUser);
+// GET user by id
+userRouter.get('/:id', userController.getUserById);
+// CREATE user
+userRouter.post('/', userController.createUser);
+// UPDATE user
+userRouter.put('/:id', userController.updateUser);
+// DELETE user
+userRouter.delete('/:id', userController.deleteUser);
 
-module.exports = { userRouter };
+module.exports = userRouter; // Export the router instance directly

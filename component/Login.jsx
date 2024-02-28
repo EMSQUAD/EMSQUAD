@@ -1,79 +1,203 @@
+// import React, { useState } from 'react';
+// import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+
+// const LoginScreen = ({ navigation }) => {
+//   const [id, setId] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [loading, setLoading] = useState(false);
+
+//   const handleLogin = async () => {
+//     if (!id || !password) {
+//       Alert.alert('Validation Error', 'Please enter both ID and password');
+//       return;
+//     }
+
+//     setLoading(true);
+
+//     try {
+//       console.log('Attempting login with:', { id_use: id, password });
+
+//       const response = await fetch('https://emsquad.onrender.com/user', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ id_use: id, password }),
+//       });
+
+//       const responseData = await response.text();
+
+//       // Check if the response is valid JSON
+//       let data;
+//       try {
+//         data = JSON.parse(responseData);
+//       } catch (error) {
+//         console.error('Invalid JSON response from server:', responseData);
+//         Alert.alert('Error', 'Invalid response from server');
+//         setLoading(false);
+//         return;
+//       }
+
+//       console.log('Server Response:', data);
+
+//       if (response.ok && data.success) {
+//         console.log('Login successful');
+//         navigation.navigate('Home');
+//       } else {
+//         console.error('Login failed:', data.message);
+//         Alert.alert('Login Failed', data.message || 'Login failed');
+//       }
+//     } catch (error) {
+//       console.error('Error during login:', error);
+//       Alert.alert('Error', 'An error occurred during login');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Image source={require("../assets/images/logo.png")} style={styles.logo} />
+//       <View style={styles.form}>
+//         <TextInput
+//           style={styles.input}
+//           placeholder="תעודת זהות"
+//           placeholderTextColor="#A9A9A9"
+//           onChangeText={setId}
+//           value={id}
+//         />
+//         <TextInput
+//           style={styles.input}
+//           placeholder="סיסמא"
+//           placeholderTextColor="#A9A9A9"
+//           secureTextEntry
+//           onChangeText={setPassword}
+//           value={password}
+//         />
+//         <TouchableOpacity onPress={handleLogin} style={styles.button} disabled={loading}>
+//           <Text style={styles.buttonText}>{loading ? 'Loading...' : 'התחברות'}</Text>
+//         </TouchableOpacity>
+//       </View>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#090909',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     padding: 16,
+//   },
+//   logo: {
+//     marginBottom: 40,
+//     width: 200,
+//     height: 50,
+//     resizeMode: "contain",
+//   },
+//   form: {
+//     width: '100%',
+//   },
+//   input: {
+//     height: 40,
+//     borderWidth: 1,
+//     borderColor: 'gray',
+//     marginBottom: 20,
+//     padding: 10,
+//     borderRadius: 5,
+//     color: 'white',
+//   },
+//   button: {
+//     backgroundColor: 'red',
+//     padding: 20,
+//     borderRadius: 5,
+//     alignItems: 'center',
+//     opacity: 0.9,
+//   },
+//   buttonText: {
+//     color: 'white',
+//     fontWeight: 'bold',
+//   },
+// });
+
+// export default LoginScreen;
+
+
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-// import Authenticate from './Authenticate';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
-const LoginScreen = () => {
-  const [username, setUsername] = useState('');
+const LoginScreen = ({ navigation }) => {
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:3000/login', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ username, password }),
-  //     });
-  
-  //     const data = await response.json();
-  
-  //     if (data.success) {
-  //       console.log('Login successful');
-  //     } else {
-  //       console.error('Login failed:', data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error during login:', error);
-  //   }
-  // };
-  
   const handleLogin = async () => {
+    if (!id || !password) {
+      Alert.alert('Validation Error', 'Please enter both ID and password');
+      return;
+    }
+  
+    setLoading(true);
+  
     try {
-      const response = await fetch('http://10.0.0.9:3000/login', {
+      console.log('Attempting login with:', { id_use: id, password });
+  
+      const response = await fetch('https://emsquad.onrender.com/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id_use: username, password }),
+        body: JSON.stringify({ id_use: parseInt(id), password }),
       });
   
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
   
-      if (data.success) {
+      const responseData = await response.json();
+      console.log('Server Response:', responseData);
+  
+      if (responseData.success) {
         console.log('Login successful');
-        // Save user data to state or context for further use in the app
+        navigation.navigate('Home');
       } else {
-        console.error('Login failed:', data.message);
+        console.error('Login failed:', responseData.message);
+        Alert.alert('Login Failed', responseData.message || 'Login failed');
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during login:', error.message);
+      Alert.alert('Error', 'An error occurred during login');
+    } finally {
+      setLoading(false);
     }
   };
+  
+  
 
   return (
     <View style={styles.container}>
       <Image source={require("../assets/images/logo.png")} style={styles.logo} />
-      <View style={styles.titleContainer}>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="תעודת זהות"
+          placeholderTextColor="#A9A9A9"
+          onChangeText={setId}
+          value={id}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="סיסמא"
+          placeholderTextColor="#A9A9A9"
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+        />
+        <TouchableOpacity onPress={handleLogin} style={styles.button} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Loading...' : 'התחברות'}</Text>
+        </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="תעודת זהות"
-        placeholderTextColor="#A9A9A9"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="סיסמא"
-        placeholderTextColor="#A9A9A9"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      />
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text style={styles.buttonText}>התחברות</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -81,28 +205,24 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#090909',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 16,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
   logo: {
-    position: 'absolute',
-    top: 140,
+    marginBottom: 40,
     width: 200,
     height: 50,
     resizeMode: "contain",
   },
+  form: {
+    width: '100%',
+  },
   input: {
     height: 40,
-    width: '80%',
-    borderColor: 'gray',
     borderWidth: 1,
+    borderColor: 'gray',
     marginBottom: 20,
     padding: 10,
     borderRadius: 5,
@@ -111,14 +231,16 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'red',
     padding: 20,
-    width: '80%',
     borderRadius: 5,
+    alignItems: 'center',
+    opacity: 0.9,
   },
   buttonText: {
     color: 'white',
-    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
 
 export default LoginScreen;
+
+
