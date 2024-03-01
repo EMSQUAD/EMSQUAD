@@ -19,8 +19,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 
 
-const {userRouter} = require('./server/router/user.router');
-app.use('/user', userRouter);
+// const {userRouter} = require('./server/router/user.router');
+// app.use('/user', userRouter);
+
+const {userRouter}=require('./server/router/user.router');
+app.use('/user',userRouter);
+
 
 
 const{eventRouter}=require('./server/router/event.router');
