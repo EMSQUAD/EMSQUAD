@@ -3,25 +3,6 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 
-
-// module.exports = class MongoStorage extends EventEmitter {
-//     constructor(user) {
-//       super();
-//       this.user = user;
-//       this.model = require(path.join(__dirname, `../models/${user}.model`));
-//       this.connect();
-//     }
-
-// connect() {
-//   const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-//   mongoose
-//     .connect(connectionUrl)
-//     .then(() =>
-//       console.log(`Connected to ${this.user} collection in MongoDB`),
-//     )
-//     .catch((err) => console.log(`Error connecting to MongoDB ${err}`));
-// }
-
 module.exports = class MongoStorage extends EventEmitter {
   constructor(entity) {
     super();
@@ -41,32 +22,6 @@ mongoose
       .catch(err => console.log(`connection error: ${err}`));
   }
 
-  
-    
-// module.exports = class MongoStorage extends EventEmitter {
-//   constructor(user) {
-//       super();
-//       this.user = user;
-//       this.model = require(path.join(__dirname, `../models/${user}.model`));
-//       this.connect();
-//   }
-
-//   connect() {
-//       const connectionUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-//       mongoose
-//           .connect(connectionUrl)
-//           .then(() => {
-//               console.log(`Connected to ${this.user} collection in MongoDB`);
-//               mongoose.set('debug', (collectionName, method, query, doc) => {
-//                   console.log(`Mongoose Query: ${method} ${collectionName}`);
-//                   console.log(`Query: ${JSON.stringify(query)}`);
-//               });
-//           })
-//           .catch((err) => console.log(`Error connecting to MongoDB ${err}`));
-//   }
-
-
-
   find() {
     try {
       return this.model.find({});
@@ -76,9 +31,6 @@ mongoose
     }
   }
   
-  
-  
-
   retrieve(id) {
     return this.model.findOne({ id_use: Number(id) });
   }
