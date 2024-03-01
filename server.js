@@ -6,7 +6,7 @@ const logger = require('morgan');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 // const { User } = require('./Server/models/user.model'); // Import your User model
-const { User } = require('./server/models/user.model'); // Import your User model
+const { User } = require('./server/models/user.model');
 
 const app = express();
 const port = 3000;
