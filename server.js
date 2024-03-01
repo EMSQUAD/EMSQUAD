@@ -4,12 +4,13 @@ const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const logger = require('morgan');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const { User } = require('./Server/models/user.model'); // Import your User model
 
 const app = express();
 const port = 3000;
 
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
