@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/נוי/Downloads",
-      "program": "c:/Users/נוי/Downloads/build/Debug/outDebug",
+      "cwd": "c:/Users/נוי/Desktop/EMSQUAD/EMSquad/Server/repository",
+      "program": "c:/Users/נוי/Desktop/EMSQUAD/EMSquad/Server/repository/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

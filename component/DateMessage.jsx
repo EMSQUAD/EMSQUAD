@@ -26,20 +26,23 @@ const GreetingMessage = () => {
 
 const styles = StyleSheet.create({
     greetingContainer: {
-        position: 'absolute',
-        top: '75%',
-        left: '15%',
-        width: 300,
-        justifyContent: 'center',
-        alignItems: 'center'
+        // position: 'absolute',
+        // top: '75%',
+        // left: '15%',
+        // display: 'flex',
+        // position: 'relative',
+        width: "100%",
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // padding: 20,
     },
     greetingText: {
         color: 'white',
         fontSize: 24,
-        position: 'absolute',
-        justifyContent: 'center',
-        textAlign: 'center',
-        alignItems: 'center',
+        // position: 'absolute',
+        // justifyContent: 'center',
+        // textAlign: 'center',
+        // alignItems: 'center',
     },
 });
 

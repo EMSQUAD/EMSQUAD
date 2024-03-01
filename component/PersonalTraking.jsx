@@ -59,8 +59,12 @@ const PersonalTracking = () => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+ 
+      },
+    container: {
         position: 'absolute',
-        top: 660,
+        top: 630,
         alignSelf: 'center',
         width: 350,
         height: 150, 

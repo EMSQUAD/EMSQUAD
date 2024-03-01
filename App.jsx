@@ -1,36 +1,95 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-// import WalkieTalkie from './component/walkieTalkie';
-import HomeScreen from './component/Home';
-// import  WalkieTalkie2 from './component/walkieTalki2';
-// import WalkieTalkie2 from './component/walkieTalki2';  // Update the import
-// import WalkieTalkiePTT from './component/walkieTalkie.component';
-import UserListComponent from './component/DisplayUsers.component';
-// import EventListComponent from './component/DisplayEvents.component';
-// import UserList from './component/UserList';
+import React, { useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  Dimensions,
+  View,
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./component/Home.component";
+import UserListComponent from "./component/DisplayUsers.component";
+import EventListComponent from "./component/DisplayEvents.component";
+import WalkieTalkiePTT from "./component/walkieTalkie.component";
+import LoginScreen from "./component/Login";
 
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check authentication status here and update isLoggedIn accordingly
+    // For simplicity, I'm assuming isLoggedIn changes based on user login/logout
+  }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <WalkieTalkie /> */
-      // <HomeScreen />
-      <UserListComponent />
-      // <EventListComponent />
-    // <WalkieTalkie2/>
-    // <WalkieTalkiePTT/>
-    }
-    </SafeAreaView>
+    <View style={styles.container}>
+      <StatusBar hidden translucent backgroundColor="transparent" />
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isLoggedIn ? (
+            <>
+              <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Users"
+                component={UserListComponent}
+                options={{
+                  headerShown: true,
+                  headerStyle: { backgroundColor: "black" },
+                  headerTitle: "צאטים",
+                  headerTitleStyle: {
+                    color: "white",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                  },
+                  headerBackTitle: "חזור",
+                }}
+              />
+              <Stack.Screen
+                name="Events"
+                component={EventListComponent}
+                options={{
+                  headerShown: true,
+                  headerStyle: { backgroundColor: "black" },
+                  headerTitle: "אירועים",
+                  headerTitleStyle: {
+                    color: "white",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                  },
+                  headerBackTitle: "חזור",
+                }}
+              />
+              <Stack.Screen
+                name="WalkieTalkie"
+                component={WalkieTalkiePTT}
+                options={{ headerShown: false }}
+              />
+            </>
+          ) : (
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#292424',
-
+    paddingTop: StatusBar.currentHeight,
   },
 });
 
