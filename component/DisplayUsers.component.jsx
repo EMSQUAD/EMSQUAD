@@ -11,7 +11,8 @@ const UserListComponent = () => {
 
     const fetchUsersFromAPI = async () => {
         try {
-            const response = await fetch('https://emsquad.onrender.com/user');
+            // const response = await fetch('https://emsquad.onrender.com/user');
+            const response = await fetch('https://server-ems-rzdd.onrender.com/user');
 
             if (!response.ok) {
                 throw new Error('Failed to fetch users');
