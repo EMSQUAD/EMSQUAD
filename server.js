@@ -27,9 +27,6 @@ const{eventRouter}=require('./server/router/event.router');
 app.use('/event',eventRouter);
 
 
-
-app.use(bodyParser.json());
-
 app.post('/user', async (req, res) => {
     const { id_use, password } = req.body;
   
