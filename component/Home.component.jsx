@@ -1,3 +1,4 @@
+
 ////
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -36,14 +37,14 @@ const Card = ({ name, description, selected, onSelect,width}) => (
   </TouchableOpacity>
 );
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route}) {
   const [alarmActive, setAlarmActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
-
-
+  const { userDetails } = route.params;
+  console.log('userDetails in Home:', userDetails);
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     // You can perform additional actions here if needed
@@ -109,7 +110,7 @@ export default function Home({ navigation }) {
       stopSound();
     };
   }, []);
-
+  console.log("userDetails:", userDetails);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -160,7 +161,8 @@ export default function Home({ navigation }) {
           </View>
         </TouchableOpacity>
       )}
-      <Header />
+      
+      <Header userDetails={userDetails }/>
       <Training />
       <PersonalTraking />
 

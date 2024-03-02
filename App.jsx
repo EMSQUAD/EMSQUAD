@@ -33,6 +33,7 @@ const App = () => {
               <Stack.Screen
                 name="Home"
                 component={HomeScreen}
+                // component={(props) => <HomeScreen {...props} />}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
