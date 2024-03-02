@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/נוי/Desktop/EMSQUAD/EMSquad/Server/repository",
-      "program": "c:/Users/נוי/Desktop/EMSQUAD/EMSquad/Server/repository/build/Debug/outDebug",
+      "cwd": "c:/Users/נוי/AppData/Local/Temp/1b771918-12e1-4c2d-96e4-cb55a77997f5_ex11noy.zip.7f5/ex11noy",
+      "program": "c:/Users/נוי/AppData/Local/Temp/1b771918-12e1-4c2d-96e4-cb55a77997f5_ex11noy.zip.7f5/ex11noy/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

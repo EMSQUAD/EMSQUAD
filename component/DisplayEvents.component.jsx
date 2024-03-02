@@ -98,7 +98,6 @@ const EventListComponent = () => {
       // const response = await fetch('https://emsquad.onrender.com/event');
        const response = await fetch('https://server-ems-rzdd.onrender.com/event');
       
-
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }

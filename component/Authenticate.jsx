@@ -43,7 +43,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const User = require('../Server/models/user.model');
+// const User = require('../Server/models/user.model');
 const rateLimit = require('express-rate-limit');
 
 const limiter = rateLimit({

@@ -14,15 +14,9 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 
-
 const Stack = createNativeStackNavigator();
-
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
-    // Check authentication status here and update isLoggedIn accordingly
-    // For simplicity, I'm assuming isLoggedIn changes based on user login/logout
   }, []);
 
   return (
@@ -30,8 +24,12 @@ const App = () => {
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
-          {isLoggedIn ? (
-            <>
+          
+        <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
               <Stack.Screen
                 name="Home"
                 component={HomeScreen}
@@ -72,14 +70,9 @@ const App = () => {
                 component={WalkieTalkiePTT}
                 options={{ headerShown: false }}
               />
-            </>
-          ) : (
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-          )}
+     
+       
+    
         </Stack.Navigator>
       </NavigationContainer>
     </View>
