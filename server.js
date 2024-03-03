@@ -22,37 +22,37 @@ app.use(bodyParser.json());
 // const {userRouter} = require('./server/router/user.router');
 // app.use('/user', userRouter);
 
-const {userRouter}=require('./server/router/user.router');
-app.use('/user',userRouter);
+const { userRouter } = require('./server/router/user.router');
+app.use('/user', userRouter);
 
+const { eventRouter } = require('./server/router/event.router');
+app.use('/event', eventRouter);
 
-
-const{eventRouter}=require('./server/router/event.router');
-app.use('/event',eventRouter);
-
+const { walkieRouter } = require('./server/router/walkie.router');
+app.use('/walkie', walkieRouter);
 
 app.post('/user', async (req, res) => {
-    const { id_use, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ id_use });
-  
-      if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-      }
-  
-      const passwordMatch = await bcrypt.compare(password, user.password);
-  
-      if (passwordMatch) {
-        return res.json({ success: true, message: 'Login successful', user });
-      } else {
-        return res.status(401).json({ success: false, message: 'Incorrect password' });
-      }
-    } catch (error) {
-      console.error('Error during authentication:', error);
-      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  const { id_use, password } = req.body;
+
+  try {
+    const user = await User.findOne({ id_use });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
-  });
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      return res.json({ success: true, message: 'Login successful', user });
+    } else {
+      return res.status(401).json({ success: false, message: 'Incorrect password' });
+    }
+  } catch (error) {
+    console.error('Error during authentication:', error);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
 
 
 // let recordedAudio = null;
@@ -98,7 +98,7 @@ app.post('/user', async (req, res) => {
 //             },
 //             body: audioData
 //         });
-        
+
 //         if (response.ok) {
 //             res.sendStatus(200);
 //         } else {
@@ -112,6 +112,6 @@ app.post('/user', async (req, res) => {
 // });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
