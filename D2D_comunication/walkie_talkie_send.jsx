@@ -1,4 +1,6 @@
-import { } from 'react-native-wifi-p2p';
+import {
+    sendFile,
+ } from 'react-native-wifi-p2p';
 
 const send_walkie_talkie = async () => {
     try {
@@ -14,8 +16,8 @@ const send_walkie_talkie = async () => {
         sendFile('path/to/file')
             .then((metaInfo) => console.log('File sent successfully:', metaInfo))
             .catch(err => console.log('Error while file sending', err));
-}
+    }
     catch (err) {
-    console.log(err);
-}
+        console.log(err);
+    }
 };

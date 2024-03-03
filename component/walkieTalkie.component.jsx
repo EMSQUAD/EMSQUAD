@@ -1,27 +1,40 @@
 import { React, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button, Platform } from 'react-native';
 import { Audio } from 'expo-av';
-import NearbyChat from './D2D_comunication/local_messege';
+// import NearbyChat from './D2D_comunication/local_messege';
 
 const WalkieTalkiePTT = () => {
     const [recording, setRecording] = useState(null);
     const [recordings, setRecordings] = useState([]);
     const [allowsRecordingIOS, setAllowsRecordingIOS] = useState(true);
+
+    const [socket, setSocket] = useState(null);
+    const port = useState(3001);
+
     useEffect(() => {
-    
-        async function setAudioMode() {
-            try {
-                await Audio.setAudioModeAsync({
-                    allowsRecordingIOS: allowsRecordingIOS,
-                    playsInSilentModeIOS: true
-                });
-            } catch (error) {
-                console.error('Failed to set audio mode:', error);
-            }
-        }
-  
-        setAudioMode();
-    }, [allowsRecordingIOS]);
+        const udpSocket = dgram.createSocket('udp4');
+        setSocket(udpSocket);
+        return () => {
+            udpSocket.close();
+        };
+    }, []);
+
+    // useEffect(() => {
+
+    //     async function setAudioMode() {
+    //         try {
+    //             await Audio.setAudioModeAsync({
+    //                 allowsRecordingIOS: allowsRecordingIOS,
+    //                 playsInSilentModeIOS: true
+    //             });
+    //         } catch (error) {
+    //             console.error('Failed to set audio mode:', error);
+    //         }
+    //     }
+
+    //     setAudioMode();
+    // }, [allowsRecordingIOS]);
+
 
     async function startRecording() {
         console.log('startRecording called');
@@ -51,9 +64,11 @@ const WalkieTalkiePTT = () => {
                     },
                 };
                 await recordingObject.prepareToRecordAsync(recordingOptions);
-                setRecording(recordingObject);
-                await recordingObject.startAsync();
-                console.log('Recording started');
+
+                // await recordingObject.prepareToRecordAsync(recordingOptions);
+                // setRecording(recordingObject);
+                // await recordingObject.startAsync();
+                // console.log('Recording started');
             } else {
                 throw new Error('Permission not granted');
             }
@@ -66,20 +81,21 @@ const WalkieTalkiePTT = () => {
         console.log('stopRecording called');
         try {
             await recording.stopAndUnloadAsync();
-            let allRecordings = [...recordings];
-            const { sound, status } = await recording.createNewLoadedSoundAsync();
-            await sound.setVolumeAsync(1.0);
-            allRecordings.push({
-                sound: sound,
-                duration: getDurationFormatted(status.durationMillis),
-                file: recording.getURI()
-            });
-            setRecordings(allRecordings);
+            // let allRecordings = [...recordings];
+            // const { sound, status } = await recording.createNewLoadedSoundAsync();
+            // await sound.setVolumeAsync(1.0);
+            // allRecordings.push({
+            //     sound: sound,
+            //     duration: getDurationFormatted(status.durationMillis),
+            //     file: recording.getURI()
+            // });
+            // setRecordings(allRecordings);
         } catch (err) {
             console.error('Failed to stop recording:', err);
-        } finally {
-            setRecording(null);
         }
+        // } finally {
+        //     setRecording(null);
+        // }
     }
 
     const handlePressIn = async () => {
@@ -96,7 +112,7 @@ const WalkieTalkiePTT = () => {
         if (Platform.OS === 'ios') {
             setAllowsRecordingIOS(false);
         }
-        await NearbyChat.sendMessage('Hello');
+        // await NearbyChat.sendMessage('Hello');
     };
 
     const playRecording = async () => {
