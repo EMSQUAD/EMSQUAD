@@ -40,6 +40,9 @@ const LoginScreen = ({ navigation }) => {
           password,
           first_name: responseData.data.first_name,
           last_name: responseData.data.last_name,
+          image: responseData.data.image,
+          status_ability: responseData.data.status_ability,
+          type_user: responseData.data.type_user,
           // Add other user details as needed
         };
         console.log('Response Data:', responseData);
