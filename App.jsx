@@ -13,64 +13,69 @@ import UserListComponent from "./component/DisplayUsers.component";
 import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
+import HomeScreenSolider from "./component/Home.component.solider";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
-          
-        <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                // component={(props) => <HomeScreen {...props} />}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Users"
-                component={UserListComponent}
-                options={{
-                  headerShown: true,
-                  headerStyle: { backgroundColor: "black" },
-                  headerTitle: "צאטים",
-                  headerTitleStyle: {
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  },
-                  headerBackTitle: "חזור",
-                }}
-              />
-              <Stack.Screen
-                name="Events"
-                component={EventListComponent}
-                options={{
-                  headerShown: true,
-                  headerStyle: { backgroundColor: "black" },
-                  headerTitle: "אירועים",
-                  headerTitleStyle: {
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  },
-                  headerBackTitle: "חזור",
-                }}
-              />
-              <Stack.Screen
-                name="WalkieTalkie"
-                component={WalkieTalkiePTT}
-                options={{ headerShown: false }}
-              />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            // component={(props) => <HomeScreen {...props} />}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeSolider"
+            component={HomeScreenSolider}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Users"
+            component={UserListComponent}
+            options={{
+              headerShown: true,
+              headerStyle: { backgroundColor: "black" },
+              headerTitle: "צאטים",
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerBackTitle: "חזור",
+            }}
+          />
+          <Stack.Screen
+            name="Events"
+            component={EventListComponent}
+            options={{
+              headerShown: true,
+              headerStyle: { backgroundColor: "black" },
+              headerTitle: "אירועים",
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerBackTitle: "חזור",
+            }}
+          />
+          <Stack.Screen
+            name="WalkieTalkie"
+            component={WalkieTalkiePTT}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

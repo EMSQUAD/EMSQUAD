@@ -44,17 +44,17 @@ export default function Home({ navigation, route}) {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
   const { userDetails } = route.params;
-  console.log('userDetails in Home:', userDetails);
+  // console.log('userDetails in Home:', userDetails);
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     // You can perform additional actions here if needed
   };
-  const startAlarm = async () => {
-    await stopSound();
-    await loadSound();
-    setAlarmActive(true);
-    playSound();
-  };
+  // const startAlarm = async () => {
+  //   await stopSound();
+  //   await loadSound();
+  //   setAlarmActive(true);
+  //   playSound();
+  // };
 
   const stopAlarm = async () => {
     setAlarmActive(false);
@@ -63,7 +63,7 @@ export default function Home({ navigation, route}) {
 
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
-      startAlarm();
+      // startAlarm();
       openModal(); 
     }, 800);
   };
@@ -104,13 +104,13 @@ export default function Home({ navigation, route}) {
   
   useEffect(() => {
     // console.log('HomeScreen height:', Dimensions.get('window').height);
-    loadSound();
+    // loadSound();
 
     return () => {
       stopSound();
     };
   }, []);
-  console.log("userDetails:", userDetails);
+  // console.log("userDetails:", userDetails);
   return (
     <View style={styles.container}>
       <TouchableOpacity

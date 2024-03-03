@@ -16,16 +16,9 @@ import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
-import jsonData from "../server/db/message.json";
+// import jsonData from "../server/db/message.json";
+import { AntDesign } from '@expo/vector-icons';
 
-// const Card = ({ name, description,width, onPress}) => (
-// <TouchableOpacity onPress={onPress}>
-//     <View style={[styles.card, { width: width }]}>
-//       <Text style={[styles.cardTitle, { textAlign: 'right' }]}>{name}</Text>
-//       <Text style={[styles.cardDescription, { textAlign: 'right' }]}>{description}</Text>
-//     </View>
-//   </TouchableOpacity>
-// );
 
 const Card = ({ name, description, selected, onSelect,width}) => (
   <TouchableOpacity
@@ -39,12 +32,12 @@ const Card = ({ name, description, selected, onSelect,width}) => (
 
 export default function Home({ navigation, route}) {
   const [alarmActive, setAlarmActive] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+//   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
-  const { userDetails } = route.params;
-  console.log('userDetails in Home:', userDetails);
+  const userDetails = route.params ? route.params.userDetails : null;
+
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     // You can perform additional actions here if needed
@@ -64,7 +57,7 @@ export default function Home({ navigation, route}) {
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
       startAlarm();
-      openModal(); 
+    //   openModal(); 
     }, 800);
   };
 
@@ -80,25 +73,6 @@ export default function Home({ navigation, route}) {
     console.log('Sending data...');
     // Add your logic to send data here
   };
-  const openModal = () => {
-    // setSelectedMessage(jsonData[0]);
-    setModalVisible(true);
-  };
-
-  // Function to close the modal
-  const closeModal = () => {
-    setSelectedMessage(null);
-    setModalVisible(false);
-  };
-
-
-  // Function to calculate the width based on the content's length
-  const calculateCardWidth = (content) => {
-    const charWidth = 10; // Adjust as needed
-    const minWidth = 380; // Minimum width to prevent very narrow cards
-    const calculatedWidth = Math.max(content.length * charWidth, minWidth);
-    return calculatedWidth;
-  };
 
 
   
@@ -110,7 +84,7 @@ export default function Home({ navigation, route}) {
       stopSound();
     };
   }, []);
-  console.log("userDetails:", userDetails);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -121,23 +95,15 @@ export default function Home({ navigation, route}) {
       >
         <Image
           source={require("../assets/images/symbol_solider.png")}
-          style={styles.backgroundImage}
+          style={[styles.backgroundImage, { width: 200, height: 200 }]}
+
         />
-        {/* <View style={styles.contentContainer}>
-          <Image
-            source={require("../assets/images/emergency.png")}
-            style={styles.buttonImage}
-          />
-          <Text style={styles.buttonText}>אירוע אמת</Text>
-        </View> */}
+     
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-        <Image
-          source={require("../assets/images/kangaroo.png")}
-          style={styles.buttonLeftImageSmall}
-        />
-        <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
+      <AntDesign name="loading1" size={30} color="white" />
+        <Text style={styles.buttonLeftTextSmall}>סטוטוס</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -145,10 +111,10 @@ export default function Home({ navigation, route}) {
         onPress={() => navigation.navigate("Users")}
       >
         <Image
-          source={require("../assets/images/team.png")}
+          source={require("../assets/images/icon_work.png")}
           style={styles.buttonRightImageSmall}
         />
-        <Text style={styles.buttonRightTextSmall}>צוות</Text>
+        <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
       </TouchableOpacity>
 
       {alarmActive && (
@@ -166,39 +132,7 @@ export default function Home({ navigation, route}) {
       <Training />
       <PersonalTraking />
 
-   {/* modal */}
-   <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            {/* Map through the jsonData array and display each item */}
-            {jsonData.map((item, index) => (
-              <Card
-                style={styles.emergencyData}
-                key={index}
-                name={item.name}
-                description={item.description}
-                selected={index === selectedCardIndex}
-                onSelect={() => handleCardSelect(index)}
-                width={calculateCardWidth(item.name)} // Pass calculated width to the Card component
-              />
-            ))}
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
-                onPress={() => sendData()}
-              >
-                <Text style={styles.textStyle}>שלח</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ ...styles.openButton, backgroundColor: "#FFA800" }}
-                onPress={closeModal}
-              >
-                <Text style={styles.textStyle}>בטל</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+  
 
 
       <NavBar />
@@ -216,10 +150,10 @@ const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    width: 205,
+    width: 250,
     height: 200,
     top: 200,
-    left: 115,
+    left: 90,
     borderWidth: 0,
     borderRadius: 40,
     borderColor: "pink",
@@ -267,6 +201,7 @@ const styles = StyleSheet.create({
   buttonLeftTextSmall: {
     color: "white",
     fontSize: 14,
+    marginTop: 5,
   },
   seconderyRightButton: {
     position: "absolute",
@@ -286,6 +221,7 @@ const styles = StyleSheet.create({
   buttonRightTextSmall: {
     color: "white",
     fontSize: 14,
+    marginTop: 5,
   },
   stpButton: {
     position: "absolute",

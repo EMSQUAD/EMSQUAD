@@ -43,7 +43,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const GreetingMessage = ({ user }) => {
-  console.log('user:', user);
+  // console.log('user:', user);
   const getGreetingMessage = () => {
     const currentHour = new Date().getHours();
 

@@ -45,12 +45,16 @@ const LoginScreen = ({ navigation }) => {
           type_user: responseData.data.type_user,
           // Add other user details as needed
         };
-        console.log('Response Data:', responseData);
+        // console.log('Response Data:', responseData);
 
-        console.log('User Details:', userDetails);
+        // console.log('User Details:', userDetails);
         // Pass user details to HomeScreen
-        navigation.navigate('Home', { userDetails: userDetails });
-   
+     if(userDetails.type_user==='Comander'){
+      navigation.navigate('Home', { userDetails: userDetails });
+     }   
+     if(userDetails.type_user==='Solider'){
+      navigation.navigate('HomeSolider', { userDetails: userDetails });
+     }
       } else {
         console.error('Login failed:', responseData.message);
         Alert.alert('Login Failed', responseData.message || 'Login failed');
