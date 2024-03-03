@@ -71,9 +71,6 @@ const App = () => {
                 component={WalkieTalkiePTT}
                 options={{ headerShown: false }}
               />
-     
-       
-    
         </Stack.Navigator>
       </NavigationContainer>
     </View>
