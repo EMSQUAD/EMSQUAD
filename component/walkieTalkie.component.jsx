@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button, Platform } from 'react-native';
 import { Audio } from 'expo-av';
-import NearbyChat from './D2D_comunication/local_messege';
 
 const WalkieTalkiePTT = () => {
     const [recording, setRecording] = useState(null);
@@ -96,7 +95,6 @@ const WalkieTalkiePTT = () => {
         if (Platform.OS === 'ios') {
             setAllowsRecordingIOS(false);
         }
-        await NearbyChat.sendMessage('Hello');
     };
 
     const playRecording = async () => {
