@@ -18,6 +18,7 @@ import Header from "./Header";
 import NavBar from "./Navbar";
 // import jsonData from "../server/db/message.json";
 import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 
 const Card = ({ name, description, selected, onSelect,width}) => (
@@ -103,17 +104,18 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
       <AntDesign name="loading1" size={30} color="white" />
-        <Text style={styles.buttonLeftTextSmall}>סטוטוס</Text>
+        <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
         onPress={() => navigation.navigate("Users")}
       >
-        <Image
+        {/* <Image
           source={require("../assets/images/icon_work.png")}
           style={styles.buttonRightImageSmall}
-        />
+        /> */}
+        <Feather name="repeat" size={30} color="white" />
         <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
       </TouchableOpacity>
 
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 540,
     height: 540,
-    left: 5,
+    right: 9,
   },
   contentContainer: {
     position: "absolute",
@@ -187,28 +189,28 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 350,
     left: 40,
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
   },
   buttonLeftImageSmall: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   buttonLeftTextSmall: {
     color: "white",
     fontSize: 14,
-    marginTop: 5,
+    marginTop: 2,
   },
   seconderyRightButton: {
     position: "absolute",
     top: 350,
     right: 40,
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     backgroundColor: "black",
     justifyContent: "center",

@@ -9,7 +9,9 @@ import {
   Text,
   Dimensions,
   Modal,
+  Alert,
 } from "react-native";
+import * as Notifications from 'expo-notifications';
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 // import { useHeaderHeight } from "@react-navigation/elements";
 import Training from "./Training";
@@ -78,10 +80,78 @@ export default function Home({ navigation, route}) {
     console.log("Pressed");
     console.log("Alarm sent...");
   };
-  const sendData = () => {
-    console.log('Sending data...');
-    // Add your logic to send data here
-  };
+
+
+  const sendData = async () => {
+    try {
+        console.log('Sending data...');
+
+        // Fetch all users from the provided endpoint
+        const response = await fetch('https://server-ems-rzdd.onrender.com/user');
+        if (!response.ok) {
+            throw new Error('Failed to fetch users');
+        }
+        const responseData = await response.json();
+
+        // Log the response to inspect its structure
+        console.log('Response from /user endpoint:', responseData);
+
+        // Check if the response contains data array
+        if (!responseData.data || !Array.isArray(responseData.data)) {
+            throw new Error('Invalid response: data is not an array');
+        }
+
+        const data = responseData.data;
+
+        // Filter soldiers
+        const soldiers = data.filter(user => user.type_user === 'Soldier');
+
+        // Get commander
+        const commander = data.find(user => user.type_user === 'Comander');
+
+        if (!commander) {
+            throw new Error('Commander not found');
+        }
+
+        // Prepare notifications for each soldier
+        const notifications = soldiers.map(soldier => ({
+            to: soldier.push_token, // Push token of the soldier
+            sound: 'default',
+            title: `Alert from Commander ${commander.first_name} ${commander.last_name}`,
+            body: `Attention, ${soldier.first_name}!`,
+            data: { data: 'goes here' }, // Optional data payload
+        }));
+
+        // Send notifications
+        // Assuming Notifications is properly defined
+        for (const notification of notifications) {
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: notification.title,
+                    body: notification.body,
+                },
+                trigger: null, // Send immediately
+            });
+        }
+
+        console.log('Alerts sent to all soldiers.');
+        Alert.alert("התראה נשלחה בהצלחה");
+    } catch (error) {
+        console.error('Error sending data:', error);
+        Alert.alert('Error', 'Failed to send alerts to soldiers');
+    }
+};
+
+
+
+  
+  
+
+
+  
+  
+
+  
   const openModal = () => {
     // setSelectedMessage(jsonData[0]);
     setModalVisible(true);

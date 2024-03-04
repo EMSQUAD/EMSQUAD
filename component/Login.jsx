@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
@@ -135,4 +134,4 @@ const loginStyles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginScreen;

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 const UserListComponent = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigation = useNavigation(); // Use useNavigation hook to get navigation object
 
     useEffect(() => {
         fetchUsersFromAPI();
@@ -48,7 +50,7 @@ const UserListComponent = () => {
                 <TouchableOpacity
                     key={`${user.id_use}_${index}`} // Use a combination of user ID and index
                     style={styles.card}
-                    onPress={() => {/* Handle onPress event */}}>
+                    onPress={() => navigation.navigate('ChatScreen', { user })}>
                     <Image source={{ uri: user.image }} style={styles.image} />
                     <View style={styles.userInfo}>
                         <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>
@@ -59,15 +61,12 @@ const UserListComponent = () => {
             ))}
         </ScrollView>
     );
-    
 };
 
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1, // Ensure content can grow
         width: '100%',
-
-        
     },
     container: {
         flex: 1,

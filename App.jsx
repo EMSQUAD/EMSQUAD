@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+import * as Notifications from 'expo-notifications';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./component/Home.component";
@@ -40,6 +41,35 @@ const App = () => {
   useEffect(() => {
     console.log("showAvailable in App:", showAvailable);
   }, [showAvailable]);
+import ChatScreen from "./component/ChatScreen";
+// import Listteam from "./component/Listteam";
+
+const Stack = createNativeStackNavigator();
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+// Request permissions for notifications
+async function registerForPushNotificationsAsync() {
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== 'granted') {
+    const { status: newStatus } = await Notifications.requestPermissionsAsync();
+    if (newStatus !== 'granted') {
+      console.log('Permission to receive notifications was denied');
+      return;
+    }
+  }
+  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+  // Now you can save the token to your user's data or send it to your server to associate it with the user
+}
+
+registerForPushNotificationsAsync();
+
 
   return (
     <View style={styles.container}>
@@ -115,6 +145,7 @@ const App = () => {
             })}
           />
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
+       
           <Stack.Screen
             name="Events"
             component={EventListComponent}
@@ -130,11 +161,17 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
+
           <Stack.Screen
             name="WalkieTalkie"
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </View>

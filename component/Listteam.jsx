@@ -11,9 +11,9 @@ import {
 
 // const { userDetails } = route.params || {};
 
-const UserListComponent = ({ showAvailable ,updateShowAvailable,route}) => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+// const UserListComponent = ({ showAvailable ,updateShowAvailable,route}) => {
+//   const [users, setUsers] = useState([]);
+//   const [loading, setLoading] = useState(true);
 //   const [showAvailable, setShowAvailable] = useState(true);
   // const { userDetails } = route.params;
   // const currentUser = {
@@ -30,6 +30,9 @@ const UserListComponent = ({ showAvailable ,updateShowAvailable,route}) => {
   console.log("currentUser: Listteam", currentUser);
   
 
+const UserListComponent = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -62,6 +65,9 @@ const UserListComponent = ({ showAvailable ,updateShowAvailable,route}) => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    fetchUsersFromAPI();
+  }, []);
 
   
 
