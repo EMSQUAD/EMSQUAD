@@ -3,7 +3,8 @@ import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, Scr
 
 
 const currentUser = {
-    id: 345679012, // Replace with the actual ID of the current user
+    // id: 345679012, // Replace with the actual ID of the current user
+    id: userDetails.id_use,
   };
 
 const UserListComponent = () => {

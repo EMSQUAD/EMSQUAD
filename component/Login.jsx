@@ -48,6 +48,7 @@ const LoginScreen = ({ navigation }) => {
 
         // console.log('User Details:', userDetails);
         // Pass user details to HomeScreen
+        //
      if(userDetails.type_user==='Comander'){
       navigation.navigate('Home', { userDetails: userDetails });
      }   
