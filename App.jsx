@@ -14,7 +14,7 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
-import Listteam from "./component/Listteam";
+// import Listteam from "./component/Listteam";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -57,7 +57,7 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-    <Stack.Screen
+    {/* <Stack.Screen
             name="List"
             component={Listteam}
             options={{
@@ -71,7 +71,7 @@ const App = () => {
               },
               headerBackTitle: "חזור",
             }}
-          />
+          /> */}
 
 
 
