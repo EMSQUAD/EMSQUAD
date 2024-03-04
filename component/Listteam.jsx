@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
+
+const currentUser = {
+    id: 345679012, // Replace with the actual ID of the current user
+  };
+
 const UserListComponent = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +23,10 @@ const UserListComponent = () => {
                 throw new Error('Failed to fetch users');
             }
             const data = await response.json();
-            setUsers(data.data); // Assuming the API response has a 'data' property containing the array of users
+            const filteredUsers = data.data.filter(user => user.id_use !== currentUser.id);
+
+            setUsers(filteredUsers);
+            // setUsers(data.data); // Assuming the API response has a 'data' property containing the array of users
             setLoading(false);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -52,8 +60,10 @@ const UserListComponent = () => {
                     <Image source={{ uri: user.image }} style={styles.image} />
                     <View style={styles.userInfo}>
                         <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>
-                        <Text style={styles.userInfoText}>{`Phone: ${user.phone}`}</Text>
-                        <Text style={styles.userInfoText}>{`Status: ${user.status_ability}`}</Text>
+                        {/* <Text style={styles.userInfoText}>{`Phone: ${user.phone}`}</Text> */}
+                        {/* <Text style={styles.userInfoText}>{`Status: ${user.status_ability}`}</Text>
+                         */}
+                          <Text style={styles.userInfoText}>{`סטטוס: ${user.status_ability}`}</Text>
                     </View>
                 </TouchableOpacity>
             ))}
@@ -73,7 +83,9 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         paddingTop: 30,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        flexDirection: 'row-reverse'
+        
     },
     loadingContainer: {
         flex: 1,
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     card: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         alignItems: 'center',
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
@@ -96,12 +108,14 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         width: '100%',
+        justifyContent: 'flex-end',
     },
     image: {
         width: 70,
         height: 70,
         borderRadius: 35,
         marginRight: 10,
+        marginLeft: 10,
     },
     userInfo: {
         flex: 1,
@@ -110,10 +124,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        textAlign: 'right',
+        paddingRight: 10,
     },
     userInfoText: {
         fontSize: 16,
         marginBottom: 3,
+        textAlign: 'right',
+        paddingRight: 10,
     },
 });
 
