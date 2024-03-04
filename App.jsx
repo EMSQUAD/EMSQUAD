@@ -5,6 +5,7 @@ import {
   StatusBar,
   Dimensions,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -15,6 +16,7 @@ import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -57,7 +59,7 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-    <Stack.Screen
+          <Stack.Screen
             name="List"
             component={Listteam}
             options={{
@@ -70,16 +72,17 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
-          
-
-
-
-
-              
+              headerRight: () => (
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="filter-variant"
+                    size={24}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              ),
             }}
           />
-
-
 
           <Stack.Screen
             name="Events"
