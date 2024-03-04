@@ -13,7 +13,7 @@ import UserListComponent from "./component/DisplayUsers.component";
 import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
-
+import ChatScreen from "./component/ChatScreen"; // Import the ChatScreen component
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +30,7 @@ const App = () => {
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
-          {isLoggedIn ? (
+          {isLoggedIn == false ? (
             <>
               <Stack.Screen
                 name="Home"
@@ -71,6 +71,11 @@ const App = () => {
                 name="WalkieTalkie"
                 component={WalkieTalkiePTT}
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ChatScreen"
+                component={ChatScreen}
+                options={{ headerShown: true, title: "Chat" }}
               />
             </>
           ) : (

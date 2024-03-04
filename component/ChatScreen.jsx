@@ -4,7 +4,7 @@ import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
-const ChatScreen = () => {
+const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -12,6 +12,7 @@ const ChatScreen = () => {
   const [persons, setPersons] = useState([]);
 
   const textInputRef = useRef(null);
+  const userId = route.params.user._id;
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardOpen(true));
@@ -22,10 +23,11 @@ const ChatScreen = () => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
   useEffect(() => {
     const fetchPersons = async () => {
       try {
-        const response = await axios.get('http://30.30.11.142:3000/user');
+        const response = await axios.get('https://server-ems-render.onrender.com/user');
         setPersons(response.data);
       } catch (error) {
         console.error('Error fetching persons: ', error);
@@ -35,9 +37,13 @@ const ChatScreen = () => {
     fetchPersons();
   }, []);
 
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
   const fetchMessages = async () => {
     try {
-      const response = await axios.get('YOUR_API_ENDPOINT/messages');
+      const response = await axios.get(`https://lochlhost:3000/messages/${userId}`);
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching messages: ', error);
@@ -45,9 +51,13 @@ const ChatScreen = () => {
   };
 
   const onSend = async (newMessages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages));
+    const formattedMessages = newMessages.map(message => ({
+      ...message,
+      userId: userId,
+    }));
+    setMessages(previousMessages => GiftedChat.append(previousMessages, formattedMessages));
     try {
-      await axios.post('YOUR_API_ENDPOINT/messages', newMessages);
+      await axios.post('https://server-ems-render.onrender.com/messages', formattedMessages);
       setText('');
     } catch (error) {
       console.error('Error sending message: ', error);
@@ -173,7 +183,7 @@ const ChatScreen = () => {
           timeFormat="HH:mm"
           keyboardShouldPersistTaps="never"
           onPressActionButton={handlePlusButtonPress}
-          bottomOffset={34}
+          bottomOffset={0}
           renderBubble={renderMessageBubble}
         />
         {showOptions && (

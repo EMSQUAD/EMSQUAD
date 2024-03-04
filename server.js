@@ -1,55 +1,91 @@
+// require('dotenv').config();
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// // const fetch = require('node-fetch');
+// // const uuid = require('uuid');
+// const logger = require('morgan');
+// // const User = require('../models/user.model');
+
+// // const User = require('./models/user.model');
+// const cors = require('cors');
+// const app = express();
+// const port = 3000;
+
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(logger('dev'));
+
+
+// const {userRouter} = require('./router/user.router');
+// app.use('/user', userRouter);
+
+// const{eventRouter}=require('./router/event.router');
+// app.use('/event',eventRouter);
+
+
+
+
+
+// app.use(bodyParser.json());
+
+
+
+
+
+// app.listen(port, () => {
+//     console.log(`Server is running at http://localhost:${port}`);
+// });
+
+
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const logger = require('morgan');
 const bcrypt = require('bcrypt');
-const { User } = require('./Server/models/user.model'); // Import your User model
+const User = require('./Server/models/user.model');
 
 const app = express();
 const port = 3000;
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 
-
-const {userRouter} = require('./Server/router/user.router');
+const { userRouter } = require('./Server/router/user.router');
 app.use('/user', userRouter);
 
-
-const{eventRouter}=require('./Server/router/event.router');
-app.use('/event',eventRouter);
-
-
-
-app.use(bodyParser.json());
+const { eventRouter } = require('./Server/router/event.router');
+app.use('/event', eventRouter);
 
 app.post('/user', async (req, res) => {
     const { id_use, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ id_use });
-  
-      if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-      }
-  
-      const passwordMatch = await bcrypt.compare(password, user.password);
-  
-      if (passwordMatch) {
-        return res.json({ success: true, message: 'Login successful', user });
-      } else {
-        return res.status(401).json({ success: false, message: 'Incorrect password' });
-      }
-    } catch (error) {
-      console.error('Error during authentication:', error);
-      return res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-  });
 
+    try {
+        console.log('Received login request with id_use:', id_use);
+
+        const user = await User.findOne({ id_use });
+
+        console.log('Data retrieved from MongoDB:', user);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (passwordMatch) {
+            return res.json({ success: true, message: 'Login successful', user });
+        } else {
+            return res.status(401).json({ success: false, message: 'Incorrect password' });
+        }
+    } catch (error) {
+        console.error('Error during authentication:', error);
+        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
 
 let recordedAudio = null;
 
@@ -94,7 +130,7 @@ app.post('/sendAudioMessage', async (req, res) => {
             },
             body: audioData
         });
-        
+
         if (response.ok) {
             res.sendStatus(200);
         } else {
