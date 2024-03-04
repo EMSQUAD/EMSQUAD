@@ -11,7 +11,7 @@ import {
 
 // const { userDetails } = route.params || {};
 
-const UserListComponent = ({ showAvailable= false ,route}) => {
+const UserListComponent = ({ showAvailable ,updateShowAvailable,route}) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 //   const [showAvailable, setShowAvailable] = useState(true);

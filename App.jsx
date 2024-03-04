@@ -19,14 +19,27 @@ import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
+const ListTeamScreen = ({ route }) => {
+  const showAvailable = route.params?.showAvailable ?? true;
+  return <Listteam showAvailable={showAvailable} />;
+};
 const App = () => {
-  const [showAvailable, setShowAvailable] = useState(true);
+ const [showAvailable, setShowAvailable] = useState(true);
 
-  const updateShowAvailable = () => {
-    setShowAvailable((prev) => !prev);
-  };
+  // const updateShowAvailable = () => {
+  //   setShowAvailable((prev) => !prev);
+  // };
+
+
+  // const updateShowAvailable = (newShowAvailable) => {
+  //   setShowAvailable(newShowAvailable);
+  //   navigation.setParams({ showAvailable: newShowAvailable });
+  // };
+
   // const [showAvailable, setShowAvailable] = useState(true);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("showAvailable in App:", showAvailable);
+  }, [showAvailable]);
 
   return (
     <View style={styles.container}>
@@ -69,10 +82,11 @@ const App = () => {
             name="List"
             // component={Listteam}
             // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
-            component={(props) => (
-              <Listteam {...props} showAvailable={showAvailable} />
-            )}
-            options={{
+            // component={(props) => (
+            //   <Listteam {...props} showAvailable={showAvailable} />
+            // )}
+            component={ListTeamScreen}
+            options={({ route }) => ({
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
               headerTitle: "צוות",
@@ -83,7 +97,14 @@ const App = () => {
               },
               headerBackTitle: "חזור",
               headerRight: () => (
-                <TouchableOpacity onPress={() => updateShowAvailable()}>
+                <TouchableOpacity
+                //   onPress={() => updateShowAvailable(!showAvailable)}
+                // >
+                onPress={() => {
+                  const showAvailable = route.params?.showAvailable || true;
+                  route.params?.updateShowAvailable(!showAvailable);
+                }}
+              >
                   <MaterialCommunityIcons
                     name="filter-variant"
                     size={24}
@@ -91,7 +112,7 @@ const App = () => {
                   />
                 </TouchableOpacity>
               ),
-            }}
+            })}
           />
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
           <Stack.Screen
