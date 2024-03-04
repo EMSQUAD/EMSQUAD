@@ -142,7 +142,7 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("List")}
+        onPress={() => navigation.navigate("List", { userDetails: userDetails })}
       >
         <Image
           source={require("../assets/images/team.png")}
