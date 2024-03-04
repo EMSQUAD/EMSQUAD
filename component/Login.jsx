@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
         },
         body: JSON.stringify({ id_use: parseInt(id), password }),
       });
-  
+  //
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
