@@ -70,6 +70,12 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
+          
+
+
+
+
+              
             }}
           />
 
