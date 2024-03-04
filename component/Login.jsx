@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
         },
         body: JSON.stringify(requestBody),
       });
-  
+  //
       if (!response.ok) {
         throw new Error(`Server Error! Status: ${response.status}`);
       }
