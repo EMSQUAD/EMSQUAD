@@ -43,12 +43,14 @@ export default function Home({ navigation, route}) {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
-  const { userDetails } = route.params;
-  // console.log('userDetails in Home:', userDetails);
+  const { userDetails } = route.params || {};  // console.log('userDetails in Home:', userDetails);
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
+    // console.log('Selected card index:', index);
+
     // You can perform additional actions here if needed
   };
+  
   // const startAlarm = async () => {
   //   await stopSound();
   //   await loadSound();
@@ -142,7 +144,7 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("List", { userDetails: userDetails })}
+        onPress={() => navigation.navigate("List",{ userDetails })}
       >
         <Image
           source={require("../assets/images/team.png")}
