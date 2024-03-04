@@ -142,7 +142,7 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("Users")}
+        onPress={() => navigation.navigate("List")}
       >
         <Image
           source={require("../assets/images/team.png")}
@@ -201,8 +201,11 @@ export default function Home({ navigation, route}) {
       </Modal>
 
 
-      <NavBar />
-      <NavBar navigation={navigation} />
+      {/* <NavBar /> */}
+      {/* <NavBar navigation={navigation}  />
+       */}
+       <NavBar navigation={navigation} route={{ params: { userDetails: userDetails } }} />
+
     </View>
   );
 }
