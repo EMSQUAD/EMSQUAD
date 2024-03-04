@@ -91,7 +91,7 @@ const WalkieTalkiePTT = () => {
 
     const handlePressOut = async () => {
         console.log('handlePressOut called');
-        await stopRecording();
+        await stopRecording();   
         if (Platform.OS === 'ios') {
             setAllowsRecordingIOS(false);
         }
