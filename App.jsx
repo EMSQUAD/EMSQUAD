@@ -20,10 +20,10 @@ import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
-const ListTeamScreen = ({ route }) => {
-  const showAvailable = route.params?.showAvailable ?? true;
-  return <Listteam showAvailable={showAvailable} />;
-};
+// const ListTeamScreen = ({ route }) => {
+//   const showAvailable = route.params?.showAvailable ?? true;
+//   return <Listteam showAvailable={showAvailable} />;
+// };
 const App = () => {
  const [showAvailable, setShowAvailable] = useState(true);
 
@@ -41,7 +41,7 @@ const App = () => {
   useEffect(() => {
     console.log("showAvailable in App:", showAvailable);
   }, [showAvailable]);
-import ChatScreen from "./component/ChatScreen";
+// import ChatScreen from "./component/ChatScreen";
 // import Listteam from "./component/Listteam";
 
 const Stack = createNativeStackNavigator();
