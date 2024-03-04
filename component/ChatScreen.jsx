@@ -8,7 +8,6 @@ const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
   const [persons, setPersons] = useState([]);
 
   const textInputRef = useRef(null);
@@ -25,28 +24,27 @@ const ChatScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    const fetchPersons = async () => {
-      try {
-        const response = await axios.get('https://server-ems-render.onrender.com/user');
-        setPersons(response.data);
-      } catch (error) {
-        console.error('Error fetching persons: ', error);
-      }
-    };
-
     fetchPersons();
-  }, []);
-
-  useEffect(() => {
     fetchMessages();
   }, []);
 
+  const fetchPersons = async () => {
+    try {
+      const response = await axios.get('https://server-ems-rzdd.onrender.com/user');
+      setPersons(response.data);
+    } catch (error) {
+      console.error('Error fetching persons: ', error);
+      Alert.alert('Error', 'Failed to fetch persons. Please try again.');
+    }
+  };
+
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(`https://lochlhost:3000/messages/${userId}`);
+      const response = await axios.get(`https://server-ems-rzdd.onrender.com/messages/${userId}`);
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching messages: ', error);
+      Alert.alert('Error', 'Failed to fetch messages. Please try again.');
     }
   };
 
@@ -57,17 +55,18 @@ const ChatScreen = ({ route }) => {
     }));
     setMessages(previousMessages => GiftedChat.append(previousMessages, formattedMessages));
     try {
-      await axios.post('https://server-ems-render.onrender.com/messages', formattedMessages);
+      await axios.post('https://server-ems-rzdd.onrender.com/messages', formattedMessages);
       setText('');
     } catch (error) {
       console.error('Error sending message: ', error);
+      Alert.alert('Error', 'Failed to send message. Please try again.');
     }
   };
 
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
+      Alert.alert('Permission Denied', 'Camera roll permissions are required to upload images.');
       return;
     }
 
@@ -111,7 +110,7 @@ const ChatScreen = ({ route }) => {
   const handlePlusButtonPress = () => {
     Alert.alert(
       'Add a Photo',
-      'Would you like to take a photo or choose from gallery?',
+      'Would you like to take a photo or choose from the gallery?',
       [
         {
           text: 'Take Photo',
@@ -133,7 +132,7 @@ const ChatScreen = ({ route }) => {
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      alert('Sorry, we need camera permissions to make this work!');
+      Alert.alert('Permission Denied', 'Camera permissions are required to take photos.');
       return;
     }
 
@@ -171,7 +170,7 @@ const ChatScreen = ({ route }) => {
           messages={messages}
           onSend={newMessages => onSend(newMessages)}
           user={{ _id: 1 }}
-          placeholder="כתוב משהו..."
+          placeholder="Type something..."
           alwaysShowSend
           renderAvatar={null}
           renderUsernameOnMessage
@@ -186,13 +185,6 @@ const ChatScreen = ({ route }) => {
           bottomOffset={0}
           renderBubble={renderMessageBubble}
         />
-        {showOptions && (
-          <View style={styles.optionsContainer}>
-            <TouchableOpacity style={styles.optionButton} onPress={handlePickImage}>
-              <Text style={styles.optionText}>Pick Image</Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </ImageBackground>
     </View>
   );
@@ -237,23 +229,6 @@ const styles = StyleSheet.create({
   },
   sendButtonText: {
     color: 'red',
-  },
-  optionsContainer: {
-    position: 'absolute',
-    bottom: 60,
-    right: 10,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    elevation: 5,
-  },
-  optionButton: {
-    padding: 5,
-  },
-  optionText: {
-    fontSize: 16,
-    color: 'black',
   },
 });
 

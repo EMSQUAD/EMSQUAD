@@ -21,11 +21,11 @@ const LoginScreen = ({ navigation }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({ id_use: parseInt(id), password }),
       });
-  //
+  
       if (!response.ok) {
-        throw new Error(`Server Error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
   
       const responseData = await response.json();
@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
       navigation.navigate('HomeSolider', { userDetails: userDetails });
      }
       } else {
-        console.error('Login failed:', responseData.message || 'Unknown error');
+        console.error('Login failed:', responseData.message);
         Alert.alert('Login Failed', responseData.message || 'Login failed');
       }
     } catch (error) {
@@ -134,4 +134,4 @@ const loginStyles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginScreen;
