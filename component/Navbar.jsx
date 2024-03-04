@@ -3,7 +3,8 @@ import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 
 
 
-const NavBar = ({navigation}) => {
+const NavBar = ({navigation,route}) => {
+  const { userDetails } = route?.params || {};
   const navOptions = [
     { icon: require("../assets/images/settings.png"), text: "הגדרות" },
     { icon: require("../assets/images/task.png"), text: "אירועים" },
@@ -11,7 +12,7 @@ const NavBar = ({navigation}) => {
     { icon: require("../assets/images/chat.png"), text: "צ'אט" },
   ];
 
-
+  console.log("userDetails in NavBar:", userDetails);
 
 
   return (
@@ -20,12 +21,12 @@ const NavBar = ({navigation}) => {
         <TouchableOpacity key={index} style={styles.optionContainer}
          onPress={() => {
               if (option.text === "בית") {
-                navigation.navigate("Home");
+                navigation.navigate("Home",{ userDetails: userDetails });
               } else if (option.text === "צ'אט") {
-                navigation.navigate("Users");
+                navigation.navigate("Users",{ userDetails: userDetails });
               }
               else if (option.text === "אירועים") {
-                navigation.navigate("Events");
+                navigation.navigate("Events",{ userDetails: userDetails });
               }
             }}
           >
