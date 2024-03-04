@@ -7,17 +7,16 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!id || !password) {
+      Alert.alert('Validation Error', 'Please enter both ID and password');
+      console.log('Validation error');
+      return;
+    }
+  
+    setLoading(true);
+  
     try {
-      if (!id || !password) {
-        throw new Error('Validation Error: Please enter both ID and password');
-      }
-  
-      setLoading(true);
-      console.log('Attempting login with:', { id_use: id, password });
-  
-      const requestBody = { id_use: id, password };
-  
-      const response = await fetch('https://emsquad.onrender.com/user', {
+      const response = await fetch('https://server-ems-rzdd.onrender.com/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,11 +29,31 @@ const LoginScreen = ({ navigation }) => {
       }
   
       const responseData = await response.json();
-      console.log('Server Response:', responseData);
   
-      if (responseData && responseData._id) {
+      if (response.status >= 200 && response.status < 300) {
         console.log('Login successful');
-        navigation.navigate('Home');
+      
+        // Save user details for future screens
+        const userDetails = {
+          id: parseInt(id),
+          password,
+          first_name: responseData.data.first_name,
+          last_name: responseData.data.last_name,
+          image: responseData.data.image,
+          status_ability: responseData.data.status_ability,
+          type_user: responseData.data.type_user,
+          // Add other user details as needed
+        };
+        // console.log('Response Data:', responseData);
+
+        // console.log('User Details:', userDetails);
+        // Pass user details to HomeScreen
+     if(userDetails.type_user==='Comander'){
+      navigation.navigate('Home', { userDetails: userDetails });
+     }   
+     if(userDetails.type_user==='Solider'){
+      navigation.navigate('HomeSolider', { userDetails: userDetails });
+     }
       } else {
         console.error('Login failed:', responseData.message || 'Unknown error');
         Alert.alert('Login Failed', responseData.message || 'Login failed');
@@ -47,36 +66,35 @@ const LoginScreen = ({ navigation }) => {
     }
   };
   
-  
 
   return (
-    <View style={styles.container}>
-      <Image source={require("../assets/images/logo.png")} style={styles.logo} />
-      <View style={styles.form}>
+    <View style={loginStyles.container}>
+      <Image source={require("../assets/images/logo.png")} style={loginStyles.logo} />
+      <View style={loginStyles.form}>
         <TextInput
-          style={styles.input}
+          style={loginStyles.input}
           placeholder="תעודת זהות"
           placeholderTextColor="#A9A9A9"
           onChangeText={setId}
           value={id}
         />
         <TextInput
-          style={styles.input}
+          style={loginStyles.input}
           placeholder="סיסמא"
           placeholderTextColor="#A9A9A9"
           secureTextEntry
           onChangeText={setPassword}
           value={password}
         />
-        <TouchableOpacity onPress={handleLogin} style={styles.button} disabled={loading}>
-          <Text style={styles.buttonText}>{loading ? 'Loading...' : 'התחברות'}</Text>
+        <TouchableOpacity onPress={handleLogin} style={loginStyles.button} disabled={loading}>
+          <Text style={loginStyles.buttonText}>{loading ? 'Loading...' : 'התחברות'}</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#090909',
@@ -116,5 +134,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-

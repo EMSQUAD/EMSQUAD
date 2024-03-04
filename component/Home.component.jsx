@@ -1,432 +1,3 @@
-// import React, { useState, useRef, useEffect } from "react";
-// import {
-//   View,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Text,
-// } from "react-native";
-// import { loadSound, playSound, stopSound } from "./SoundUtils";
-// import NavBar from "./Navbar";
-// // import GreetingMessage from "./DateMessage";
-// import Training from "./Training";
-// import PersonalTraking from "./PersonalTraking";
-// import Header from "./Header";
-// // import { useNavigation } from "@react-navigation/native";
-// export default function Home({ navigation }) {
-//   const pressHandler = () => {
-//     navigation.navigate('Users');
-//   };
-
-//   const [alarmActive, setAlarmActive] = useState(false);
-//   const pressTimer = useRef(null);
-
-//   const startAlarm = async () => {
-//     await stopSound();
-//     await loadSound();
-//     setAlarmActive(true);
-//     playSound();
-//   };
-
-//   const stopAlarm = async () => {
-//     setAlarmActive(false);
-//     await stopSound();
-//   };
-
-//   const handleButtonPressIn = () => {
-//     pressTimer.current = setTimeout(() => {
-//       startAlarm();
-//     }, 1500);
-//   };
-
-//   const handleButtonPressOut = () => {
-//     clearTimeout(pressTimer.current);
-//   };
-
-//   const press = () => {
-//     console.log('Pressed');
-//     console.log('Alarm sent...');
-//   };
-
-//   useEffect(() => {
-//     loadSound();
-
-//     return () => {
-//       stopSound();
-//     };
-//   }, []);
-
-//   return (
-//     <View style={styles.container}>
-//       <TouchableOpacity
-//         style={styles.button}
-//         onPressIn={handleButtonPressIn}
-//         onPressOut={handleButtonPressOut}
-//       >
-//         <Image
-//           source={require('../assets/images/symbol1.png')}
-//           style={styles.backgroundImage}
-//         />
-//         <View style={styles.contentContainer}>
-//           <Image
-//             source={require('../assets/images/emergency.png')}
-//             style={styles.buttonImage}
-//           />
-//           <Text style={styles.buttonText}>אירוע אמת</Text>
-//         </View>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-//         <Image
-//           source={require('../assets/images/kangaroo.png')}
-//           style={styles.buttonLeftImageSmall}
-//         />
-//         <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity style={styles.seconderyRightButton} onPress={pressHandler}>
-//         <Image
-//           source={require('../assets/images/team.png')}
-//           style={styles.buttonRightImageSmall}
-//         />
-//         <Text style={styles.buttonRightTextSmall}>צוות</Text>
-//       </TouchableOpacity>
-
-//       {alarmActive && (
-//         <TouchableOpacity
-//           onPress={stopAlarm}
-//           style={[styles.stpButtonContainer, { zIndex: 999 }]}
-//         >
-//           <View style={styles.stpButton}>
-//             <Text style={styles.stpButtonText}>Stop Alarm</Text>
-//           </View>
-//         </TouchableOpacity>
-//       )}
-//       <Header />
-//       <Training />
-//       <PersonalTraking />
-//       <NavBar />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//      flex: 1,
-//     backgroundColor: "#242424",
-//     alignContent: "center",
-//     justifyContent: "center",
-//   },
-
-//   image: {
-//     marginTop: 40,
-//     width: 200,
-//     height: 50,
-//     resizeMode: "contain",
-//   },
-//   button: {
-//    position: "absolute",
-//     width: 205,
-//     height: 200,
-//     top: 130,
-//     left: 115,
-//     borderWidth: 0,
-//     borderRadius: 40,
-//     borderColor: "pink",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     overflow: "hidden",
-//   },
-//   backgroundImage: {
-//     position: "relative",
-//     width: 540,
-//     height: 540,
-//     left: 5,
-//   },
-//   contentContainer: {
-//     position: "absolute",
-//     justifyContent: "center",
-//     alignItems: "center",
-
-//   },
-//   buttonImage: {
-//     left: -10,
-//     width: 90,
-//     height: 90,
-//   },
-//   buttonText: {
-//     left: -10,
-//     color: "white",
-//     marginTop: 10,
-//     fontSize: 20,
-//   },
-//   seconderyLeftButton: {
-//     position: "absolute",
-//     top: 300,
-//     left: 40,
-//     width: 80,
-//     height: 80,
-//     borderRadius: 100,
-//     backgroundColor: "black",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   buttonLeftImageSmall: {
-//     width: 40,
-//     height: 40,
-//   },
-//   buttonLeftTextSmall: {
-//     color: "white",
-//     fontSize: 14,
-//   },
-//   seconderyRightButton: {
-//     position: "absolute",
-//     top: 300,
-//     right: 40,
-//     width: 80,
-//     height: 80,
-//     borderRadius: 100,
-//     backgroundColor: "black",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   buttonRightImageSmall: {
-//     width: 40,
-//     height: 40,
-//   },
-//   buttonRightTextSmall: {
-//     color: "white",
-//     fontSize: 14,
-//   },
-//   stpButton: {
-//     position: "absolute",
-//     top: 500,
-//     left: 115,
-//     width: 150,
-//     height: 50,
-//     backgroundColor: "red",
-//     padding: 12,
-//     borderRadius: 8,
-//   },
-//   stpButtonText: {
-//     color: "white",
-//     fontSize: 20,
-//     textAlign: "center",
-//     alignItems: "center",
-//   },
-// });
-
-// // export default HomeScreen;
-
-// // ////////////////////////////////
-
-// import React, { useState, useRef, useEffect } from "react";
-// import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
-// import { loadSound, playSound, stopSound } from "./SoundUtils";
-// // import NavBar from "./Navbar";
-// import Training from "./Training";
-// import PersonalTraking from "./PersonalTraking";
-// import { useHeaderHeight } from "@react-navigation/elements";
-// // import Header from "./Header";
-
-// export default function Home({ navigation }) {
-//   const headerHeight = useHeaderHeight();
-//   const pressHandlerUser = () => {
-//     navigation.navigate("Users");
-//   };
-
-//   const [alarmActive, setAlarmActive] = useState(false);
-//   const pressTimer = useRef(null);
-
-//   const startAlarm = async () => {
-//     await stopSound();
-//     await loadSound();
-//     setAlarmActive(true);
-//     playSound();
-//   };
-
-//   const stopAlarm = async () => {
-//     setAlarmActive(false);
-//     await stopSound();
-//   };
-
-//   const handleButtonPressIn = () => {
-//     pressTimer.current = setTimeout(() => {
-//       startAlarm();
-//     }, 1500);
-//   };
-
-//   const handleButtonPressOut = () => {
-//     clearTimeout(pressTimer.current);
-//   };
-
-//   const press = () => {
-//     console.log("Pressed");
-//     console.log("Alarm sent...");
-//   };
-
-//   useEffect(() => {
-//     loadSound();
-
-//     return () => {
-//       stopSound();
-//     };
-//   }, []);
-
-//   return (
-//     <View style={[styles.container, { paddingTop: headerHeight }]}>
-//       <TouchableOpacity
-//         style={styles.button}
-//         onPressIn={handleButtonPressIn}
-//         onPressOut={handleButtonPressOut}
-//       >
-//         <Image
-//           source={require("../assets/images/symbol1.png")}
-//           style={styles.backgroundImage}
-//         />
-//         <View style={styles.contentContainer}>
-//           <Image
-//             source={require("../assets/images/emergency.png")}
-//             style={styles.buttonImage}
-//           />
-//           <Text style={styles.buttonText}>אירוע אמת</Text>
-//         </View>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-//         <Image
-//           source={require("../assets/images/kangaroo.png")}
-//           style={styles.buttonLeftImageSmall}
-//         />
-//         <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity
-//         style={styles.seconderyRightButton}
-//         onPress={() => navigation.navigate("Users")}
-//       >
-//         <Image
-//           source={require("../assets/images/team.png")}
-//           style={styles.buttonRightImageSmall}
-//         />
-//         <Text style={styles.buttonRightTextSmall}>צוות</Text>
-//       </TouchableOpacity>
-
-//       {alarmActive && (
-//         <TouchableOpacity
-//           onPress={stopAlarm}
-//           style={[styles.stpButtonContainer, { zIndex: 999 }]}
-//         >
-//           <View style={styles.stpButton}>
-//             <Text style={styles.stpButtonText}>Stop Alarm</Text>
-//           </View>
-//         </TouchableOpacity>
-//       )}
-//       {/* <Header /> */}
-//       <Training />
-//       <PersonalTraking />
-//       {/* <NavBar /> */}
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#242424",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   button: {
-//     position: "absolute",
-//     width: 205,
-//     height: 200,
-//     top: 130,
-//     left: 115,
-//     borderWidth: 0,
-//     borderRadius: 40,
-//     borderColor: "pink",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     overflow: "hidden",
-//   },
-//   backgroundImage: {
-//     position: "relative",
-//     width: 540,
-//     height: 540,
-//     left: 5,
-//   },
-//   contentContainer: {
-//     position: "absolute",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   buttonImage: {
-//     left: -10,
-//     width: 90,
-//     height: 90,
-//   },
-//   buttonText: {
-//     left: -10,
-//     color: "white",
-//     marginTop: 10,
-//     fontSize: 20,
-//   },
-//   seconderyLeftButton: {
-//     position: "absolute",
-//     top: 300,
-//     left: 40,
-//     width: 80,
-//     height: 80,
-//     borderRadius: 100,
-//     backgroundColor: "black",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   buttonLeftImageSmall: {
-//     width: 40,
-//     height: 40,
-//   },
-//   buttonLeftTextSmall: {
-//     color: "white",
-//     fontSize: 14,
-//   },
-//   seconderyRightButton: {
-//     position: "absolute",
-//     top: 300,
-//     right: 40,
-//     width: 80,
-//     height: 80,
-//     borderRadius: 100,
-//     backgroundColor: "black",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   buttonRightImageSmall: {
-//     width: 40,
-//     height: 40,
-//   },
-//   buttonRightTextSmall: {
-//     color: "white",
-//     fontSize: 14,
-//   },
-//   stpButton: {
-//     position: "absolute",
-//     top: 500,
-//     left: 115,
-//     width: 150,
-//     height: 50,
-//     backgroundColor: "red",
-//     padding: 12,
-//     borderRadius: 8,
-//   },
-//   stpButtonText: {
-//     color: "white",
-//     fontSize: 20,
-//     textAlign: "center",
-//     alignItems: "center",
-//   },
-// });
 
 ////
 import React, { useState, useRef, useEffect } from "react";
@@ -445,7 +16,7 @@ import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
-import jsonData from "../Server/db/message.json";
+import jsonData from "../server/db/message.json";
 
 // const Card = ({ name, description,width, onPress}) => (
 // <TouchableOpacity onPress={onPress}>
@@ -466,24 +37,24 @@ const Card = ({ name, description, selected, onSelect,width}) => (
   </TouchableOpacity>
 );
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route}) {
   const [alarmActive, setAlarmActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
-
-
+  const { userDetails } = route.params;
+  // console.log('userDetails in Home:', userDetails);
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     // You can perform additional actions here if needed
   };
-  const startAlarm = async () => {
-    await stopSound();
-    await loadSound();
-    setAlarmActive(true);
-    playSound();
-  };
+  // const startAlarm = async () => {
+  //   await stopSound();
+  //   await loadSound();
+  //   setAlarmActive(true);
+  //   playSound();
+  // };
 
   const stopAlarm = async () => {
     setAlarmActive(false);
@@ -492,7 +63,7 @@ export default function Home({ navigation }) {
 
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
-      startAlarm();
+      // startAlarm();
       openModal(); 
     }, 800);
   };
@@ -533,13 +104,13 @@ export default function Home({ navigation }) {
   
   useEffect(() => {
     // console.log('HomeScreen height:', Dimensions.get('window').height);
-    loadSound();
+    // loadSound();
 
     return () => {
       stopSound();
     };
   }, []);
-
+  // console.log("userDetails:", userDetails);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -571,7 +142,7 @@ export default function Home({ navigation }) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("Users")}
+        onPress={() => navigation.navigate("List")}
       >
         <Image
           source={require("../assets/images/team.png")}
@@ -590,7 +161,8 @@ export default function Home({ navigation }) {
           </View>
         </TouchableOpacity>
       )}
-      <Header />
+      
+      <Header userDetails={userDetails }/>
       <Training />
       <PersonalTraking />
 
@@ -629,8 +201,11 @@ export default function Home({ navigation }) {
       </Modal>
 
 
-      <NavBar />
-      <NavBar navigation={navigation} />
+      {/* <NavBar /> */}
+      {/* <NavBar navigation={navigation}  />
+       */}
+       <NavBar navigation={navigation} route={{ params: { userDetails: userDetails } }} />
+
     </View>
   );
 }

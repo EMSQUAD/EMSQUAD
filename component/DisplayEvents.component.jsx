@@ -95,8 +95,9 @@ const EventListComponent = () => {
 
   const fetchEventsFromAPI = async () => {
     try {
-      const response = await fetch('https://server-ems-render.onrender.com/event');
-
+      // const response = await fetch('https://emsquad.onrender.com/event');
+       const response = await fetch('https://server-ems-rzdd.onrender.com/event');
+      
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   eventCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#909090",
     borderRadius: 10,
     padding: 16,
     marginBottom: 20,
@@ -153,8 +154,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 }, // For iOS
     shadowOpacity: 0.8, // For iOS
     shadowRadius: 1, // For iOS
+   
   },
-  eventTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 5 },
+  eventTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 5,
+  textAlign: "center",
+ 
+},
 });
 
 export default EventListComponent;
