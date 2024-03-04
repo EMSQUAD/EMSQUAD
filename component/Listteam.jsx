@@ -11,10 +11,10 @@ import {
 
 // const { userDetails } = route.params || {};
 
-const UserListComponent = ({ route }) => {
+const UserListComponent = ({ showAvailable= false ,route}) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-
+//   const [showAvailable, setShowAvailable] = useState(true);
   // const { userDetails } = route.params;
   // const currentUser = {
   //     // id: 345679012, // Replace with the actual ID of the current user
@@ -33,8 +33,9 @@ const UserListComponent = ({ route }) => {
 
 
   useEffect(() => {
+    console.log("showAvailable in useEffect:", showAvailable);
     fetchUsersFromAPI();
-  }, []);
+  }, [showAvailable]);
 
   const fetchUsersFromAPI = async () => {
     try {
@@ -44,10 +45,14 @@ const UserListComponent = ({ route }) => {
       if (!response.ok) {
         throw new Error("Failed to fetch users");
       }
-      const data = await response.json();
-      const filteredUsers = data.data.filter(
-        (user) => user.id_use !== currentUser.id
-      );
+       const data = await response.json();
+    //   const filteredUsers = data.data.filter(
+    //     (user) => user.id_use !== currentUser.id
+    //   );
+
+    const filteredUsers = showAvailable
+    ? data.data.filter((user) => user.id_use !== currentUser.id && user.status_ability === "available")
+    : data.data.filter((user) => user.id_use !== currentUser.id);
 
       setUsers(filteredUsers);
       // setUsers(data.data); // Assuming the API response has a 'data' property containing the array of users
@@ -57,6 +62,10 @@ const UserListComponent = ({ route }) => {
       setLoading(false);
     }
   };
+
+  
+
+
 
   if (loading) {
     return (

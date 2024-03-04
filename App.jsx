@@ -20,6 +20,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
+  const [showAvailable, setShowAvailable] = useState(true);
+
+  const updateShowAvailable = () => {
+    setShowAvailable((prev) => !prev);
+  };
+  // const [showAvailable, setShowAvailable] = useState(true);
   useEffect(() => {}, []);
 
   return (
@@ -61,7 +67,11 @@ const App = () => {
           />
           <Stack.Screen
             name="List"
-            component={Listteam}
+            // component={Listteam}
+            // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
+            component={(props) => (
+              <Listteam {...props} showAvailable={showAvailable} />
+            )}
             options={{
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
@@ -73,7 +83,7 @@ const App = () => {
               },
               headerBackTitle: "חזור",
               headerRight: () => (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => updateShowAvailable()}>
                   <MaterialCommunityIcons
                     name="filter-variant"
                     size={24}
@@ -83,7 +93,7 @@ const App = () => {
               ),
             }}
           />
-
+          {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
           <Stack.Screen
             name="Events"
             component={EventListComponent}
