@@ -16,60 +16,18 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
-import Listteam from "./component/Listteam";
+// import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
-// const ListTeamScreen = ({ route }) => {
-//   const showAvailable = route.params?.showAvailable ?? true;
-//   return <Listteam showAvailable={showAvailable} />;
-// };
 const App = () => {
- const [showAvailable, setShowAvailable] = useState(true);
-
-  // const updateShowAvailable = () => {
-  //   setShowAvailable((prev) => !prev);
-  // };
-
-
-  // const updateShowAvailable = (newShowAvailable) => {
-  //   setShowAvailable(newShowAvailable);
-  //   navigation.setParams({ showAvailable: newShowAvailable });
-  // };
-
   // const [showAvailable, setShowAvailable] = useState(true);
-  useEffect(() => {
-    console.log("showAvailable in App:", showAvailable);
-  }, [showAvailable]);
-// import ChatScreen from "./component/ChatScreen";
-// import Listteam from "./component/Listteam";
 
-const Stack = createNativeStackNavigator();
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
-// Request permissions for notifications
-async function registerForPushNotificationsAsync() {
-  const { status } = await Notifications.getPermissionsAsync();
-  if (status !== 'granted') {
-    const { status: newStatus } = await Notifications.requestPermissionsAsync();
-    if (newStatus !== 'granted') {
-      console.log('Permission to receive notifications was denied');
-      return;
-    }
-  }
-  const token = (await Notifications.getExpoPushTokenAsync()).data;
-  console.log(token);
-  // Now you can save the token to your user's data or send it to your server to associate it with the user
-}
-
-registerForPushNotificationsAsync();
-
+  const updateShowAvailable = () => {
+    setShowAvailable((prev) => !prev);
+  };
+  // const [showAvailable, setShowAvailable] = useState(true);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -108,15 +66,14 @@ registerForPushNotificationsAsync();
               headerBackTitle: "חזור",
             }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="List"
             // component={Listteam}
             // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
-            // component={(props) => (
-            //   <Listteam {...props} showAvailable={showAvailable} />
-            // )}
-            component={ListTeamScreen}
-            options={({ route }) => ({
+            component={(props) => (
+              <Listteam {...props} showAvailable={showAvailable} />
+            )}
+            options={{
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
               headerTitle: "צוות",
@@ -127,14 +84,7 @@ registerForPushNotificationsAsync();
               },
               headerBackTitle: "חזור",
               headerRight: () => (
-                <TouchableOpacity
-                //   onPress={() => updateShowAvailable(!showAvailable)}
-                // >
-                onPress={() => {
-                  const showAvailable = route.params?.showAvailable || true;
-                  route.params?.updateShowAvailable(!showAvailable);
-                }}
-              >
+                <TouchableOpacity onPress={() => updateShowAvailable()}>
                   <MaterialCommunityIcons
                     name="filter-variant"
                     size={24}
@@ -142,8 +92,8 @@ registerForPushNotificationsAsync();
                   />
                 </TouchableOpacity>
               ),
-            })}
-          />
+            }}
+          /> */}
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
        
           <Stack.Screen
@@ -167,10 +117,10 @@ registerForPushNotificationsAsync();
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
-          />
+          /> */}
 
         </Stack.Navigator>
       </NavigationContainer>
