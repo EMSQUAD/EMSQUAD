@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useNavigation } from '@react-navigation/native'; 
 
 const UserListComponent = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigation = useNavigation(); // Use useNavigation hook to get navigation object
+    
 
     useEffect(() => {
         fetchUsersFromAPI();
@@ -13,7 +14,6 @@ const UserListComponent = () => {
 
     const fetchUsersFromAPI = async () => {
         try {
-            // const response = await fetch('https://emsquad.onrender.com/user');
             const response = await fetch('https://server-ems-rzdd.onrender.com/user');
 
             if (!response.ok) {
@@ -48,9 +48,13 @@ const UserListComponent = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             {users.map((user, index) => (
                 <TouchableOpacity
-                    key={`${user.id_use}_${index}`} // Use a combination of user ID and index
+                    key={`${user.id_use}_${index}`}
                     style={styles.card}
-                    onPress={() => navigation.navigate('ChatScreen', { user })}>
+                    onPress={() => {
+                        // Log user information to the console
+                        console.log("Navigating with user ID:", user.id_use);
+                        navigation.navigate('ChatScreen', { userId: user.id_use });
+                    }}>
                     <Image source={{ uri: user.image }} style={styles.image} />
                     <View style={styles.userInfo}>
                         <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>
@@ -61,26 +65,27 @@ const UserListComponent = () => {
             ))}
         </ScrollView>
     );
+    
 };
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        flexGrow: 1, // Ensure content can grow
+        flexGrow: 1,
         width: '100%',
     },
     container: {
         flex: 1,
         padding: 16,
         paddingTop: 30,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     card: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse', 
         alignItems: 'center',
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
@@ -100,20 +105,35 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         borderRadius: 35,
-        marginRight: 10,
+        marginLeft: 10, 
     },
     userInfo: {
         flex: 1,
+        alignItems: 'flex-end', 
     },
     userName: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        textAlign: 'right', 
     },
     userInfoText: {
         fontSize: 16,
         marginBottom: 3,
+        textAlign: 'right', 
     },
+    
+    userPhone: { 
+        fontSize: 16,
+        marginBottom: 3,
+        textAlign: 'right', 
+    },
+    userStatus: { 
+        fontSize: 16,
+        marginBottom: 3,
+        textAlign: 'right', 
+    },
+    
 });
 
 export default UserListComponent;

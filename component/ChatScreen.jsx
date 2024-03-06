@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Keyboard, ImageBackground, Alert } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import * as ImagePicker from 'expo-image-picker';
+import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 
 const ChatScreen = ({ route }) => {
@@ -11,7 +12,7 @@ const ChatScreen = ({ route }) => {
   const [persons, setPersons] = useState([]);
 
   const textInputRef = useRef(null);
-  const userId = route.params.user._id;
+  const userId = route.params ? route.params.userId : null;
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardOpen(true));
@@ -39,29 +40,62 @@ const ChatScreen = ({ route }) => {
   };
 
   const fetchMessages = async () => {
+    console.log("userId chatScreen", userId);
     try {
       const response = await axios.get(`https://server-ems-rzdd.onrender.com/messages/${userId}`);
-      setMessages(response.data);
+      console.log('Server response for messages:', response.data); // Log the response data
+      setMessages(response.data.messages || []); // Ensure this is an array
     } catch (error) {
       console.error('Error fetching messages: ', error);
-      Alert.alert('Error', 'Failed to fetch messages. Please try again.');
+    }
+  };
+  
+
+  const onSend = async (newMessages = []) => {
+    // Check if there is at least one new message to send
+    if (newMessages.length > 0) {
+      const messageToSend = {
+        id_use: userId, // Assuming userId is the sender's ID
+        text: newMessages[0].text, // Taking the text from the first new message
+      };
+  
+      try {
+        // Use Axios to post the message to the server
+        const response = await axios.post('https://server-ems-rzdd.onrender.com/messages', messageToSend);
+  
+        // Check for successful response
+        if (response.status === 201) {
+          // Assuming the server response includes the message object
+          const savedMessage = response.data;
+  
+          // Add the new message to the local state to display it in the UI
+          setMessages(previousMessages => GiftedChat.append(previousMessages, [{
+            ...newMessages[0], // Original message data
+            _id: savedMessage.createdAt, // Use createdAt as unique id for the message
+            createdAt: savedMessage.createdAt, // Use the server-provided timestamp
+            imageUrl: savedMessage.imageUrl, // Include the imageUrl if provided by the server
+          }]));
+  
+          setText(''); // Clear input field after successful send
+        } else {
+          // Handle any non-successful responses
+          console.error('Message send unsuccessful:', response);
+          Alert.alert('Error', 'Message send unsuccessful. Please try again.');
+        }
+      } catch (error) {
+        // Handle errors in sending message
+        console.error('Error sending message: ', error);
+        Alert.alert('Error', 'Failed to send message. Please try again.');
+      }
+    } else {
+      console.error('No new message to send');
     }
   };
 
-  const onSend = async (newMessages = []) => {
-    const formattedMessages = newMessages.map(message => ({
-      ...message,
-      userId: userId,
-    }));
-    setMessages(previousMessages => GiftedChat.append(previousMessages, formattedMessages));
-    try {
-      await axios.post('https://server-ems-rzdd.onrender.com/messages', formattedMessages);
-      setText('');
-    } catch (error) {
-      console.error('Error sending message: ', error);
-      Alert.alert('Error', 'Failed to send message. Please try again.');
-    }
-  };
+  console.log("success");
+  
+  
+  
 
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

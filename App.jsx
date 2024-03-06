@@ -19,6 +19,7 @@ import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StatusSwitch from "./component/Status";
+import ChatScreen from "./component/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -118,13 +119,11 @@ const App = () => {
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+
+          <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
-          /> */}
-
-
-
+          />
 
           <Stack.Screen
             name="Status"
