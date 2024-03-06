@@ -102,7 +102,7 @@ export default function Home({ navigation, route}) {
      
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
+      <TouchableOpacity style={styles.seconderyLeftButton} onPress={() => navigation.navigate("Status", { userDetails: userDetails }) }>
       <AntDesign name="loading1" size={30} color="white" />
         <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
       </TouchableOpacity>

@@ -18,6 +18,7 @@ import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import StatusSwitch from "./component/Status";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -122,7 +123,20 @@ const App = () => {
             component={ChatScreen}
           /> */}
 
+
+
+
+          <Stack.Screen
+            name="Status"
+            component={StatusSwitch}
+            options={{ headerShown: false }}  
+          />
+
         </Stack.Navigator>
+
+
+
+
       </NavigationContainer>
     </View>
   );
