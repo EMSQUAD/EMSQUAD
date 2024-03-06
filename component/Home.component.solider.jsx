@@ -14,7 +14,7 @@ import { loadSound, playSound, stopSound } from "./SoundUtils";
 import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
-import NavBar from "./Navbar";
+import NavBar from "./NavbarSoliser";
 // import jsonData from "../server/db/message.json";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -239,7 +239,7 @@ export default function Home({ navigation, route }) {
       <PersonalTraking />
 
       {/* <NavBar /> */}
-      <NavBar navigation={navigation} />
+      <NavBar navigation={navigation} route={route} />
 
 
    {/* Custom Modal */}
