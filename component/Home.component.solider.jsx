@@ -103,7 +103,6 @@ export default function Home({ navigation, route }) {
   //   // ... Other useEffect code
   // }, [userDetails]);
 
-
   //this is work! not delete
   // useEffect(() => {
   //   // Fetch data from MongoDB or use your existing logic to get the message
