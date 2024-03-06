@@ -53,7 +53,7 @@ const UserListComponent = () => {
                     onPress={() => {
                         // Log user information to the console
                         console.log("Navigating with user ID:", user.id_use);
-                        navigation.navigate('ChatScreen', { userId: user.id_use });
+                        navigation.navigate('ChatScreen', { userId: user.id_use, userName: user.first_name, userImageUrl: user.image });
                     }}>
                     <Image source={{ uri: user.image }} style={styles.image} />
                     <View style={styles.userInfo}>

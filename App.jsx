@@ -6,7 +6,10 @@ import {
   Dimensions,
   View,
   TouchableOpacity,
+  Image,
+  Text,
 } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -29,7 +32,7 @@ const App = () => {
     setShowAvailable((prev) => !prev);
   };
   // const [showAvailable, setShowAvailable] = useState(true);
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <View style={styles.container}>
@@ -73,7 +76,7 @@ const App = () => {
             component={Listteam}
             // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
             // component={(props) => (
-              // <Listteam {...props} showAvailable={showAvailable} />
+            // <Listteam {...props} showAvailable={showAvailable} />
             // )}
             options={{
               headerShown: true,
@@ -97,7 +100,7 @@ const App = () => {
             }}
           />
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
-       
+
           <Stack.Screen
             name="Events"
             component={EventListComponent}
@@ -123,12 +126,13 @@ const App = () => {
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
+            options={{ headerShown: true }}
           />
 
           <Stack.Screen
             name="Status"
             component={StatusSwitch}
-            options={{ headerShown: false }}  
+            options={{ headerShown: false }}
           />
 
         </Stack.Navigator>
@@ -145,6 +149,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
+  },
+  headerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 10, // Adjust the margin to position the image to the right of the text
+  },
+  headerTitle: {
+    color: 'black',
+    fontSize: 18, // You might want to adjust the size depending on your needs
+    // Add additional styling as needed for alignment or font properties
   },
 });
 
