@@ -17,16 +17,24 @@ import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
+import socket from "./utils/socket";
+
 
 const Stack = createNativeStackNavigator();
 const App = () => {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <View style={styles.container}>
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="WalkieTalkie"
+            component={WalkieTalkiePTT}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -43,6 +51,13 @@ const App = () => {
             component={HomeScreenSolider}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="HomeSoliderWalkie"
+            component={HomeScreenSoliderWalkie}
+            options={{ headerShown: false }}
+          />
+
+
 
           <Stack.Screen
             name="Users"
@@ -99,11 +114,11 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="WalkieTalkie"
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </View>
