@@ -457,7 +457,7 @@ import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
 import jsonData from "../server/db/message.json";
-import UpdateAllLiveEvents from "./updateLiveEvent";
+import updateAllLiveEvents from "./updateLiveEvent";
 
 const Card = ({ name, description, selected, onSelect, width }) => (
   <TouchableOpacity
@@ -639,7 +639,7 @@ export default function Home({ navigation, route }) {
             <View style={styles.buttonRow}>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
-                onPress={UpdateAllLiveEvents} 
+                onPress={updateAllLiveEvents} 
               >
                 <Text style={styles.textStyle}>שלח</Text>
               </TouchableOpacity>
