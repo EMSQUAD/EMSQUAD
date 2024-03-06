@@ -83,15 +83,15 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
-              headerRight: () => (
-                <TouchableOpacity onPress={() => updateShowAvailable()}>
-                  <MaterialCommunityIcons
-                    name="filter-variant"
-                    size={24}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ),
+              // headerRight: () => (
+              //   <TouchableOpacity onPress={() => updateShowAvailable()}>
+              //     <MaterialCommunityIcons
+              //       name="filter-variant"
+              //       size={24}
+              //       color="white"
+              //     />
+              //   </TouchableOpacity>
+              // ),
             }}
           />
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
