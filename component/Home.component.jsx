@@ -218,7 +218,7 @@ export default function Home({ navigation, route }) {
             <View style={styles.buttonRow}>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
-                onPress={() => sendSelectedMessage (selectedMessage)}
+                onPress={() => sendSelectedMessage (selectedMessage,closeModal())}
               >
                 <Text style={styles.textStyle}>שלח</Text>
               </TouchableOpacity>
