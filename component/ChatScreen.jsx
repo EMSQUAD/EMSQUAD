@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Keyboard, ImageBackground, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Keyboard, ImageBackground, Alert, Image } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import * as ImagePicker from 'expo-image-picker';
+import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from 'axios';
+import { Ionicons } from '@expo/vector-icons';
 
 const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
@@ -11,7 +13,7 @@ const ChatScreen = ({ route }) => {
   const [persons, setPersons] = useState([]);
 
   const textInputRef = useRef(null);
-  const userId = route.params.user._id;
+  const userId = route.params ? route.params.userId : null;
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardOpen(true));
@@ -28,6 +30,33 @@ const ChatScreen = ({ route }) => {
     fetchMessages();
   }, []);
 
+
+  const navigation = useNavigation();
+  const { userName, userImageUrl } = route.params;
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <View style={styles.imgAndtxt}>
+          <Text style={styles.personName}>{userName}</Text>
+          <Image source={{ uri: userImageUrl }} style={styles.personImage} />
+        </View>
+      ),
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingHorizontal: 10 }}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      headerStyle: {
+        backgroundColor: 'black',
+        height: 200, // Attempting to increase the height
+      },
+      headerTintColor: '#fff',
+      headerTitleAlign: 'left',
+    });
+  }, [navigation, userName, userImageUrl]);
+  
+
   const fetchPersons = async () => {
     try {
       const response = await axios.get('https://server-ems-rzdd.onrender.com/user');
@@ -39,29 +68,64 @@ const ChatScreen = ({ route }) => {
   };
 
   const fetchMessages = async () => {
+    console.log("userId chatScreen", userId);
     try {
       const response = await axios.get(`https://server-ems-rzdd.onrender.com/messages/${userId}`);
-      setMessages(response.data);
+      console.log('Server response for messages:', response.data); // Log the response data
+      setMessages(response.data.messages || []); // Ensure this is an array
     } catch (error) {
       console.error('Error fetching messages: ', error);
-      Alert.alert('Error', 'Failed to fetch messages. Please try again.');
     }
   };
 
+
   const onSend = async (newMessages = []) => {
-    const formattedMessages = newMessages.map(message => ({
-      ...message,
-      userId: userId,
-    }));
-    setMessages(previousMessages => GiftedChat.append(previousMessages, formattedMessages));
-    try {
-      await axios.post('https://server-ems-rzdd.onrender.com/messages', formattedMessages);
-      setText('');
-    } catch (error) {
-      console.error('Error sending message: ', error);
-      Alert.alert('Error', 'Failed to send message. Please try again.');
+    // Check if there is at least one new message to send
+    if (newMessages.length > 0) {
+      const messageToSend = {
+        id_use: userId, // Assuming userId is the sender's ID
+        text: newMessages[0].text, // Taking the text from the first new message
+      };
+
+      try {
+        // Use Axios to post the message to the server
+        const response = await axios.post('https://server-ems-rzdd.onrender.com/messages', messageToSend);
+
+        // Check for successful response
+        if (response.status === 201) {
+          // Assuming the server response includes the message object
+          const savedMessage = response.data;
+
+          // Add the new message to the local state to display it in the UI
+          setMessages(previousMessages => GiftedChat.append(previousMessages, [{
+            ...newMessages[0], // Original message data
+            _id: savedMessage.createdAt, // Use createdAt as unique id for the message
+            createdAt: savedMessage.createdAt, // Use the server-provided timestamp
+            imageUrl: savedMessage.imageUrl, // Include the imageUrl if provided by the server
+          }]));
+
+          setText(''); // Clear input field after successful send
+        } else {
+          // Handle any non-successful responses
+          console.error('Message send unsuccessful:', response);
+          Alert.alert('Error', 'Message send unsuccessful. Please try again.');
+        }
+      } catch (error) {
+        // Handle errors in sending message
+        console.error('Error sending message: ', error);
+        Alert.alert('Error', 'Failed to send message. Please try again.');
+      }
+    } else {
+      console.error('No new message to send');
     }
   };
+
+  console.log("success");
+
+
+
+
+
 
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -229,6 +293,27 @@ const styles = StyleSheet.create({
   },
   sendButtonText: {
     color: 'red',
+  },
+  imgAndtxt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    position: "absolute",
+    left: 90,
+  },
+
+  personImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+    marginLeft: 20,
+    marginBottom: 5,
+  },
+  personName: {
+    color: 'white',
+    fontSize: 20,
+    paddingBottom: 10,
   },
 });
 

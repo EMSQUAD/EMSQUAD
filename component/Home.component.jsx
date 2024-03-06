@@ -9,10 +9,10 @@ import {
   Dimensions,
   Modal,
   Alert,
+  Platform,
 } from "react-native";
 // import * as Notifications from "expo-notifications";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
-// import { useHeaderHeight } from "@react-navigation/elements";
 import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
@@ -46,6 +46,44 @@ const Card = ({ name, description, selected, onSelect, width }) => (
   </TouchableOpacity>
 );
 
+export const sendData = async () => {
+  try {
+      const response = await fetch('https://server-ems-rzdd.onrender.com/user');
+      const jsonResponse = await response.json();
+      
+      if (jsonResponse && Array.isArray(jsonResponse.data)) {
+          const updatePromises = jsonResponse.data.filter(user => user.liveEvent === "No").map(user => {
+              // Log the first name and liveEvent field of each user being updated
+              console.log(`Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`);
+
+              return fetch(`https://server-ems-rzdd.onrender.com/user/${user._id}`, {
+                  method: 'PUT',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                      liveEvent: "Yes",
+                  }),
+              });
+          });
+          
+          await Promise.all(updatePromises);
+          console.log('All applicable users updated successfully.');
+          console.log(`Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`);
+
+      } else {
+          console.log('No users need updating or unexpected response structure.');
+      }
+  } catch (error) {
+      console.error('Error updating users:', error);
+  }
+};
+
+
+
+
+
+
 export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -54,18 +92,12 @@ export default function Home({ navigation, route }) {
   
   const pressTimer = useRef(null);
   const { userDetails } = route.params;
-  // console.log('userDetails in Home:', userDetails);
+
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     setSelectedMessage(jsonData[index]);
     // You can perform additional actions here if needed
   };
-  // const startAlarm = async () => {
-  //   await stopSound();
-  //   await loadSound();
-  //   setAlarmActive(true);
-  //   playSound();
-  // };
 
   const stopAlarm = async () => {
     setAlarmActive(false);
@@ -74,7 +106,6 @@ export default function Home({ navigation, route }) {
 
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
-      // startAlarm();
       openModal();
     }, 800);
   };
@@ -89,20 +120,17 @@ export default function Home({ navigation, route }) {
   };
     
   const openModal = () => {
-    // setSelectedMessage(jsonData[0]);
     setModalVisible(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setSelectedMessage(null);
     setModalVisible(false);
   };
 
-  // Function to calculate the width based on the content's length
   const calculateCardWidth = (content) => {
-    const charWidth = 10; // Adjust as needed
-    const minWidth = 380; // Minimum width to prevent very narrow cards
+    const charWidth = 10;
+    const minWidth = 380;
     const calculatedWidth = Math.max(content.length * charWidth, minWidth);
     return calculatedWidth;
   };
@@ -148,7 +176,6 @@ export default function Home({ navigation, route }) {
         style={styles.button}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
-        // onPress={() => openModal(jsonData.message)}
       >
         <Image
           source={require("../assets/images/symbol1.png")}
@@ -199,11 +226,9 @@ export default function Home({ navigation, route }) {
       <Training />
       <PersonalTraking />
 
-      {/* modal */}
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            {/* Map through the jsonData array and display each item */}
             {jsonData.map((item, index) => (
               <Card
                 style={styles.emergencyData}
@@ -212,7 +237,7 @@ export default function Home({ navigation, route }) {
                 description={item.description}
                 selected={index === selectedCardIndex}
                 onSelect={() => handleCardSelect(index)}
-                width={calculateCardWidth(item.name)} // Pass calculated width to the Card component
+                width={calculateCardWidth(item.name)}
               />
             ))}
             <View style={styles.buttonRow}>
@@ -233,9 +258,6 @@ export default function Home({ navigation, route }) {
         </View>
       </Modal>
 
-      {/* <NavBar /> */}
-      {/* <NavBar navigation={navigation}  />
-       */}
       <NavBar
         navigation={navigation}
         route={{ params: { userDetails: userDetails } }}
@@ -243,6 +265,7 @@ export default function Home({ navigation, route }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -410,3 +433,4 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
+
