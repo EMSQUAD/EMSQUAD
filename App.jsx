@@ -16,8 +16,9 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
-// import Listteam from "./component/Listteam";
+import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import StatusSwitch from "./component/Status";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -66,13 +67,13 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="List"
-            // component={Listteam}
+            component={Listteam}
             // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
-            component={(props) => (
-              <Listteam {...props} showAvailable={showAvailable} />
-            )}
+            // component={(props) => (
+              // <Listteam {...props} showAvailable={showAvailable} />
+            // )}
             options={{
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
@@ -83,17 +84,17 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
-              headerRight: () => (
-                <TouchableOpacity onPress={() => updateShowAvailable()}>
-                  <MaterialCommunityIcons
-                    name="filter-variant"
-                    size={24}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ),
+              // headerRight: () => (
+              //   <TouchableOpacity onPress={() => updateShowAvailable()}>
+              //     <MaterialCommunityIcons
+              //       name="filter-variant"
+              //       size={24}
+              //       color="white"
+              //     />
+              //   </TouchableOpacity>
+              // ),
             }}
-          /> */}
+          />
           {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
        
           <Stack.Screen
@@ -122,7 +123,20 @@ const App = () => {
             component={ChatScreen}
           /> */}
 
+
+
+
+          <Stack.Screen
+            name="Status"
+            component={StatusSwitch}
+            options={{ headerShown: false }}  
+          />
+
         </Stack.Navigator>
+
+
+
+
       </NavigationContainer>
     </View>
   );

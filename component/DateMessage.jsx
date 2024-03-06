@@ -60,7 +60,7 @@ const GreetingMessage = ({ user }) => {
 
   return (
     <View style={styles.greetingContainer}>
-      <Text style={styles.greetingText}>{`${getGreetingMessage()} ${user ? user.first_name : ''}`}</Text>
+      <Text style={styles.greetingText}>{`${getGreetingMessage()}, ${user ? user.first_name : ''}`}</Text>
     </View>
   );
 };
