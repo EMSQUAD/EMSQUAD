@@ -20,9 +20,14 @@ import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 
+
 export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   const pressTimer = useRef(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  
+
   const userDetails = route.params ? route.params.userDetails : null;
 
   const startAlarm = async () => {
@@ -48,40 +53,76 @@ export default function Home({ navigation, route }) {
     clearTimeout(pressTimer.current);
   };
 
+  // useEffect(() => {
+  //   // Fetch data from MongoDB or use your existing logic to get the message
+  //   const fetchData = async () => {
+  //     try {
+   
+  //       const response = await fetch(
+  //         "https://server-ems-rzdd.onrender.com/user"
+  //       );
+  //       const responseData = await response.json();
+
+  //       // Check if 'data' property exists and it is an array
+  //       if (responseData.data && Array.isArray(responseData.data)) {
+  //         // Find the logged-in user based on the 'id_use' from userDetails
+  //         const loggedInUser = responseData.data.find(
+  //           (user) => user.id_use === userDetails.id
+  //         );
+
+  //         // Check if the logged-in user has a 'message'
+  //         if (loggedInUser && loggedInUser.message) {
+  //           startAlarm();
+  //           Alert.alert(
+  //             "Emergency Alert",
+  //             `Emergency message: ${loggedInUser.message}`,
+  //             [
+  //               {
+  //                 text: "אישור",
+  //                 onPress: () => {
+  //                   stopAlarm();
+  //                   // Additional logic if needed
+  //                 },
+  //               },
+  //             ]
+  //           );
+  //         }
+  //       } else {
+  //         console.error(
+  //           "Error: Response data does not have the expected structure"
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error.message);
+  //     }
+  //   };
+
+  //   // Call the fetchData function when the component mounts
+  //   fetchData();
+
+  //   // ... Other useEffect code
+  // }, [userDetails]);
   useEffect(() => {
     // Fetch data from MongoDB or use your existing logic to get the message
     const fetchData = async () => {
       try {
-   
         const response = await fetch(
           "https://server-ems-rzdd.onrender.com/user"
         );
         const responseData = await response.json();
-
-        // Check if 'data' property exists and it is an array
+  
         if (responseData.data && Array.isArray(responseData.data)) {
-          // Find the logged-in user based on the 'id_use' from userDetails
           const loggedInUser = responseData.data.find(
             (user) => user.id_use === userDetails.id
           );
-
-          // Check if the logged-in user has a 'message'
+  
           if (loggedInUser && loggedInUser.message) {
             startAlarm();
-            Alert.alert(
-              "Emergency Alert",
-              `Emergency message: ${loggedInUser.message}`,
-              [
-                {
-                  text: "אישור",
-                  onPress: () => {
-                    stopAlarm();
-                    // Additional logic if needed
-                  },
-                },
-              ]
-            );
-           
+            setModalVisible(true);
+            // Use setModalVisible to ensure the modal is visible
+  
+            // Set the modal message using the state
+            setModalMessage(loggedInUser.message);
           }
         } else {
           console.error(
@@ -92,12 +133,13 @@ export default function Home({ navigation, route }) {
         console.error("Error fetching data:", error.message);
       }
     };
-
-    // Call the fetchData function when the component mounts
+  
     fetchData();
+  }, [userDetails, setModalVisible,setModalMessage]);
+  
 
-    // ... Other useEffect code
-  }, [userDetails]);
+
+
 
   return (
     <View style={styles.container}>
@@ -150,11 +192,49 @@ export default function Home({ navigation, route }) {
       <Training />
       <PersonalTraking />
 
-      <NavBar />
+      {/* <NavBar /> */}
       <NavBar navigation={navigation} />
+
+
+   {/* Custom Modal */}
+   <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Emergency Alert</Text>
+            <Text style={styles.modalMessage}>
+              Emergency message: {modalMessage}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                stopAlarm();
+                // Additional logic if needed
+              }}
+            >
+              <Text style={styles.okButton}>אישור</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+
+
+
+
+
+
+
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -262,14 +342,36 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
 
+
+  // modalView: {
+  //   margin: 0,
+  //   backgroundColor: "black",
+  //   borderRadius: 20,
+  //   padding: 35,
+  //   // top: 25,
+  //   width: "80%",  // Set a specific width (adjust as needed)
+  //   height: "20%", // Set a specific height (adjust as needed)
+  //   alignSelf: 'center', // Center the modal horizontally
+  //   justifyContent: "center", //
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
   modalView: {
     margin: 0,
-    backgroundColor: "#999999",
+    backgroundColor: "black",
     borderRadius: 20,
     padding: 35,
-    top: 25,
-    width: "100%",
-    height: "70%",
+    width: "80%",
+    height: "20%",
+    alignSelf: 'center',
+    justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -280,25 +382,44 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  
 
   modalText: {
     marginBottom: 30,
     textAlign: "center",
-  },
-  card: {
-    backgroundColor: "#D9D9D9",
-    borderRadius: 15,
-    padding: 16,
-    margin: 8,
-    elevation: 3,
-  },
-  cardTitle: {
-    fontSize: 26,
+    color: "white",
+    fontSize: 20,
     fontWeight: "bold",
+    
   },
-  cardDescription: {
-    fontSize: 26,
+  modalMessage: {
+    marginBottom: 20,
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
   },
+  okButton: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 10,
+    color: "white",
+    fontSize: 20,
+    
+  },
+  // card: {
+  //   backgroundColor: "#D9D9D9",
+  //   borderRadius: 15,
+  //   padding: 16,
+  //   margin: 8,
+  //   elevation: 3,
+  // },
+  // cardTitle: {
+  //   fontSize: 26,
+  //   fontWeight: "bold",
+  // },
+  // cardDescription: {
+  //   fontSize: 26,
+  // },
   emergencyData: {
     textAlign: "center",
   },
@@ -308,6 +429,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 100,
   },
+
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
