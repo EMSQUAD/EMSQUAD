@@ -6,7 +6,7 @@ const PersonalTracking = () => {
     const getPersonalData = () => {
         const tempDate = new Date().getFullYear();
         if (tempDate !== 0) {
-            const PersonalData = ['משימה ישיבת צוות', 'משימה 2', 'משימה 3'];
+            const PersonalData = ['משימה 1', 'משימה 2', 'משימה 3'];
             return PersonalData;
         } else {
             return [];
