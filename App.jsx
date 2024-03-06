@@ -44,6 +44,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="WalkieTalkie"
+            component={WalkieTalkiePTT}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }}
@@ -58,6 +63,13 @@ const App = () => {
             component={HomeScreenSolider}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="HomeSoliderWalkie"
+            component={HomeScreenSoliderWalkie}
+            options={{ headerShown: false }}
+          />
+
+
 
           <Stack.Screen
             name="Users"
