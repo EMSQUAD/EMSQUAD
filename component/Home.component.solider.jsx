@@ -26,7 +26,7 @@ export default function Home({ navigation, route }) {
   const pressTimer = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  
+  const [lastMessage, setLastMessage] = useState("");
 
   const userDetails = route.params ? route.params.userDetails : null;
 
@@ -102,43 +102,89 @@ export default function Home({ navigation, route }) {
 
   //   // ... Other useEffect code
   // }, [userDetails]);
-  useEffect(() => {
-    // Fetch data from MongoDB or use your existing logic to get the message
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://server-ems-rzdd.onrender.com/user"
+
+
+  //this is work! not delete
+  // useEffect(() => {
+  //   // Fetch data from MongoDB or use your existing logic to get the message
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "https://server-ems-rzdd.onrender.com/user"
+  //       );
+  //       const responseData = await response.json();
+  
+  //       if (responseData.data && Array.isArray(responseData.data)) {
+  //         const loggedInUser = responseData.data.find(
+  //           (user) => user.id_use === userDetails.id
+  //         );
+  
+  //         if (loggedInUser && loggedInUser.message) {
+  //           startAlarm();
+  //           setModalVisible(true);
+  //           setModalMessage(loggedInUser.message);
+  //         }
+  //       } else {
+  //         console.error(
+  //           "Error: Response data does not have the expected structure"
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error.message);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, [userDetails, setModalVisible,setModalMessage]);
+  
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://server-ems-rzdd.onrender.com/user"
+      );
+      const responseData = await response.json();
+
+      if (responseData.data && Array.isArray(responseData.data)) {
+        const loggedInUser = responseData.data.find(
+          (user) => user.id_use === userDetails.id
         );
-        const responseData = await response.json();
-  
-        if (responseData.data && Array.isArray(responseData.data)) {
-          const loggedInUser = responseData.data.find(
-            (user) => user.id_use === userDetails.id
-          );
-  
-          if (loggedInUser && loggedInUser.message) {
-            startAlarm();
-            setModalVisible(true);
-            // Use setModalVisible to ensure the modal is visible
-  
-            // Set the modal message using the state
-            setModalMessage(loggedInUser.message);
-          }
-        } else {
-          console.error(
-            "Error: Response data does not have the expected structure"
-          );
+
+        if (loggedInUser && loggedInUser.message && !lastMessage) {
+          // Initial message, set it and do not trigger the alarm
+          setLastMessage(loggedInUser.message);
+        } else if (
+          loggedInUser &&
+          loggedInUser.message &&
+          loggedInUser.message !== lastMessage
+        ) {
+          // New message, trigger the alarm
+          startAlarm();
+          setModalVisible(true);
+          setModalMessage(loggedInUser.message);
+          setLastMessage(loggedInUser.message);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error.message);
+      } else {
+        console.error(
+          "Error: Response data does not have the expected structure"
+        );
       }
-    };
-  
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch data initially
     fetchData();
-  }, [userDetails, setModalVisible,setModalMessage]);
-  
 
+    // Set up interval to continuously check for updates
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 5000); // Check every 5 seconds, adjust as needed
 
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [userDetails, lastMessage]);
 
 
   return (
@@ -382,6 +428,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   
 
   modalText: {
@@ -397,11 +444,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontSize: 16,
+    
   },
   okButton: {
     backgroundColor: "green",
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     color: "white",
     fontSize: 20,
     
