@@ -1,4 +1,3 @@
-
 ////
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -17,25 +16,14 @@ import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
 // import jsonData from "../server/db/message.json";
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { Alert } from 'react-native';
+import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
-
-
-export default function Home({ navigation, route}) {
+export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
-//   const [modalVisible, setModalVisible] = useState(false);
-  // const [selectedMessage, setSelectedMessage] = useState(null);
-  // const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
   const userDetails = route.params ? route.params.userDetails : null;
-
-  // const handleCardSelect = (index) => {
-  //   setSelectedCardIndex(index);
-  //   // You can perform additional actions here if needed
-  // };
-
 
   const startAlarm = async () => {
     await stopSound();
@@ -49,90 +37,89 @@ export default function Home({ navigation, route}) {
     await stopSound();
   };
 
-  const handleButtonPressIn = () => {
-    pressTimer.current = setTimeout(() => {
-      startAlarm();
-    //   openModal(); 
-    }, 800);
-  };
+  // const handleButtonPressIn = () => {
+  //   pressTimer.current = setTimeout(() => {
+  //     startAlarm();
+     
+  //   }, 800);
+  // };
 
   const handleButtonPressOut = () => {
     clearTimeout(pressTimer.current);
   };
 
-  // const press = () => {
-  //   console.log("Pressed");
-  //   console.log("Alarm sent...");
-  // };
-  // const sendData = () => {
-  //   console.log('Sending data...');
-  //   // Add your logic to send data here
-  // };
-
-
-  
-  // useEffect(() => {
-  //   // console.log('HomeScreen height:', Dimensions.get('window').height);
-  //   loadSound();
-
-  //   return () => {
-  //     stopSound();
-  //   };
-  // }, []);
-
   useEffect(() => {
     // Fetch data from MongoDB or use your existing logic to get the message
     const fetchData = async () => {
       try {
-        const response = await fetch('https://server-ems-rzdd.onrender.com/user');
+   
+        const response = await fetch(
+          "https://server-ems-rzdd.onrender.com/user"
+        );
         const responseData = await response.json();
-  
+
         // Check if 'data' property exists and it is an array
         if (responseData.data && Array.isArray(responseData.data)) {
           // Find the logged-in user based on the 'id_use' from userDetails
-          const loggedInUser = responseData.data.find(user => user.id_use === userDetails.id);
-  
+          const loggedInUser = responseData.data.find(
+            (user) => user.id_use === userDetails.id
+          );
+
           // Check if the logged-in user has a 'message'
           if (loggedInUser && loggedInUser.message) {
-            Alert.alert('Emergency Alert', `Emergency message: ${loggedInUser.message}`);
+            startAlarm();
+            Alert.alert(
+              "Emergency Alert",
+              `Emergency message: ${loggedInUser.message}`,
+              [
+                {
+                  text: "אישור",
+                  onPress: () => {
+                    stopAlarm();
+                    // Additional logic if needed
+                  },
+                },
+              ]
+            );
+           
           }
         } else {
-          console.error('Error: Response data does not have the expected structure');
+          console.error(
+            "Error: Response data does not have the expected structure"
+          );
         }
       } catch (error) {
-        console.error('Error fetching data:', error.message);
+        console.error("Error fetching data:", error.message);
       }
     };
-  
+
     // Call the fetchData function when the component mounts
     fetchData();
-  
+
     // ... Other useEffect code
-  
   }, [userDetails]);
-  
-
-
-
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPressIn={handleButtonPressIn}
+        // onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
         // onPress={() => openModal(jsonData.message)}
       >
         <Image
           source={require("../assets/images/symbol_solider.png")}
           style={[styles.backgroundImage, { width: 200, height: 200 }]}
-
         />
-     
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.seconderyLeftButton} onPress={() => navigation.navigate("Status", { userDetails: userDetails }) }>
-      <AntDesign name="loading1" size={30} color="white" />
+      <TouchableOpacity
+        style={styles.seconderyLeftButton}
+        onPress={() =>
+          navigation.navigate("Status", { userDetails: userDetails })
+        }
+      >
+        <AntDesign name="loading1" size={30} color="white" />
         <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
       </TouchableOpacity>
 
@@ -158,13 +145,10 @@ export default function Home({ navigation, route}) {
           </View>
         </TouchableOpacity>
       )}
-      
-      <Header userDetails={userDetails }/>
+
+      <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
-
-  
-
 
       <NavBar />
       <NavBar navigation={navigation} />
@@ -271,7 +255,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -281,12 +264,12 @@ const styles = StyleSheet.create({
 
   modalView: {
     margin: 0,
-    backgroundColor: '#999999',
+    backgroundColor: "#999999",
     borderRadius: 20,
     padding: 35,
     top: 25,
-    width: '100%',
-    height: '70%',
+    width: "100%",
+    height: "70%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -303,7 +286,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   card: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: "#D9D9D9",
     borderRadius: 15,
     padding: 16,
     margin: 8,
@@ -311,17 +294,17 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   cardDescription: {
     fontSize: 26,
   },
   emergencyData: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
     height: 100,
   },
@@ -335,10 +318,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: '300',
+    fontWeight: "300",
     paddingTop: 10,
     textAlign: "center",
     fontSize: 30,
   },
-
 });
