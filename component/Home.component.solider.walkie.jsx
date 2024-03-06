@@ -18,21 +18,22 @@ import Header from "./Header";
 import NavBar from "./Navbar";
 // import jsonData from "../server/db/message.json";
 import { AntDesign } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
+import socket from "../utils/socket";
 
-
-const Card = ({ name, description, selected, onSelect,width}) => (
+const Card = ({ name, description, selected, onSelect, width }) => (
   <TouchableOpacity
     style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
     onPress={onSelect}
   >
- <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
-     <Text style={styles.cardDescription}>{description}</Text>
+    <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
+    <Text style={styles.cardDescription}>{description}</Text>
   </TouchableOpacity>
 );
 
-export default function Home({ navigation, route}) {
-  const [alarmActive, setAlarmActive] = useState(false);
-//   const [modalVisible, setModalVisible] = useState(false);
+export default function Home({ navigation, route }) {
+  // const [alarmActive, setAlarmActive] = useState(false);
+  //   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
@@ -42,40 +43,154 @@ export default function Home({ navigation, route}) {
     setSelectedCardIndex(index);
     // You can perform additional actions here if needed
   };
-  const startAlarm = async () => {
-    await stopSound();
-    await loadSound();
-    setAlarmActive(true);
-    playSound();
+  // const startAlarm = async () => {
+  //   await stopSound();
+  //   await loadSound();
+  //   setAlarmActive(true);
+  //   playSound();
+  // };
+
+  // const stopAlarm = async () => {
+  //   setAlarmActive(false);
+  //   await stopSound();
+  // };
+
+  // const handleButtonPressIn = () => {
+  //   pressTimer.current = setTimeout(() => {
+  //     startAlarm();
+  //   //   openModal(); 
+  //   }, 800);
+  // };
+
+  // const handleButtonPressOut = () => {
+  //   clearTimeout(pressTimer.current);
+  // };
+
+  //*** from here copy from WalkieTalkiePTT */
+  const [recording, setRecording] = useState(null);
+  const [recordings, setRecordings] = useState([]);
+  const [allowsRecordingIOS, setAllowsRecordingIOS] = useState(true);
+
+  useEffect(() => {
+
+    async function setAudioMode() {
+      try {
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: allowsRecordingIOS,
+          playsInSilentModeIOS: true
+        });
+      } catch (error) {
+        console.error('Failed to set audio mode:', error);
+      }
+    }
+
+    setAudioMode();
+  }, [allowsRecordingIOS]);
+
+  async function startRecording() {
+    console.log('startRecording called');
+    try {
+      const perm = await Audio.requestPermissionsAsync();
+      if (perm.status === "granted") {
+        const recordingObject = new Audio.Recording();
+        const recordingOptions = {
+          android: {
+            extension: '.mp3',
+            outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+            audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+            sampleRate: 44100,
+            numberOfChannels: 2,
+            bitRate: 128000,
+          },
+          ios: {
+            extension: '.mp4',
+            outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+            audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
+            sampleRate: 44100,
+            numberOfChannels: 1,
+            bitRate: 128000,
+            linearPCMBitDepth: 16,
+            linearPCMIsBigEndian: false,
+            linearPCMIsFloat: false,
+          },
+        };
+        await recordingObject.prepareToRecordAsync(recordingOptions);
+        setRecording(recordingObject);
+        await recordingObject.startAsync();
+        console.log('Recording started');
+      } else {
+        throw new Error('Permission not granted');
+      }
+    } catch (err) {
+      console.error('Failed to start recording:', err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log('stopRecording called');
+    try {
+      await recording.stopAndUnloadAsync();
+      let allRecordings = [...recordings];
+      const { sound, status } = await recording.createNewLoadedSoundAsync();
+      await sound.setVolumeAsync(1.0);
+      allRecordings.push({
+        sound: sound,
+        duration: getDurationFormatted(status.durationMillis),
+        file: recording.getURI()
+      });
+      // setRecordings(allRecordings);
+      //** brodcast recording to server, no need to save  */
+      console.log('Recording stopped');
+      socket.emit('cmessage', { type: 'audio', data: allRecordings[allRecordings.length - 1].file });
+    } catch (err) {
+      console.error('Failed to stop recording:', err);
+    } finally {
+      setRecording(null);
+    }
+  }
+
+  const handleButtonPressIn = async () => {
+    console.log('handlePressIn called');
+    if (Platform.OS === 'ios') {
+      setAllowsRecordingIOS(true);
+    }
+    await startRecording();
   };
 
-  const stopAlarm = async () => {
-    setAlarmActive(false);
-    await stopSound();
+  const handleButtonPressOut = async () => {
+    console.log('handlePressOut called');
+    await stopRecording();
+    if (Platform.OS === 'ios') {
+      setAllowsRecordingIOS(false);
+    }
   };
 
-  const handleButtonPressIn = () => {
-    pressTimer.current = setTimeout(() => {
-      startAlarm();
-    //   openModal(); 
-    }, 800);
+  const playRecording = async () => {
+    if (recordings.length > 0) {
+      const sound = new Audio.Sound();
+      await sound.loadAsync({ uri: recordings[recordings.length - 1].file });
+      await sound.setVolumeAsync(1.0);
+      await sound.playAsync();
+    }
   };
 
-  const handleButtonPressOut = () => {
-    clearTimeout(pressTimer.current);
-  };
+  function getDurationFormatted(milliseconds) {
+    const minutes = milliseconds / 1000 / 60;
+    const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
+    return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`;
+  }
 
-  const press = () => {
-    console.log("Pressed");
-    console.log("Alarm sent...");
-  };
-  const sendData = () => {
-    console.log('Sending data...');
-    // Add your logic to send data here
-  };
+  // const press = () => {
+  //   console.log("Pressed");
+  //   console.log("Alarm sent...");
+  // };
+  // const sendData = () => {
+  //   console.log('Sending data...');
+  //   // Add your logic to send data here
+  // };
 
 
-  
+
   useEffect(() => {
     // console.log('HomeScreen height:', Dimensions.get('window').height);
     loadSound();
@@ -91,18 +206,18 @@ export default function Home({ navigation, route}) {
         style={styles.button}
         onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
-        // onPress={() => openModal(jsonData.message)}
+      // onPress={() => openModal(jsonData.message)}
       >
         <Image
           source={require("../assets/images/symbol_solider.png")}
           style={[styles.backgroundImage, { width: 200, height: 200 }]}
 
         />
-     
+
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-      <AntDesign name="loading1" size={30} color="white" />
+        <AntDesign name="loading1" size={30} color="white" />
         <Text style={styles.buttonLeftTextSmall}>סטוטוס</Text>
       </TouchableOpacity>
 
@@ -127,12 +242,12 @@ export default function Home({ navigation, route}) {
           </View>
         </TouchableOpacity>
       )}
-      
-      <Header userDetails={userDetails }/>
+
+      <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
 
-  
+
 
 
       <NavBar />
@@ -240,7 +355,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
