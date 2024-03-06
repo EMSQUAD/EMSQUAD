@@ -9,6 +9,8 @@ import {
   Text,
   Dimensions,
   Modal,
+  Platform,
+  Button,
 } from "react-native";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 // import { useHeaderHeight } from "@react-navigation/elements";
@@ -20,7 +22,10 @@ import NavBar from "./Navbar";
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import socket from "../utils/socket";
+// import WalkieTalkiePTT from "./walkieTalkie.component"
 
+// const handlePressIn = import("./walkieTalkie.component", "handlePressIn");
+// const handlePressOut = import("./walkieTalkie.component", "handlePressOut");
 const Card = ({ name, description, selected, onSelect, width }) => (
   <TouchableOpacity
     style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
@@ -32,45 +37,12 @@ const Card = ({ name, description, selected, onSelect, width }) => (
 );
 
 export default function Home({ navigation, route }) {
-  // const [alarmActive, setAlarmActive] = useState(false);
-  //   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
-  const pressTimer = useRef(null);
-  const userDetails = route.params ? route.params.userDetails : null;
 
-  const handleCardSelect = (index) => {
-    setSelectedCardIndex(index);
-    // You can perform additional actions here if needed
-  };
-  // const startAlarm = async () => {
-  //   await stopSound();
-  //   await loadSound();
-  //   setAlarmActive(true);
-  //   playSound();
-  // };
-
-  // const stopAlarm = async () => {
-  //   setAlarmActive(false);
-  //   await stopSound();
-  // };
-
-  // const handleButtonPressIn = () => {
-  //   pressTimer.current = setTimeout(() => {
-  //     startAlarm();
-  //   //   openModal(); 
-  //   }, 800);
-  // };
-
-  // const handleButtonPressOut = () => {
-  //   clearTimeout(pressTimer.current);
-  // };
-
-  //*** from here copy from WalkieTalkiePTT */
+  // const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const stopAndUnloadAsync = useState(Audio.Recording.stopAndUnloadAsync);
   const [recording, setRecording] = useState(null);
   const [recordings, setRecordings] = useState([]);
   const [allowsRecordingIOS, setAllowsRecordingIOS] = useState(true);
-
   useEffect(() => {
 
     async function setAudioMode() {
@@ -138,10 +110,7 @@ export default function Home({ navigation, route }) {
         duration: getDurationFormatted(status.durationMillis),
         file: recording.getURI()
       });
-      // setRecordings(allRecordings);
-      //** brodcast recording to server, no need to save  */
-      console.log('Recording stopped');
-      socket.emit('cmessage', { type: 'audio', data: allRecordings[allRecordings.length - 1].file });
+      setRecordings(allRecordings);
     } catch (err) {
       console.error('Failed to stop recording:', err);
     } finally {
@@ -149,7 +118,7 @@ export default function Home({ navigation, route }) {
     }
   }
 
-  const handleButtonPressIn = async () => {
+  const handlePressIn = async () => {
     console.log('handlePressIn called');
     if (Platform.OS === 'ios') {
       setAllowsRecordingIOS(true);
@@ -157,7 +126,7 @@ export default function Home({ navigation, route }) {
     await startRecording();
   };
 
-  const handleButtonPressOut = async () => {
+  const handlePressOut = async () => {
     console.log('handlePressOut called');
     await stopRecording();
     if (Platform.OS === 'ios') {
@@ -180,36 +149,227 @@ export default function Home({ navigation, route }) {
     return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`;
   }
 
-  // const press = () => {
-  //   console.log("Pressed");
-  //   console.log("Alarm sent...");
+  function getRecordingLines() {
+    return recordings.map((recordingLine, index) => {
+        return (
+            <View key={index} style={styles.row}>
+                <Text style={styles.fill}>
+                    Recording #{index + 1} | {recordingLine.duration}
+                </Text>
+                <TouchableOpacity onPress={playRecording}>
+                    <Text style={styles.playButton}>Play</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    });
+}
+
+function clearRecording() {
+    setRecordings([])
+}
+
+  // const [alarmActive, setAlarmActive] = useState(false);
+  //   const [modalVisible, setModalVisible] = useState(false);
+  // const [selectedMessage, setSelectedMessage] = useState(null);
+  // const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  // const pressTimer = useRef(null);
+  const userDetails = route.params ? route.params.userDetails : null;
+
+  // const handleCardSelect = (index) => {
+  //   setSelectedCardIndex(index);
+  //   // You can perform additional actions here if needed
   // };
-  // const sendData = () => {
-  //   console.log('Sending data...');
-  //   // Add your logic to send data here
+  // const startAlarm = async () => {
+  //   await stopSound();
+  //   await loadSound();
+  //   setAlarmActive(true);
+  //   playSound();
   // };
 
+  // const stopAlarm = async () => {
+  //   setAlarmActive(false);
+  //   await stopSound();
+  // };
+
+  // const handleButtonPressIn = () => {
+  //   pressTimer.current = setTimeout(() => {
+  //     startAlarm();
+  //   //   openModal(); 
+  //   }, 800);
+  // };
+
+  // const handleButtonPressOut = () => {
+  //   clearTimeout(pressTimer.current);
+  // };
+
+  //*** from here copy from WalkieTalkiePTT */
 
 
-  useEffect(() => {
-    // console.log('HomeScreen height:', Dimensions.get('window').height);
-    loadSound();
+  // useEffect(() => {
 
-    return () => {
-      stopSound();
-    };
-  }, []);
+  //   async function setAudioMode() {
+  //     try {
+  //       await Audio.setAudioModeAsync({
+  //         allowsRecordingIOS: allowsRecordingIOS,
+  //         playsInSilentModeIOS: true
+  //       });
+  //     } catch (error) {
+  //       console.error('Failed to set audio mode:', error);
+  //     }
+  //   }
+
+  //   setAudioMode();
+  // }, [allowsRecordingIOS]);
+
+  // async function startRecording() {
+  //   console.log('startRecording called');
+  //   try {
+  //     // const perm = await Audio.requestPermissionsAsync();
+  //     if (permissionResponse.status !== 'granted') {
+  //       console.log('Requesting permission..');
+  //       await requestPermission();
+  //     }
+  //     if (OS === 'ios') {
+  //       await Audio.setAudioModeAsync({
+  //         allowsRecordingIOS: true,
+  //         playsInSilentModeIOS: true,
+  //       });
+  //     }
+  //     console.log('Starting recording..');
+  //     recording = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY
+  //     );
+  //     setRecording(recording);
+  //     console.log('Recording started');
+  //   } catch (err) {
+  //     console.error('Failed to start recording', err);
+  //   }
+  //   if (perm.status === "granted") {   
+  //   const recordingObject = new Audio.Recording();
+  //   const recordingOptions = Audio.RecordingOptionsPresets.HIGH_QUALITY;
+  //   const recordingOptions = {
+  //     android: {
+  //       extension: '.mp3',
+  //       outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+  //       audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+  //       sampleRate: 44100,
+  //       numberOfChannels: 2,
+  //       bitRate: 128000,
+  //     },
+  //     ios: {
+  //       extension: '.mp4',
+  //       outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+  //       audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
+  //       sampleRate: 44100,
+  //       numberOfChannels: 1,
+  //       bitRate: 128000,
+  //       linearPCMBitDepth: 16,
+  //       linearPCMIsBigEndian: false,
+  //       linearPCMIsFloat: false,
+  //     },
+  //   };
+  //   await recordingObject.prepareToRecordAsync(recordingOptions);
+  //   setRecording(recordingObject);
+  //   await recordingObject.startAsync();
+  //   console.log('Recording started');
+  //   } else {
+  //     throw new Error('Permission not granted');
+  //   }
+  //   } catch (err) {
+  //     console.error('Failed to start recording:', err);
+  //   }
+  // }
+
+  // async function stopRecording() {
+  //   console.log('stopRecording called');
+  //   try {
+  //     console.log('Recording stopped');
+  //     await recording.stopAndUnloadAsync();
+  //     console.log('154\n');
+  //     await Audio.setAudioModeAsync(
+  //       {
+  //         allowsRecordingIOS: false,
+  //       }
+  //     );
+  //     let allRecordings = [...recordings];
+  //     const { sound, status } = await recording.createNewLoadedSoundAsync();
+  //     await sound.setVolumeAsync(1.0);
+  //     allRecordings.push({
+  //       sound: sound,
+  //       duration: getDurationFormatted(status.durationMillis),
+  //       file: recording.getURI()
+  //     });
+  //     setRecordings(allRecordings);
+  //     //** brodcast recording to server, no need to save  */
+  //     console.log('Recording stopped');
+  //     socket.emit('cmessage', { type: 'audio', data: allRecordings[allRecordings.length - 1].file });
+  //   } catch (err) {
+  //     console.error('Failed to stop recording:', err);
+  //   } finally {
+  //     setRecording(null);
+  //   }
+  // }
+
+  // const handlePressIn = async () => {
+  //   console.log('handlePressIn called');
+  //   if (Platform.OS === 'ios') {
+  //     setAllowsRecordingIOS(true);
+  //   }
+  //   await startRecording();
+  // };
+
+  // const handlePressOut = async () => {
+  //   console.log('handlePressOut called');
+  //   await stopRecording();
+  //   if (Platform.OS === 'ios') {
+  //     setAllowsRecordingIOS(false);
+  //   }
+  // };
+
+  // const playRecording = async () => {
+  //   if (recordings.length > 0) {
+  //     const sound = new Audio.Sound();
+  //     await sound.loadAsync({ uri: recordings[recordings.length - 1].file });
+  //     await sound.setVolumeAsync(1.0);
+  //     await sound.playAsync();
+  //   }
+  // };
+
+  // function getDurationFormatted(milliseconds) {
+  //   const minutes = milliseconds / 1000 / 60;
+  //   const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
+  //   return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`;
+  // }
+
+  const press = () => {
+    console.log("Pressed");
+    console.log("Alarm sent...");
+  };
+  const sendData = () => {
+    console.log('Sending data...');
+    // Add your logic to send data here
+  };
+
+
+
+  // useEffect(() => {
+  //   // console.log('HomeScreen height:', Dimensions.get('window').height);
+  //   loadSound();
+
+  //   return () => {
+  //     stopSound();
+  //   };
+  // }, []);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPressIn={handleButtonPressIn}
-        onPressOut={handleButtonPressOut}
-      // onPress={() => openModal(jsonData.message)}
+
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
       >
         <Image
-          source={require("../assets/images/symbol_solider.png")}
+          source={require("../assets/images/symbol_solider_w.png")}
           style={[styles.backgroundImage, { width: 200, height: 200 }]}
 
         />
@@ -232,25 +392,24 @@ export default function Home({ navigation, route }) {
         <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
       </TouchableOpacity>
 
-      {alarmActive && (
+      {/* {alarmActive && (
         <TouchableOpacity
           onPress={stopAlarm}
           style={[styles.stpButtonContainer, { zIndex: 999 }]}
-        >
+          >
           <View style={styles.stpButton}>
-            <Text style={styles.stpButtonText}>Stop Alarm</Text>
+          <Text style={styles.stpButtonText}>Stop Alarm</Text>
           </View>
-        </TouchableOpacity>
-      )}
+          </TouchableOpacity>
+        )} */}
 
+      {/* <WalkieTalkiePTT /> */}
       <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
 
 
 
-
-      <NavBar />
       <NavBar navigation={navigation} />
     </View>
   );
