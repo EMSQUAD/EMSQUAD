@@ -19,30 +19,24 @@ import NavBar from "./Navbar";
 // import jsonData from "../server/db/message.json";
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { Alert } from 'react-native';
 
 
-const Card = ({ name, description, selected, onSelect,width}) => (
-  <TouchableOpacity
-    style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
-    onPress={onSelect}
-  >
- <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
-     <Text style={styles.cardDescription}>{description}</Text>
-  </TouchableOpacity>
-);
 
 export default function Home({ navigation, route}) {
   const [alarmActive, setAlarmActive] = useState(false);
 //   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  // const [selectedMessage, setSelectedMessage] = useState(null);
+  // const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
   const userDetails = route.params ? route.params.userDetails : null;
 
-  const handleCardSelect = (index) => {
-    setSelectedCardIndex(index);
-    // You can perform additional actions here if needed
-  };
+  // const handleCardSelect = (index) => {
+  //   setSelectedCardIndex(index);
+  //   // You can perform additional actions here if needed
+  // };
+
+
   const startAlarm = async () => {
     await stopSound();
     await loadSound();
@@ -66,25 +60,60 @@ export default function Home({ navigation, route}) {
     clearTimeout(pressTimer.current);
   };
 
-  const press = () => {
-    console.log("Pressed");
-    console.log("Alarm sent...");
-  };
-  const sendData = () => {
-    console.log('Sending data...');
-    // Add your logic to send data here
-  };
+  // const press = () => {
+  //   console.log("Pressed");
+  //   console.log("Alarm sent...");
+  // };
+  // const sendData = () => {
+  //   console.log('Sending data...');
+  //   // Add your logic to send data here
+  // };
 
 
   
-  useEffect(() => {
-    // console.log('HomeScreen height:', Dimensions.get('window').height);
-    loadSound();
+  // useEffect(() => {
+  //   // console.log('HomeScreen height:', Dimensions.get('window').height);
+  //   loadSound();
 
-    return () => {
-      stopSound();
+  //   return () => {
+  //     stopSound();
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    // Fetch data from MongoDB or use your existing logic to get the message
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://server-ems-rzdd.onrender.com/user');
+        const responseData = await response.json();
+  
+        // Check if 'data' property exists and it is an array
+        if (responseData.data && Array.isArray(responseData.data)) {
+          // Find the logged-in user based on the 'id_use' from userDetails
+          const loggedInUser = responseData.data.find(user => user.id_use === userDetails.id);
+  
+          // Check if the logged-in user has a 'message'
+          if (loggedInUser && loggedInUser.message) {
+            Alert.alert('Emergency Alert', `Emergency message: ${loggedInUser.message}`);
+          }
+        } else {
+          console.error('Error: Response data does not have the expected structure');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
     };
-  }, []);
+  
+    // Call the fetchData function when the component mounts
+    fetchData();
+  
+    // ... Other useEffect code
+  
+  }, [userDetails]);
+  
+
+
+
 
   return (
     <View style={styles.container}>
@@ -109,7 +138,7 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("Users")}
+        // onPress={() => navigation.navigate("Users")}
       >
         {/* <Image
           source={require("../assets/images/icon_work.png")}
