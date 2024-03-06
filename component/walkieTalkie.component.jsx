@@ -42,28 +42,28 @@ const WalkieTalkiePTT = () => {
             const perm = await Audio.requestPermissionsAsync();
             if (perm.status === "granted") {
                 const recordingObject = new Audio.Recording();
-                const recordingOptions = {
-                    android: {
-                        extension: '.mp3',
-                        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-                        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-                        sampleRate: 44100,
-                        numberOfChannels: 2,
-                        bitRate: 128000,
-                    },
-                    ios: {
-                        extension: '.mp4',
-                        outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
-                        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
-                        sampleRate: 44100,
-                        numberOfChannels: 1,
-                        bitRate: 128000,
-                        linearPCMBitDepth: 16,
-                        linearPCMIsBigEndian: false,
-                        linearPCMIsFloat: false,
-                    },
-                };
-                await recordingObject.prepareToRecordAsync(recordingOptions);
+                // const recordingOptions = {
+                //     android: {
+                //         extension: '.mp3',
+                //         outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+                //         audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+                //         sampleRate: 44100,
+                //         numberOfChannels: 2,
+                //         bitRate: 128000,
+                //     },
+                //     ios: {
+                //         extension: '.mp4',
+                //         outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+                //         audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
+                //         sampleRate: 44100,
+                //         numberOfChannels: 1,
+                //         bitRate: 128000,
+                //         linearPCMBitDepth: 16,
+                //         linearPCMIsBigEndian: false,
+                //         linearPCMIsFloat: false,
+                //     },
+                // };
+                await recordingObject.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
                 setRecording(recordingObject);
                 await recordingObject.startAsync();
                 console.log('Recording started');
@@ -106,14 +106,19 @@ const WalkieTalkiePTT = () => {
         // const audioBase64 = Buffer.from(new Uint8Array(msg)).toString('base64');
         const audioBase64 = msg;
         // Create a data URL
-        const audioUri = `data:audio/mp3;base64,${audioBase64}`;
+        const audioUri = `data:audio/m4a;base64,${audioBase64}`;
 
         try {
             const { sound } = await Audio.Sound.createAsync(
                 { uri: audioUri },
-                { shouldPlay: true }
+                { shouldPlay: false }
             );
             await sound.setVolumeAsync(1.0);
+            sound.setOnPlaybackStatusUpdate(status => {
+                if (status.isLoaded && status.isBuffering) {
+                    sound.playAsync();
+                }
+            });
         }
         catch (err) {
             console.error('Failed to play the recording:', err);
@@ -295,28 +300,28 @@ const styles = StyleSheet.create({
     //     padding: 10,
     //     backgroundColor: 'gray',
     // }
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: 'red',
-        height: 250,
-        width: 250,
-        borderRadius: 250,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    title: {
-        color: 'white',
-        fontSize: 40,
-    },
+    // container: {
+    //     flex: 1,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    // },
+    // button: {
+    //     backgroundColor: 'red',
+    //     height: 250,
+    //     width: 250,
+    //     borderRadius: 250,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    // },
+    // buttonText: {
+    //     fontSize: 30,
+    //     fontWeight: 'bold',
+    //     color: 'white',
+    // },
+    // title: {
+    //     color: 'white',
+    //     fontSize: 40,
+    // },
 
 })
 
