@@ -5,7 +5,7 @@ const Training = () =>{
     const getTrainingData = () => {
         const tempDate = new Date().getFullYear();
         if (tempDate !== 0) {
-            const trainingData = ['משימה 1', 'משימה 2', 'משימה 3'];
+            const trainingData = ['ישיבה צוות 8.3 ', 'תרגיל  אימון 9.3', 'ספירת מלאי 10.3'];
             
             return (
                 <View>
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end', 
-        justifyContent: 'flex-start', 
+        // justifyContent: 'flex-start',
+         
         width: 350,
         height: 150,
         backgroundColor: '#c0c0c0',
@@ -57,16 +58,22 @@ const styles = StyleSheet.create({
     },
     listItem: {
         flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent: 'flex-end',
         marginBottom: 1,
     },
     bullet: {
         fontSize: 18,
         marginRight: 5,
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        // textAlign: 'left',
+        textAlign: 'right'
+
     },
     listItemText: {
         fontSize: 14,
         color: 'black',
+        textAlign: 'right',
     },
 });
 

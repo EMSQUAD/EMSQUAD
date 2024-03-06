@@ -12,7 +12,7 @@ const NavBar = ({navigation,route}) => {
     { icon: require("../assets/images/chat.png"), text: "צ'אט" },
   ];
 
-  console.log("userDetails in NavBar:", userDetails);
+  // console.log("userDetails in NavBar:", userDetails);
 
 
   return (

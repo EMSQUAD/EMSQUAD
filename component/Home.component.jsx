@@ -1,4 +1,3 @@
-
 ////
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -9,7 +8,9 @@ import {
   Text,
   Dimensions,
   Modal,
+  Alert,
 } from "react-native";
+// import * as Notifications from "expo-notifications";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 // import { useHeaderHeight } from "@react-navigation/elements";
 import Training from "./Training";
@@ -17,7 +18,10 @@ import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
 import jsonData from "../assets/json/message.json";
+// import { Notifications } from 'expo';
+import axios from "axios";
 
+const BASE_URL = "https://server-ems-rzdd.onrender.com/user";
 // const Card = ({ name, description,width, onPress}) => (
 // <TouchableOpacity onPress={onPress}>
 //     <View style={[styles.card, { width: width }]}>
@@ -27,30 +31,35 @@ import jsonData from "../assets/json/message.json";
 //   </TouchableOpacity>
 // );
 
-const Card = ({ name, description, selected, onSelect,width}) => (
+const Card = ({ name, description, selected, onSelect, width }) => (
   <TouchableOpacity
-    style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
+    style={[
+      styles.card,
+      { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" },
+    ]}
     onPress={onSelect}
   >
- <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
-     <Text style={styles.cardDescription}>{description}</Text>
+    <Text style={[styles.cardTitle, { textAlign: "center", paddingTop: 5 }]}>
+      {name}
+    </Text>
+    <Text style={styles.cardDescription}>{description}</Text>
   </TouchableOpacity>
 );
 
-export default function Home({ navigation, route}) {
+export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  
   const pressTimer = useRef(null);
-  const { userDetails } = route.params || {};  // console.log('userDetails in Home:', userDetails);
+  const { userDetails } = route.params;
+  // console.log('userDetails in Home:', userDetails);
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
-    // console.log('Selected card index:', index);
-
+    setSelectedMessage(jsonData[index]);
     // You can perform additional actions here if needed
   };
-  
   // const startAlarm = async () => {
   //   await stopSound();
   //   await loadSound();
@@ -66,7 +75,7 @@ export default function Home({ navigation, route}) {
   const handleButtonPressIn = () => {
     pressTimer.current = setTimeout(() => {
       // startAlarm();
-      openModal(); 
+      openModal();
     }, 800);
   };
 
@@ -78,10 +87,7 @@ export default function Home({ navigation, route}) {
     console.log("Pressed");
     console.log("Alarm sent...");
   };
-  const sendData = () => {
-    console.log('Sending data...');
-    // Add your logic to send data here
-  };
+    
   const openModal = () => {
     // setSelectedMessage(jsonData[0]);
     setModalVisible(true);
@@ -93,7 +99,6 @@ export default function Home({ navigation, route}) {
     setModalVisible(false);
   };
 
-
   // Function to calculate the width based on the content's length
   const calculateCardWidth = (content) => {
     const charWidth = 10; // Adjust as needed
@@ -103,7 +108,31 @@ export default function Home({ navigation, route}) {
   };
 
 
+
+
+  const sendSelectedMessage = async (selectedMessage) => {
+    try {
+      if (!selectedMessage) {
+        console.error('No selected message to send.');
+        return;
+      }
   
+      const data = {
+        message: selectedMessage.name,
+        // Add any other data you want to send to the server
+      };
+  
+      console.log('Sending message:', data);
+      const response = await axios.put(`${BASE_URL}/update-soldier-messages`, data);
+      console.log('Response from server:', response.data);
+      Alert.alert('התראה נשלחה בהצלחה');
+    } catch (error) {
+      console.error('Error sending message:', error.message);
+      Alert.alert('Error', 'Failed to send alerts to users');
+    }
+  };
+  
+
   useEffect(() => {
     // console.log('HomeScreen height:', Dimensions.get('window').height);
     // loadSound();
@@ -144,7 +173,9 @@ export default function Home({ navigation, route}) {
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("List",{ userDetails })}
+        onPress={() =>
+          navigation.navigate("List", { userDetails: userDetails })
+        }
       >
         <Image
           source={require("../assets/images/team.png")}
@@ -163,13 +194,13 @@ export default function Home({ navigation, route}) {
           </View>
         </TouchableOpacity>
       )}
-      
-      <Header userDetails={userDetails }/>
+
+      <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
 
-   {/* modal */}
-   <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      {/* modal */}
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {/* Map through the jsonData array and display each item */}
@@ -187,7 +218,7 @@ export default function Home({ navigation, route}) {
             <View style={styles.buttonRow}>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
-                onPress={() => sendData()}
+                onPress={() => sendSelectedMessage (selectedMessage,closeModal())}
               >
                 <Text style={styles.textStyle}>שלח</Text>
               </TouchableOpacity>
@@ -202,12 +233,13 @@ export default function Home({ navigation, route}) {
         </View>
       </Modal>
 
-
       {/* <NavBar /> */}
       {/* <NavBar navigation={navigation}  />
        */}
-       <NavBar navigation={navigation} route={{ params: { userDetails: userDetails } }} />
-
+      <NavBar
+        navigation={navigation}
+        route={{ params: { userDetails: userDetails } }}
+      />
     </View>
   );
 }
@@ -309,7 +341,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -319,12 +350,12 @@ const styles = StyleSheet.create({
 
   modalView: {
     margin: 0,
-    backgroundColor: '#999999',
+    backgroundColor: "#999999",
     borderRadius: 20,
     padding: 35,
     top: 25,
-    width: '100%',
-    height: '70%',
+    width: "100%",
+    height: "70%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -341,7 +372,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   card: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: "#D9D9D9",
     borderRadius: 15,
     padding: 16,
     margin: 8,
@@ -349,17 +380,17 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   cardDescription: {
     fontSize: 26,
   },
   emergencyData: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
     height: 100,
   },
@@ -373,10 +404,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: '300',
+    fontWeight: "300",
     paddingTop: 10,
     textAlign: "center",
     fontSize: 30,
   },
-
 });

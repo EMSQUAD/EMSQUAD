@@ -1,4 +1,3 @@
-
 ////
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -17,31 +16,20 @@ import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
 // import jsonData from "../server/db/message.json";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
 
-const Card = ({ name, description, selected, onSelect,width}) => (
-  <TouchableOpacity
-    style={[styles.card, { width: width, backgroundColor: selected ? "#FF5733" : "#D9D9D9" }]}
-    onPress={onSelect}
-  >
- <Text style={[styles.cardTitle, { textAlign: 'center', paddingTop: 5 }]}>{name}</Text>
-     <Text style={styles.cardDescription}>{description}</Text>
-  </TouchableOpacity>
-);
-
-export default function Home({ navigation, route}) {
+export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
-//   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const pressTimer = useRef(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  
+
   const userDetails = route.params ? route.params.userDetails : null;
 
-  const handleCardSelect = (index) => {
-    setSelectedCardIndex(index);
-    // You can perform additional actions here if needed
-  };
   const startAlarm = async () => {
     await stopSound();
     await loadSound();
@@ -54,66 +42,138 @@ export default function Home({ navigation, route}) {
     await stopSound();
   };
 
-  const handleButtonPressIn = () => {
-    pressTimer.current = setTimeout(() => {
-      startAlarm();
-    //   openModal(); 
-    }, 800);
-  };
+  // const handleButtonPressIn = () => {
+  //   pressTimer.current = setTimeout(() => {
+  //     startAlarm();
+     
+  //   }, 800);
+  // };
 
   const handleButtonPressOut = () => {
     clearTimeout(pressTimer.current);
   };
 
-  const press = () => {
-    console.log("Pressed");
-    console.log("Alarm sent...");
-  };
-  const sendData = () => {
-    console.log('Sending data...');
-    // Add your logic to send data here
-  };
+  // useEffect(() => {
+  //   // Fetch data from MongoDB or use your existing logic to get the message
+  //   const fetchData = async () => {
+  //     try {
+   
+  //       const response = await fetch(
+  //         "https://server-ems-rzdd.onrender.com/user"
+  //       );
+  //       const responseData = await response.json();
 
+  //       // Check if 'data' property exists and it is an array
+  //       if (responseData.data && Array.isArray(responseData.data)) {
+  //         // Find the logged-in user based on the 'id_use' from userDetails
+  //         const loggedInUser = responseData.data.find(
+  //           (user) => user.id_use === userDetails.id
+  //         );
 
-  
+  //         // Check if the logged-in user has a 'message'
+  //         if (loggedInUser && loggedInUser.message) {
+  //           startAlarm();
+  //           Alert.alert(
+  //             "Emergency Alert",
+  //             `Emergency message: ${loggedInUser.message}`,
+  //             [
+  //               {
+  //                 text: "אישור",
+  //                 onPress: () => {
+  //                   stopAlarm();
+  //                   // Additional logic if needed
+  //                 },
+  //               },
+  //             ]
+  //           );
+  //         }
+  //       } else {
+  //         console.error(
+  //           "Error: Response data does not have the expected structure"
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error.message);
+  //     }
+  //   };
+
+  //   // Call the fetchData function when the component mounts
+  //   fetchData();
+
+  //   // ... Other useEffect code
+  // }, [userDetails]);
   useEffect(() => {
-    // console.log('HomeScreen height:', Dimensions.get('window').height);
-    loadSound();
-
-    return () => {
-      stopSound();
+    // Fetch data from MongoDB or use your existing logic to get the message
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://server-ems-rzdd.onrender.com/user"
+        );
+        const responseData = await response.json();
+  
+        if (responseData.data && Array.isArray(responseData.data)) {
+          const loggedInUser = responseData.data.find(
+            (user) => user.id_use === userDetails.id
+          );
+  
+          if (loggedInUser && loggedInUser.message) {
+            startAlarm();
+            setModalVisible(true);
+            // Use setModalVisible to ensure the modal is visible
+  
+            // Set the modal message using the state
+            setModalMessage(loggedInUser.message);
+          }
+        } else {
+          console.error(
+            "Error: Response data does not have the expected structure"
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
     };
-  }, []);
+  
+    fetchData();
+  }, [userDetails, setModalVisible,setModalMessage]);
+  
+
+
+
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPressIn={handleButtonPressIn}
+        // onPressIn={handleButtonPressIn}
         onPressOut={handleButtonPressOut}
         // onPress={() => openModal(jsonData.message)}
       >
         <Image
           source={require("../assets/images/symbol_solider.png")}
           style={[styles.backgroundImage, { width: 200, height: 200 }]}
-
         />
-     
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
-      <AntDesign name="loading1" size={30} color="white" />
-        <Text style={styles.buttonLeftTextSmall}>סטוטוס</Text>
+      <TouchableOpacity
+        style={styles.seconderyLeftButton}
+        onPress={() =>
+          navigation.navigate("Status", { userDetails: userDetails })
+        }
+      >
+        <AntDesign name="loading1" size={30} color="white" />
+        <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.seconderyRightButton}
-        onPress={() => navigation.navigate("Users")}
+        // onPress={() => navigation.navigate("Users")}
       >
-        <Image
+        {/* <Image
           source={require("../assets/images/icon_work.png")}
           style={styles.buttonRightImageSmall}
-        />
+        /> */}
+        <Feather name="repeat" size={30} color="white" />
         <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
       </TouchableOpacity>
 
@@ -127,19 +187,54 @@ export default function Home({ navigation, route}) {
           </View>
         </TouchableOpacity>
       )}
-      
-      <Header userDetails={userDetails }/>
+
+      <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
 
-  
-
-
-      <NavBar />
+      {/* <NavBar /> */}
       <NavBar navigation={navigation} />
+
+
+   {/* Custom Modal */}
+   <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Emergency Alert</Text>
+            <Text style={styles.modalMessage}>
+              Emergency message: {modalMessage}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                stopAlarm();
+                // Additional logic if needed
+              }}
+            >
+              <Text style={styles.okButton}>אישור</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+
+
+
+
+
+
+
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -165,7 +260,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 540,
     height: 540,
-    left: 5,
+    right: 9,
   },
   contentContainer: {
     position: "absolute",
@@ -187,28 +282,28 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 350,
     left: 40,
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
   },
   buttonLeftImageSmall: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   buttonLeftTextSmall: {
     color: "white",
     fontSize: 14,
-    marginTop: 5,
+    marginTop: 2,
   },
   seconderyRightButton: {
     position: "absolute",
     top: 350,
     right: 40,
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     backgroundColor: "black",
     justifyContent: "center",
@@ -240,7 +335,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -248,14 +342,36 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
 
+
+  // modalView: {
+  //   margin: 0,
+  //   backgroundColor: "black",
+  //   borderRadius: 20,
+  //   padding: 35,
+  //   // top: 25,
+  //   width: "80%",  // Set a specific width (adjust as needed)
+  //   height: "20%", // Set a specific height (adjust as needed)
+  //   alignSelf: 'center', // Center the modal horizontally
+  //   justifyContent: "center", //
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
   modalView: {
     margin: 0,
-    backgroundColor: '#999999',
+    backgroundColor: "black",
     borderRadius: 20,
     padding: 35,
-    top: 25,
-    width: '100%',
-    height: '70%',
+    width: "80%",
+    height: "20%",
+    alignSelf: 'center',
+    justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -266,34 +382,54 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  
 
   modalText: {
     marginBottom: 30,
     textAlign: "center",
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+    
   },
-  card: {
-    backgroundColor: '#D9D9D9',
-    borderRadius: 15,
-    padding: 16,
-    margin: 8,
-    elevation: 3,
+  modalMessage: {
+    marginBottom: 20,
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
   },
-  cardTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
+  okButton: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 10,
+    color: "white",
+    fontSize: 20,
+    
   },
-  cardDescription: {
-    fontSize: 26,
-  },
+  // card: {
+  //   backgroundColor: "#D9D9D9",
+  //   borderRadius: 15,
+  //   padding: 16,
+  //   margin: 8,
+  //   elevation: 3,
+  // },
+  // cardTitle: {
+  //   fontSize: 26,
+  //   fontWeight: "bold",
+  // },
+  // cardDescription: {
+  //   fontSize: 26,
+  // },
   emergencyData: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
     height: 100,
   },
+
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
@@ -304,10 +440,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: '300',
+    fontWeight: "300",
     paddingTop: 10,
     textAlign: "center",
     fontSize: 30,
   },
-
 });

@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+import * as Notifications from 'expo-notifications';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./component/Home.component";
@@ -20,10 +21,17 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
 import socket from "./utils/socket";
 
+import StatusSwitch from "./component/Status";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
-  useEffect(() => { }, []);
+  // const [showAvailable, setShowAvailable] = useState(true);
+
+  const updateShowAvailable = () => {
+    setShowAvailable((prev) => !prev);
+  };
+  // const [showAvailable, setShowAvailable] = useState(true);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -77,6 +85,10 @@ const App = () => {
           <Stack.Screen
             name="List"
             component={Listteam}
+            // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
+            // component={(props) => (
+              // <Listteam {...props} showAvailable={showAvailable} />
+            // )}
             options={{
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
@@ -87,18 +99,19 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
-              headerRight: () => (
-                <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="filter-variant"
-                    size={24}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ),
+              // headerRight: () => (
+              //   <TouchableOpacity onPress={() => updateShowAvailable()}>
+              //     <MaterialCommunityIcons
+              //       name="filter-variant"
+              //       size={24}
+              //       color="white"
+              //     />
+              //   </TouchableOpacity>
+              // ),
             }}
           />
-
+          {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
+       
           <Stack.Screen
             name="Events"
             component={EventListComponent}
@@ -119,7 +132,25 @@ const App = () => {
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
           /> */}
+          {/* <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+          /> */}
+
+
+
+
+          <Stack.Screen
+            name="Status"
+            component={StatusSwitch}
+            options={{ headerShown: false }}  
+          />
+
         </Stack.Navigator>
+
+
+
+
       </NavigationContainer>
     </View>
   );
