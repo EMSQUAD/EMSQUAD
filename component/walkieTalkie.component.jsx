@@ -87,8 +87,8 @@ const WalkieTalkiePTT = () => {
             const audioUri = recording.getURI();
             const audioData = await FileSystem.readAsStringAsync(audioUri, { encoding: FileSystem.EncodingType.Base64 });
             // const audioArrayBuffer = Base64.from(audioData, c => c.charCodeAt(0));
-            await socket.emit('cmessage',  audioData );
-            console.log('Recording stopped and stored');
+            await socket.emit('cmessage', audioData);
+            console.log('Recording stopped and stored length:', audioData.length);
         } catch (err) {
             console.error('Failed to stop recording:', err);
         } finally {
@@ -97,13 +97,7 @@ const WalkieTalkiePTT = () => {
     }
 
     socket.on('smessage', async (msg) => {
-        
-        console.log('smessage', msg);
-        // const audioData = message.file;
-        // console.log('audioData', audioData);
-
-        // Convert the ArrayBuffer back to a Base64 string
-        // const audioBase64 = Buffer.from(new Uint8Array(msg)).toString('base64');
+        console.log('smessage length:', msg.length);
         const audioBase64 = msg;
         // Create a data URL
         const audioUri = `data:audio/m4a;base64,${audioBase64}`;
@@ -240,9 +234,9 @@ const WalkieTalkiePTT = () => {
         <View>
             {/* <Text style={styles.title}>Walkie-Talkie PTT</Text> */}
             <TouchableOpacity
+                style={styles.button}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
-            // style={styles.button}
             >
                 <Image
                     source={require("../assets/images/symbol_solider_w.png")}
@@ -300,11 +294,25 @@ const styles = StyleSheet.create({
     //     padding: 10,
     //     backgroundColor: 'gray',
     // }
-    // container: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    // },
+    container: {
+        flex: 1,
+        backgroundColor: "#242424",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    button: {
+        position: "flex",
+        width: 250,
+        height: 200,
+        // top: 200,
+        // left: 90,
+        borderWidth: 0,
+        // borderRadius: 40,
+        borderColor: "pink",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+    },
     // button: {
     //     backgroundColor: 'red',
     //     height: 250,
