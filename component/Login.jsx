@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, setId] = useState('345678901');
+  const [password, setPassword] = useState('S000009');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -12,9 +12,9 @@ const LoginScreen = ({ navigation }) => {
       console.log('Validation error');
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const response = await fetch('https://server-ems-rzdd.onrender.com/user/login', {
         method: 'POST',
@@ -23,16 +23,16 @@ const LoginScreen = ({ navigation }) => {
         },
         body: JSON.stringify({ id_use: parseInt(id), password }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const responseData = await response.json();
-  
+
       if (response.status >= 200 && response.status < 300) {
         console.log('Login successful');
-      
+
         // Save user details for future screens
         const userDetails = {
           id: parseInt(id),
@@ -50,12 +50,12 @@ const LoginScreen = ({ navigation }) => {
         // console.log('User Details:', userDetails);
         // Pass user details to HomeScreen
         //
-     if(userDetails.type_user==='Comander'){
-      navigation.navigate('Home', { userDetails: userDetails });
-     }   
-     if(userDetails.type_user==='Solider'){
-      navigation.navigate('HomeSolider', { userDetails: userDetails });
-     }
+        if (userDetails.type_user === 'Comander') {
+          navigation.navigate('Home', { userDetails: userDetails });
+        }
+        if (userDetails.type_user === 'Solider') {
+          navigation.navigate('HomeSolider', { userDetails: userDetails });
+        }
       } else {
         console.error('Login failed:', responseData.message);
         Alert.alert('Login Failed', responseData.message || 'Login failed');
@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
-  
+
 
   return (
     <View style={loginStyles.container}>
@@ -135,4 +135,4 @@ const loginStyles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginScreen;
