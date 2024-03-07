@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Switch } from "react-native-elements";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Header from "./Header";
-import NavBar from "./Navbar";
+import NavBar from "./NavbarSoliser";
 import Axios from "axios";
 
 const StatusSwitch = () => {
@@ -55,7 +55,7 @@ const StatusSwitch = () => {
         <Switch value={isAvailable} onValueChange={handleSwitchToggle} />
       </View>
       <Header userDetails={userDetails} />
-      <NavBar navigation={navigation} />
+      <NavBar navigation={navigation} route={route}  />
     </View>
   );
 };

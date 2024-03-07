@@ -243,7 +243,7 @@ const ListTeam = () => {
                 <TouchableOpacity
                     key={`${user.id_use}_${index}`} // Use a combination of user ID and index
                     style={styles.card}
-                    onPress={() => navigation.navigate('ChatScreen', { user })}>
+                    onPress={() => navigation.navigate('ProfileUser', { user })}>
                     <Image source={{ uri: user.image }} style={styles.image} />
                     <View style={styles.userInfo}>
                         <Text style={styles.userName}>{`${user.first_name} ${user.last_name}`}</Text>

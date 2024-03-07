@@ -67,16 +67,40 @@ const ChatScreen = ({ route }) => {
     }
   };
 
+  // const fetchMessages = async () => {
+  //   console.log("userId chatScreen", userId);
+  //   try {
+  //     const response = await axios.get(`https://server-ems-rzdd.onrender.com/messages/${userId}`);
+  //     console.log('Server response for messages:', response.data); // Log the response data
+  //     setMessages(response.data.messages || []); // Ensure this is an array
+  //   } catch (error) {
+  //     console.error('Error fetching messages: ', error);
+  //   }
+  // };
+
+  useEffect(() => {
+    fetchMessages();
+    const intervalId = setInterval(fetchMessages, 2000);
+    return () => clearInterval(intervalId);
+  }, []);
   const fetchMessages = async () => {
-    console.log("userId chatScreen", userId);
     try {
       const response = await axios.get(`https://server-ems-rzdd.onrender.com/messages/${userId}`);
-      console.log('Server response for messages:', response.data); // Log the response data
-      setMessages(response.data.messages || []); // Ensure this is an array
+      const fetchedMessages = response.data.messages || [];
+      setMessages(prevMessages => {
+        const updatedMessages = GiftedChat.append(prevMessages, fetchedMessages);
+        console.log('Updated Messages:', updatedMessages);
+        return updatedMessages;
+      });
     } catch (error) {
       console.error('Error fetching messages: ', error);
     }
+
   };
+  
+  
+
+  
 
 
   const onSend = async (newMessages = []) => {
@@ -119,13 +143,6 @@ const ChatScreen = ({ route }) => {
       console.error('No new message to send');
     }
   };
-
-  console.log("success");
-
-
-
-
-
 
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

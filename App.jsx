@@ -9,8 +9,8 @@ import {
   Image,
   Text,
 } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import * as Notifications from 'expo-notifications';
+import { Ionicons } from "@expo/vector-icons";
+import * as Notifications from "expo-notifications";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./component/Home.component";
@@ -23,6 +23,7 @@ import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StatusSwitch from "./component/Status";
 import ChatScreen from "./component/ChatScreen";
+import UserProfileScreen from "./component/UserProfile";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -32,7 +33,7 @@ const App = () => {
     setShowAvailable((prev) => !prev);
   };
   // const [showAvailable, setShowAvailable] = useState(true);
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -135,11 +136,19 @@ const App = () => {
             options={{ headerShown: false }}
           />
 
+          <Stack.Screen
+            name="ProfileUser"
+            component={UserProfileScreen}
+            options={{ headerShown: true,
+              headerTitle: "פרופיל",
+              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              },}}
+          />
+
         </Stack.Navigator>
-
-
-
-
       </NavigationContainer>
     </View>
   );
@@ -157,7 +166,7 @@ const styles = StyleSheet.create({
     marginLeft: 10, // Adjust the margin to position the image to the right of the text
   },
   headerTitle: {
-    color: 'black',
+    color: "black",
     fontSize: 18, // You might want to adjust the size depending on your needs
     // Add additional styling as needed for alignment or font properties
   },
