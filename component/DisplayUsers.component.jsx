@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 
 const UserListComponent = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigation = useNavigation(); // Use useNavigation hook to get navigation object
-    
-
     useEffect(() => {
         fetchUsersFromAPI();
     }, []);
@@ -65,7 +63,7 @@ const UserListComponent = () => {
             ))}
         </ScrollView>
     );
-    
+
 };
 
 const styles = StyleSheet.create({
@@ -85,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     card: {
-        flexDirection: 'row-reverse', 
+        flexDirection: 'row-reverse',
         alignItems: 'center',
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
@@ -105,35 +103,35 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         borderRadius: 35,
-        marginLeft: 10, 
+        marginLeft: 10,
     },
     userInfo: {
         flex: 1,
-        alignItems: 'flex-end', 
+        alignItems: 'flex-end',
     },
     userName: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
-        textAlign: 'right', 
+        textAlign: 'right',
     },
     userInfoText: {
         fontSize: 16,
         marginBottom: 3,
-        textAlign: 'right', 
+        textAlign: 'right',
     },
-    
-    userPhone: { 
+
+    userPhone: {
         fontSize: 16,
         marginBottom: 3,
-        textAlign: 'right', 
+        textAlign: 'right',
     },
-    userStatus: { 
+    userStatus: {
         fontSize: 16,
         marginBottom: 3,
-        textAlign: 'right', 
+        textAlign: 'right',
     },
-    
+
 });
 
 export default UserListComponent;

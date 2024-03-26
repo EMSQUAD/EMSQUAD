@@ -183,9 +183,9 @@
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback  } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation hook
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Import useNavigation hook
 
 const ListTeam = () => {
     const [users, setUsers] = useState([]);
@@ -196,6 +196,7 @@ const ListTeam = () => {
     useEffect(() => {
         fetchUsersFromAPI();
     }, []);
+
 
     const fetchUsersFromAPI = async () => {
         try {
@@ -220,6 +221,13 @@ const ListTeam = () => {
             setLoading(false);
         }
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchUsersFromAPI();
+        }, [])
+    );
+
 
     if (loading) {
         return (
