@@ -39,7 +39,7 @@ const AddUserScreen = () => {
       if (response.ok) {
         const data = await response.json(); // Assuming the server responds with JSON
         console.log(data); // Log or process the response from the server
-        alert('User added successfully');
+        alert('משתמש נוסף בהצלחה');
       } else {
         throw new Error('Failed to add user'); // Throw an error if the response is not ok
       }
@@ -103,12 +103,12 @@ const AddUserScreen = () => {
         value={userDetails.certifications}
         placeholder="Certifications"
       />
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         onChangeText={(text) => handleInputChange('message', text)}
         value={userDetails.message}
         placeholder="התראה"
-      />
+      /> */}
       {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
         <Text style={{ alignSelf: 'center' }}>Live Event:</Text>
         <Button
@@ -121,7 +121,7 @@ const AddUserScreen = () => {
   onPress={handleSubmit}
   style={styles.submitButton}
 >
-  <Text style={styles.submitButtonText}>Submit</Text>
+  <Text style={styles.submitButtonText}>שלח</Text>
 </TouchableOpacity>
     </ScrollView>
   );

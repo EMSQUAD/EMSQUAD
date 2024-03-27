@@ -51,7 +51,7 @@ const StatusSwitch = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{isAvailable ? "זמינה" : "לא זמינה"}</Text>
+        <Text style={styles.title}>{isAvailable ? "זמין" : "לא זמין"}</Text>
         <Switch value={isAvailable} onValueChange={handleSwitchToggle} />
       </View>
       <Header userDetails={userDetails} />

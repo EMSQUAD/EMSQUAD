@@ -26,6 +26,7 @@ import ChatScreen from "./component/ChatScreen";
 import UserProfileScreen from "./component/UserProfile";
 import SettingsPage from "./component/Settings";
 import AddUserScreen from "./component/AddUser";
+import AddTaskScreen from "./component/AddTasks";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -176,6 +177,20 @@ const App = () => {
             ,headerBackTitle: "חזור",}}
           />
 
+          <Stack.Screen
+
+            name="AddTask"
+            component={AddTaskScreen}
+            options={{ headerShown: true 
+              , headerTitle: "הוספת משימה",
+              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }
+              ,headerBackTitle: "חזור",}}
+          />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </View>

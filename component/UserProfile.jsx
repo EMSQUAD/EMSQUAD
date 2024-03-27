@@ -228,9 +228,9 @@ const UserProfileScreen = ({ route, navigation }) => {
       //     { text: 'OK', onPress: () => navigation.goBack() } // Navigate back on success
       // ]);
       // Successful deletion
-      Alert.alert("מחיקה", `${user.first_name} ${user.last_name} הוסר בהצלחה .`, [
+      Alert.alert("מחיקה", `${user.first_name} ${user.last_name} הוסר בהצלחה.`, [
         {
-          text: "OK",
+          text: "אישור",
           onPress: () => {
             navigation.navigate("List", { refresh: true });
           },
@@ -258,7 +258,7 @@ const UserProfileScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={deleteUser}>
-          <Text style={styles.buttonText}>Delete User</Text>
+          <Text style={styles.buttonText}>מחיקה</Text>
         </TouchableOpacity>
       </View>
     </View>
