@@ -28,6 +28,9 @@ const NavBar = ({navigation,route}) => {
               else if (option.text === "אירועים") {
                 navigation.navigate("Events",{ userDetails: userDetails });
               }
+              else if (option.text === "הגדרות") {
+                navigation.navigate("Settings",{ userDetails: userDetails });
+              }
             }}
           >
           

@@ -24,6 +24,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StatusSwitch from "./component/Status";
 import ChatScreen from "./component/ChatScreen";
 import UserProfileScreen from "./component/UserProfile";
+import SettingsPage from "./component/Settings";
+import AddUserScreen from "./component/AddUser";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -145,7 +147,33 @@ const App = () => {
                 color: "white",
                 fontSize: 20,
                 fontWeight: "bold",
-              },}}
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsPage}
+            options={{ headerShown: true,
+              headerTitle: "הגדרות",
+              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }
+              ,headerBackTitle: "חזור",}}
+          />
+
+          <Stack.Screen
+            name="AddUser"
+            component={AddUserScreen}
+            options={{ headerShown: true 
+              , headerTitle: "הוספת משתמש",
+              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }    
+            ,headerBackTitle: "חזור",}}
           />
 
         </Stack.Navigator>
