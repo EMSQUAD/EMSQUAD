@@ -27,7 +27,9 @@ import UserProfileScreen from "./component/UserProfile";
 import SettingsPage from "./component/Settings";
 import AddUserScreen from "./component/AddUser";
 import AddTaskScreen from "./component/AddTasks";
-
+import EditProfileScreen from "./component/EditProfile";
+// import SettingsSolider from "./component/SettingsSolider";
+import SettingsSoliderPage from "./component/SettingsSolider";
 const Stack = createNativeStackNavigator();
 const App = () => {
   // const [showAvailable, setShowAvailable] = useState(true);
@@ -142,9 +144,11 @@ const App = () => {
           <Stack.Screen
             name="ProfileUser"
             component={UserProfileScreen}
-            options={{ headerShown: true,
+            options={{
+              headerShown: true,
               headerTitle: "פרופיל",
-              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
                 color: "white",
                 fontSize: 20,
                 fontWeight: "bold",
@@ -154,43 +158,83 @@ const App = () => {
           <Stack.Screen
             name="Settings"
             component={SettingsPage}
-            options={{ headerShown: true,
+            options={{
+              headerShown: true,
               headerTitle: "הגדרות",
-              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
                 color: "white",
                 fontSize: 20,
                 fontWeight: "bold",
-              }
-              ,headerBackTitle: "חזור",}}
+              },
+              headerBackTitle: "חזור",
+            }}
           />
 
           <Stack.Screen
             name="AddUser"
             component={AddUserScreen}
-            options={{ headerShown: true 
-              , headerTitle: "הוספת משתמש",
-              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+            options={{
+              headerShown: true,
+              headerTitle: "הוספת משתמש",
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
                 color: "white",
                 fontSize: 20,
                 fontWeight: "bold",
-              }    
-            ,headerBackTitle: "חזור",}}
+              },
+              headerBackTitle: "חזור",
+            }}
           />
 
           <Stack.Screen
-
             name="AddTask"
             component={AddTaskScreen}
-            options={{ headerShown: true 
-              , headerTitle: "הוספת משימה",
-              headerStyle: { backgroundColor: "black" } ,  headerTitleStyle: {
+            options={{
+              headerShown: true,
+              headerTitle: "הוספת משימה",
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
                 color: "white",
                 fontSize: 20,
                 fontWeight: "bold",
-              }
-              ,headerBackTitle: "חזור",}}
+              },
+              headerBackTitle: "חזור",
+            }}
           />
-          
+
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{
+              headerShown: true,
+              headerTitle: "עריכת פרופיל",
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerBackTitle: "חזור",
+            }}
+          />
+
+          <Stack.Screen
+            name="SettingsSolider"
+            component={SettingsSoliderPage}
+            options={{
+              headerShown: true,
+              headerTitle: "הגדרות",
+              headerStyle: { backgroundColor: "black" },
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerBackTitle: "חזור",
+            }}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </View>

@@ -146,7 +146,7 @@ const NavBar = ({ navigation, route }) => {
     const { userDetails } = route?.params || {};
    console.log("userDetails in NavBar:", userDetails);
     const navOptions = [
-      { icon: require("../assets/images/settings.png"), text: "הגדרות", screen: "Settings" },
+      { icon: require("../assets/images/settings.png"), text: "הגדרות", screen: "SettingsSolider" },
       { icon: require("../assets/images/task.png"), text: "אירועים", screen: "Events" },
       { icon: require("../assets/images/home.png"), text: "בית", screen: "HomeSolider" },
       { icon: require("../assets/images/chat.png"), text: "צ'אט", screen: "Users" },

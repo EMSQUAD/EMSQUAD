@@ -43,9 +43,11 @@ const LoginScreen = ({ navigation }) => {
           status_ability: responseData.data.status_ability,
           type_user: responseData.data.type_user,
           message: responseData.message,
+          phone: responseData.data.phone,
+          certifications: responseData.data.certifications,
           // Add other user details as needed
         };
-        // console.log('Response Data:', responseData);
+        console.log('Response Data - from login:', responseData);
 
         // console.log('User Details:', userDetails);
         // Pass user details to HomeScreen

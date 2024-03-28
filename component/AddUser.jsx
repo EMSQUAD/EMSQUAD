@@ -8,7 +8,7 @@ const AddUserScreen = () => {
     first_name: '',
     last_name: '',
     phone: '',
-    type_user: 'Soldier',
+    type_user: 'Solider',
     password: '',
     status_ability: 'available',
     certifications: 'none',
@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#C8C5C5',
+    // backgroundColor: '#C8C5C5',
+    backgroundColor: '#f9f9f9',
 
   },
   image: {

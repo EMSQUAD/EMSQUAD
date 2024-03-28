@@ -24,11 +24,19 @@ const settingsOptions = [
     icon: 'list',
     navigateTo: 'List',
   },
+  {
+    title: 'עריכת פרופיל',
+    icon: 'edit',
+    navigateTo: 'EditProfile',
+  },
+
+
   // Add more settings options as needed
 ];
 
 const SettingsPage = ({ navigation, route }) => {
     const userDetails = route?.params?.userDetails;
+    
   return (
     <ScrollView style={styles.container}>
       {settingsOptions.map((option, index) => (
