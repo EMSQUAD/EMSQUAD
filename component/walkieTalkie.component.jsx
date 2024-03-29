@@ -105,7 +105,7 @@ const WalkieTalkiePTT = () => {
         try {
             const { sound } = await Audio.Sound.createAsync(
                 { uri: audioUri },
-                { shouldPlay: false }
+                { shouldPlay: true }
             );
             await sound.setVolumeAsync(1.0);
             sound.setOnPlaybackStatusUpdate(status => {
