@@ -15,11 +15,6 @@ const settingsOptions = [
         navigateTo: 'Status',
     },
     {
-        title: 'רשימת צוות',
-        icon: 'list',
-        navigateTo: 'List',
-    },
-    {
         title: 'עריכת פרופיל',
         icon: 'edit',
         navigateTo: 'EditProfile',
@@ -28,6 +23,8 @@ const settingsOptions = [
     ];
 
 const SettingsSoliderPage = ({ navigation, route }) => {
+    const userDetails = route.params.userDetails;
+
     return (
         <ScrollView style={styles.container}>
       {settingsOptions.map((option, index) => (

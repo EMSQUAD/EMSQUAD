@@ -1,133 +1,136 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView, Alert } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from "react-native";
 
+const EditProfileScreen = ({ route, navigation }) => {
+  const { userDetails } = route.params;
 
-
-const EditProfileScreen = ({ route }) => {
-    const userDetails = route.params.userDetails;
-  // Initial user profile state with empty fields
-  const [userProfile, setUserProfile] = useState({
-    id_use: userDetails?.id || '',
-    first_name: userDetails?.first_name || '',
-    last_name: userDetails?.last_name || '',
-    phone: userDetails?.phone || '',
-    type_user: userDetails?.type_user || '',
-    status_ability: userDetails?.status_ability || '',
-    certifications: userDetails?.certifications || '',
-    password: userDetails?.password || '',
-    image: userDetails?.image || '',
-  });
-
-  useEffect(() => {
-    console.log("userDetails received in EditProfileScreen:", userDetails);
-    console.log("userDetails received:", userDetails);
-    console.log("Phone number:", userDetails?.phone);
-    console.log("User certification:", userProfile?.certifications);
-    if (!userDetails) {
-        fetchUserData();
+  const [firstName, setFirstName] = useState(userDetails.first_name);
+  const [lastName, setLastName] = useState(userDetails.last_name);
+  const [phone, setPhone] = useState(userDetails.phone);
+  const [certifications, setCertifications] = useState(
+    userDetails.certifications
+  );
+  const [password, setPassword] = useState(userDetails.password || "");
+  const [image, setImage] = useState(userDetails.image);
+  const handleSubmit = async () => {
+    if (!userDetails.id) { 
+      Alert.alert('Error', 'User ID is missing.');
+      return;
     }
-  }, []);
-
-  console.log("userDetails received:", userDetails);
-
-  const handleSave = async () => {
+  
     try {
-      const response = await fetch('https://server-ems-rzdd.onrender.com/user/update', {
-        method: 'PATCH',
+      const payload = {
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+        certifications,
+        password,
+        image,
+      };
+  
+      const url = `https://server-ems-rzdd.onrender.com/user/${userDetails.id}`; 
+  
+      const response = await fetch(url, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id_use: userProfile.id_use,
-          password: userProfile.password,
-        //   certifications: userProfile.certifications,
-        }),
+        body: JSON.stringify(payload),
       });
-
+  
       if (response.ok) {
         const result = await response.json();
-        Alert.alert('Success', 'Profile updated successfully!');
+        console.log(result);
+        Alert.alert("Success", "Profile updated successfully.");
+        navigation.goBack();
       } else {
-        const result = await response.json();
-        throw new Error(result.message || 'An error occurred while updating the profile.');
+        const errorMessage = await response.text();
+        console.error("Response error:", errorMessage);
+        Alert.alert('Error', 'An error occurred while updating the profile. Please try again.');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', 'An unexpected error occurred. Please check your connection and try again.');
     }
   };
-
-  const handleInputChange = (name, value) => {
-    setUserProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
-
-  if (!userProfile.id_use) {
-    return <Text>Loading...</Text>;
-  }
+  
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: userProfile.image }} style={styles.profileImage} />
-      <Text style={styles.label}>שם פרטי: {userProfile.first_name}</Text>
-      <Text style={styles.label}>שם משפחה: {userProfile.last_name}</Text>
-      <Text style={styles.label}>פלאפון: {userProfile.phone}</Text>
-      <Text style={styles.label}>סוג משתמש: {userProfile.type_user}</Text>
-      <Text style={styles.label}>סטטוס: {userProfile.status_ability}</Text>
-      <Text style={styles.label}>אישורים: {userProfile.certifications}</Text>
-      
-      <View style={styles.formRow}>
-        <Text style={styles.label}>סיסמא:</Text>
-        <TextInput
-          style={styles.input}
-          value={userProfile.password}
-          onChangeText={(text) => handleInputChange('password', text)}
-          secureTextEntry
-        />
-      </View>
-      
-      {/* <View style={styles.formRow}>
-        <Text style={styles.label}>אישורים:</Text>
-        <TextInput
-          style={styles.input}
-          value={userProfile.certifications}
-          onChangeText={(text) => handleInputChange('certifications', text)}
-        />
-      </View> */}
-      
-      <Button title="שמירת שינויים" onPress={handleSave} />
-    </ScrollView>
+    <View style={styles.container}>
+      <Image source={{ uri: image }} style={styles.profileImage} />
+      <TextInput
+        style={styles.input}
+        value={firstName}
+        onChangeText={setFirstName}
+        placeholder="First Name"
+      />
+      <TextInput
+        style={styles.input}
+        value={lastName}
+        onChangeText={setLastName}
+        placeholder="Last Name"
+      />
+      <TextInput
+        style={styles.input}
+        value={phone}
+        keyboardType="phone-pad"
+        onChangeText={setPhone}
+        placeholder="Phone"
+      />
+      <TextInput
+        style={styles.input}
+        value={certifications}
+        onChangeText={setCertifications}
+        placeholder="Certifications"
+      />
+      <TextInput
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Password"
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>שמור</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
   },
-  formRow: {
-    marginBottom: 10,
-  },
-  label: {
-    marginBottom: 5,
-    marginRight: 5,
-    marginTop: 10,
-    fontWeight: 'bold',
-    textAlign: 'right',
-  },
   input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
     height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 20,
+    padding: 10,
+    textAlign: "right",
+  },
+  button: {
+    backgroundColor: "red",
+    padding: 15,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
   },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 20,
   },
 });
