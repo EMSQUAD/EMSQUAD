@@ -19,9 +19,10 @@ import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
+import StatusSwitch from "./component/Status";
 import socket from "./utils/socket";
 
-import StatusSwitch from "./component/Status";
+// socket;
 
 const Stack = createNativeStackNavigator();
 const App = () => {
