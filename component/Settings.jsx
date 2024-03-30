@@ -17,9 +17,8 @@ const settingsOptions = [
   {
     title: 'סטטוס',
     icon: 'check-circle',
-    navigateTo: 'StatusCommander',
+    navigateTo: 'Status',
   },
-
   {
     title: 'רשימת צוות',
     icon: 'list',

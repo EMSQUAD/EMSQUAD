@@ -18,30 +18,29 @@ const StatusSwitch = () => {
 
   const fetchStatusFromServer = async () => {
     try {
-      console.log("userDetails", userDetails);
+        console.log("userDetails", userDetails);
       const response = await Axios.get(
         `https://server-ems-rzdd.onrender.com/user/${userDetails.id}`
       );
+    //   console.log("response", response);
       setAvailable(response.data.status_ability === "available");
-      console.log(
-        "\n response.data.status_ability:",
-        response.data.status_ability
-      );
+      console.log("\n response.data.status_ability:", response.data.status_ability);
     } catch (error) {
       console.error("Error fetching status from server:", error.message);
     }
   };
 
+  //   const handleSwitchToggle = () => {
+  //     setAvailable((prev) => !prev);
+  //   };
   const handleSwitchToggle = async () => {
     try {
       const newStatus = isAvailable ? "unavailable" : "available";
 
-      await Axios.put(
-        `https://server-ems-rzdd.onrender.com/user/${userDetails.id}`,
-        {
-          status_ability: newStatus,
-        }
-      );
+  
+      await Axios.put(`https://server-ems-rzdd.onrender.com/user/${userDetails.id}`, {
+        status_ability: newStatus,
+      });
 
       setAvailable(!isAvailable);
     } catch (error) {
@@ -56,7 +55,7 @@ const StatusSwitch = () => {
         <Switch value={isAvailable} onValueChange={handleSwitchToggle} />
       </View>
       <Header userDetails={userDetails} />
-      <NavBar navigation={navigation} route={route} />
+      <NavBar navigation={navigation} route={route}  />
     </View>
   );
 };
@@ -77,12 +76,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   switch: {
-    transform: [{ scaleX: 2 }, { scaleY: 2 }],
+    transform: [{ scaleX: 2 }, { scaleY: 2 }], // Increase the size
   },
   title: {
     marginTop: 20,
-    fontSize: 40,
-    color: "white",
+    fontSize: 40, // Adjust the fontSize as needed
+    color: "white", // Change the color to your desired color
     padding: 40,
   },
 });

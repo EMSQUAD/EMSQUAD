@@ -1,3 +1,4 @@
+////
 import React, { useState, useRef, useEffect } from "react";
 import {
   View,
@@ -9,13 +10,16 @@ import {
   Modal,
 } from "react-native";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
+// import { useHeaderHeight } from "@react-navigation/elements";
 import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./NavbarSoliser";
+// import jsonData from "../server/db/message.json";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
+
 
 export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
@@ -38,13 +42,105 @@ export default function Home({ navigation, route }) {
     await stopSound();
   };
 
+  // const handleButtonPressIn = () => {
+  //   pressTimer.current = setTimeout(() => {
+  //     startAlarm();
+     
+  //   }, 800);
+  // };
+
   const handleButtonPressOut = () => {
     clearTimeout(pressTimer.current);
   };
 
+  // useEffect(() => {
+  //   // Fetch data from MongoDB or use your existing logic to get the message
+  //   const fetchData = async () => {
+  //     try {
+   
+  //       const response = await fetch(
+  //         "https://server-ems-rzdd.onrender.com/user"
+  //       );
+  //       const responseData = await response.json();
+
+  //       // Check if 'data' property exists and it is an array
+  //       if (responseData.data && Array.isArray(responseData.data)) {
+  //         // Find the logged-in user based on the 'id_use' from userDetails
+  //         const loggedInUser = responseData.data.find(
+  //           (user) => user.id_use === userDetails.id
+  //         );
+
+  //         // Check if the logged-in user has a 'message'
+  //         if (loggedInUser && loggedInUser.message) {
+  //           startAlarm();
+  //           Alert.alert(
+  //             "Emergency Alert",
+  //             `Emergency message: ${loggedInUser.message}`,
+  //             [
+  //               {
+  //                 text: "אישור",
+  //                 onPress: () => {
+  //                   stopAlarm();
+  //                   // Additional logic if needed
+  //                 },
+  //               },
+  //             ]
+  //           );
+  //         }
+  //       } else {
+  //         console.error(
+  //           "Error: Response data does not have the expected structure"
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error.message);
+  //     }
+  //   };
+
+  //   // Call the fetchData function when the component mounts
+  //   fetchData();
+
+  //   // ... Other useEffect code
+  // }, [userDetails]);
+
+  //this is work! not delete
+  // useEffect(() => {
+  //   // Fetch data from MongoDB or use your existing logic to get the message
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "https://server-ems-rzdd.onrender.com/user"
+  //       );
+  //       const responseData = await response.json();
+  
+  //       if (responseData.data && Array.isArray(responseData.data)) {
+  //         const loggedInUser = responseData.data.find(
+  //           (user) => user.id_use === userDetails.id
+  //         );
+  
+  //         if (loggedInUser && loggedInUser.message) {
+  //           startAlarm();
+  //           setModalVisible(true);
+  //           setModalMessage(loggedInUser.message);
+  //         }
+  //       } else {
+  //         console.error(
+  //           "Error: Response data does not have the expected structure"
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error.message);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, [userDetails, setModalVisible,setModalMessage]);
+  
   const fetchData = async () => {
     try {
-      const response = await fetch("https://server-ems-rzdd.onrender.com/user");
+      const response = await fetch(
+        "https://server-ems-rzdd.onrender.com/user"
+      );
       const responseData = await response.json();
 
       if (responseData.data && Array.isArray(responseData.data)) {
@@ -53,12 +149,14 @@ export default function Home({ navigation, route }) {
         );
 
         if (loggedInUser && loggedInUser.message && !lastMessage) {
+          // Initial message, set it and do not trigger the alarm
           setLastMessage(loggedInUser.message);
         } else if (
           loggedInUser &&
           loggedInUser.message &&
           loggedInUser.message !== lastMessage
         ) {
+          // New message, trigger the alarm
           startAlarm();
           setModalVisible(true);
           setModalMessage(loggedInUser.message);
@@ -75,16 +173,27 @@ export default function Home({ navigation, route }) {
   };
 
   useEffect(() => {
+    // Fetch data initially
     fetchData();
+
+    // Set up interval to continuously check for updates
     const intervalId = setInterval(() => {
       fetchData();
-    }, 5000);
+    }, 5000); // Check every 5 seconds, adjust as needed
+
+    // Clear interval on component unmount
     return () => clearInterval(intervalId);
   }, [userDetails, lastMessage]);
 
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPressOut={handleButtonPressOut}>
+      <TouchableOpacity
+        style={styles.button}
+        // onPressIn={handleButtonPressIn}
+        onPressOut={handleButtonPressOut}
+        // onPress={() => openModal(jsonData.message)}
+      >
         <Image
           source={require("../assets/images/symbol_solider.png")}
           style={[styles.backgroundImage, { width: 200, height: 200 }]}
@@ -101,7 +210,14 @@ export default function Home({ navigation, route }) {
         <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.seconderyRightButton}>
+      <TouchableOpacity
+        style={styles.seconderyRightButton}
+        // onPress={() => navigation.navigate("Users")}
+      >
+        {/* <Image
+          source={require("../assets/images/icon_work.png")}
+          style={styles.buttonRightImageSmall}
+        /> */}
         <Feather name="repeat" size={30} color="white" />
         <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
       </TouchableOpacity>
@@ -120,9 +236,13 @@ export default function Home({ navigation, route }) {
       <Header userDetails={userDetails} />
       <Training />
       <PersonalTraking />
+
+      {/* <NavBar /> */}
       <NavBar navigation={navigation} route={route} />
 
-      <Modal
+
+   {/* Custom Modal */}
+   <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -140,6 +260,7 @@ export default function Home({ navigation, route }) {
               onPress={() => {
                 setModalVisible(!modalVisible);
                 stopAlarm();
+                // Additional logic if needed
               }}
             >
               <Text style={styles.okButton}>אישור</Text>
@@ -147,9 +268,18 @@ export default function Home({ navigation, route }) {
           </View>
         </View>
       </Modal>
+
+
+
+
+
+
+
+
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -257,6 +387,27 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
 
+
+  // modalView: {
+  //   margin: 0,
+  //   backgroundColor: "black",
+  //   borderRadius: 20,
+  //   padding: 35,
+  //   // top: 25,
+  //   width: "80%",  // Set a specific width (adjust as needed)
+  //   height: "20%", // Set a specific height (adjust as needed)
+  //   alignSelf: 'center', // Center the modal horizontally
+  //   justifyContent: "center", //
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
   modalView: {
     margin: 0,
     backgroundColor: "black",
@@ -264,7 +415,7 @@ const styles = StyleSheet.create({
     padding: 35,
     width: "80%",
     height: "20%",
-    alignSelf: "center",
+    alignSelf: 'center',
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -277,18 +428,22 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
+  
+
   modalText: {
     marginBottom: 30,
     textAlign: "center",
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
+    
   },
   modalMessage: {
     marginBottom: 20,
     textAlign: "center",
     color: "white",
     fontSize: 16,
+    
   },
   okButton: {
     backgroundColor: "green",
@@ -296,8 +451,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     color: "white",
     fontSize: 20,
+    
   },
-
+  // card: {
+  //   backgroundColor: "#D9D9D9",
+  //   borderRadius: 15,
+  //   padding: 16,
+  //   margin: 8,
+  //   elevation: 3,
+  // },
+  // cardTitle: {
+  //   fontSize: 26,
+  //   fontWeight: "bold",
+  // },
+  // cardDescription: {
+  //   fontSize: 26,
+  // },
   emergencyData: {
     textAlign: "center",
   },
