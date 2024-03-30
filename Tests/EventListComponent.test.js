@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
-import EventListComponent from './EventListComponent'; // Adjust the import path as necessary
+import EventListComponent from '../component/DisplayEvents.component'; 
 import fetchMock from 'jest-fetch-mock';
 
 describe('EventListComponent', () => {
@@ -9,7 +9,7 @@ describe('EventListComponent', () => {
   });
 
   it('displays a loading indicator initially', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ data: [] })); // Mock fetch response
+    fetchMock.mockResponseOnce(JSON.stringify({ data: [] })); 
     const { getByTestId } = render(<EventListComponent />);
     expect(getByTestId('loading-indicator')).toBeTruthy();
   });
@@ -17,7 +17,6 @@ describe('EventListComponent', () => {
   it('renders events after fetching', async () => {
     const mockEvents = [
       { id_event: '1', name_event: 'Event 1', severity: 'High', description: 'Description 1', report: 'Report 1' },
-      // Add more mock events as needed
     ];
     fetchMock.mockResponseOnce(JSON.stringify({ data: mockEvents }));
 
@@ -25,7 +24,7 @@ describe('EventListComponent', () => {
 
     await waitFor(() => {
       expect(getByText('Event 1')).toBeTruthy();
-      // Verify other event details as needed
+
     });
   });
 

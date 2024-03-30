@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react-native';
 import EditProfileScreen from '../component/EditProfile';
 
-// Mocks for navigation and route
+
 const mockGoBack = jest.fn();
 const mockRoute = {
     params: {
@@ -34,7 +34,6 @@ it('renders with initial values', () => {
     expect(getByDisplayValue(mockRoute.params.userDetails.first_name)).toBeTruthy();
     expect(getByDisplayValue(mockRoute.params.userDetails.last_name)).toBeTruthy();
     expect(getByDisplayValue(mockRoute.params.userDetails.phone)).toBeTruthy();
-    // Continue for other inputs
 });
 it('updates the inputs when changed', () => {
     const { getByPlaceholderText } = render(<EditProfileScreen />);
@@ -43,11 +42,10 @@ it('updates the inputs when changed', () => {
     fireEvent.changeText(firstNameInput, 'Jane');
     expect(firstNameInput.props.value).toBe('Jane');
 
-    // Repeat for other fields
 });
 it('submits the form and shows success message', async () => {
     fetch.mockClear();
-    global.Alert = { alert: jest.fn() }; // Mock Alert.alert
+    global.Alert = { alert: jest.fn() }; 
 
     const { getByText } = render(<EditProfileScreen />);
 
@@ -59,7 +57,7 @@ it('submits the form and shows success message', async () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(global.Alert.alert).toHaveBeenCalledWith("Success", "Profile updated successfully.");
-    expect(mockGoBack).toHaveBeenCalled(); // Assuming navigation.goBack() is called upon success
+    expect(mockGoBack).toHaveBeenCalled(); 
 });
 it('shows an error message if the API call fails', async () => {
     fetch.mockImplementationOnce(() => Promise.resolve({

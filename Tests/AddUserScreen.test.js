@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import AddUserScreen from '../component/AddUser'; // Adjust the import path as necessary
+import AddUserScreen from '../component/AddUser'; 
 
 global.fetch = jest.fn(() =>
   Promise.resolve({

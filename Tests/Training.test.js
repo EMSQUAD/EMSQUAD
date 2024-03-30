@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import Training from './Training';
+import Training from '../component/Training';
 
 describe('Training Component', () => {
   it('renders training events correctly', () => {
@@ -11,6 +11,6 @@ describe('Training Component', () => {
       expect(getByText(title)).toBeTruthy();
     });
 
-    expect(getByText('אירועים קרובים')).toBeTruthy(); // Check if the section title is rendered
+    expect(getByText('אירועים קרובים')).toBeTruthy(); 
   });
 });

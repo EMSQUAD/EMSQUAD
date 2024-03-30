@@ -38,7 +38,6 @@ beforeEach(() => {
   it('renders users after fetching data successfully', async () => {
     const mockUsers = [
       { id_use: '2', first_name: 'John', last_name: 'Doe', phone: '1234567890', status_ability: 'available', image: 'image-url-1' },
-      // Add more mock users as needed
     ];
   
     fetch.mockReturnValueOnce(Promise.resolve({
@@ -50,7 +49,6 @@ beforeEach(() => {
   
     await waitFor(() => {
       expect(findByText('John Doe')).toBeTruthy();
-      // Verify other user details as needed
     });
   });
   it('handles errors during fetch operation', async () => {

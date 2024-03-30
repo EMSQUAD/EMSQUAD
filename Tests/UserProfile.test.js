@@ -1,18 +1,17 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import UserProfileScreen from '../component/UserProfile'; // Adjust the import path as necessary
+import UserProfileScreen from '../component/UserProfile'; 
 import { Alert } from 'react-native';
 
-// Mocking fetch globally
 global.fetch = jest.fn();
 
-// Mocking Alert
+
 jest.mock('react-native', () => ({
   ...jest.requireActual('react-native'),
   Alert: { alert: jest.fn() },
 }));
 
-// Mocking route and navigation
+
 const mockNavigate = jest.fn();
 const route = {
   params: {
@@ -38,7 +37,7 @@ it('renders user information correctly', () => {
   
     expect(getByText(`John Doe`)).toBeTruthy();
     expect(getByText(`ת"ז: 1`)).toBeTruthy();
-    // Continue for other user details
+
   });
   it('handles user deletion successfully', async () => {
     fetch.mockResolvedValueOnce({ ok: true });
@@ -49,15 +48,13 @@ it('renders user information correctly', () => {
   
     fireEvent.press(getByText('מחיקה'));
   
-    // Expect an Alert to be shown on success
+
     expect(Alert.alert).toHaveBeenCalledWith(
       'מחיקה',
       expect.any(String),
-      expect.any(Array) // Because the exact text might depend on fetched data, use expect.any(String)
+      expect.any(Array) 
     );
   
-    // Expect navigation to have been called with "List" and { refresh: true }
-    // This expectation should be validated after confirming the Alert action, which requires a more integrated testing approach or manual testing.
   });
   it('handles failure in user deletion', async () => {
     fetch.mockRejectedValueOnce(new Error('Failed to delete user'));
@@ -68,7 +65,6 @@ it('renders user information correctly', () => {
   
     fireEvent.press(getByText('מחיקה'));
   
-    // Expect an Alert to be shown on failure
     expect(Alert.alert).toHaveBeenCalledWith(
       'Error',
       'Failed to delete user',

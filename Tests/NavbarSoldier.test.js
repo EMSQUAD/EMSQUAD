@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
-import NavBar from '../component/NavbarSoliser'; // Adjust the path according to your project structure
+import NavBar from '../component/NavbarSoliser';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 jest.mock('@react-navigation/native', () => ({
@@ -24,7 +24,7 @@ describe('NavBar Component', () => {
             first_name: 'John',
             last_name: 'Doe',
           },
-          name: '', // Mock current route name if needed
+          name: '', 
         },
       });
     });
@@ -32,7 +32,6 @@ describe('NavBar Component', () => {
     it('navigates correctly when options are pressed', () => {
       const { getByText } = render(<NavBar />);
       
-      // Assuming you have a userDetails object to pass for navigation
       const userDetails = {
         id: '1',
         first_name: 'John',
@@ -51,7 +50,6 @@ describe('NavBar Component', () => {
         expect(mockNavigate).toHaveBeenCalledWith(option.screen, { userDetails });
       });
   
-      // Reset mock to ensure clean slate for next tests
       mockNavigate.mockClear();
     });
   

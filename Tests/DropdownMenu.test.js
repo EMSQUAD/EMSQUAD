@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '../component/DropdownMenu';
 import { useNavigation } from '@react-navigation/native';
 
 jest.mock('@react-navigation/native', () => ({

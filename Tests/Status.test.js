@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react-native';
 import Axios from 'axios';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import StatusSwitch from './StatusSwitch'; // Adjust the import path as necessary
+import StatusSwitch from '../component/Status'; 
 
 jest.mock('axios');
 jest.mock('@react-navigation/native', () => ({
@@ -12,7 +11,6 @@ jest.mock('@react-navigation/native', () => ({
   })),
 }));
 
-// Mock additional components if necessary
 it('fetches and displays the initial status correctly', async () => {
     Axios.get.mockResolvedValue({ data: { status_ability: 'available' } });
   
@@ -25,12 +23,12 @@ it('fetches and displays the initial status correctly', async () => {
   });
   it('toggles status correctly', async () => {
     Axios.get.mockResolvedValue({ data: { status_ability: 'available' } });
-    Axios.put.mockResolvedValue({}); // Assume a successful status update
+    Axios.put.mockResolvedValue({}); 
   
     const { getByText, getByTestId } = render(<StatusSwitch />);
   
     await act(async () => {
-      fireEvent(getByTestId('switch'), 'onValueChange', false); // Assuming 'switch' is the testID for the Switch component
+      fireEvent(getByTestId('switch'), 'onValueChange', false); 
     });
   
     expect(Axios.put).toHaveBeenCalledWith(

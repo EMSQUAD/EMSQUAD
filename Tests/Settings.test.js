@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import SettingsPage from '../component/Settings'; // Adjust the import path as necessary
+import SettingsPage from '../component/Settings';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 jest.mock('@react-navigation/native', () => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
-import SettingsSoliderPage from '../component/SettingsSolider'; // Adjust the import path as necessary
+import SettingsSoliderPage from '../component/SettingsSolider'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 jest.mock('@react-navigation/native', () => ({
@@ -36,7 +36,6 @@ describe('SettingsSoliderPage Component', () => {
         expect(mockNavigate).toHaveBeenCalledWith(option.navigateTo, { userDetails: expect.any(Object) });
       });
   
-      // Ensure that the mockNavigate function was called the correct number of times
       expect(mockNavigate).toHaveBeenCalledTimes(settingsOptions.length);
     });
   });

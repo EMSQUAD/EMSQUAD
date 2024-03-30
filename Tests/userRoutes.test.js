@@ -1,16 +1,15 @@
 const request = require('supertest');
 const bcrypt = require('bcrypt');
 const express = require('express');
-const userRoutes = require('./path/to/your/router/file'); // Update the path
+const userRoutes = require('../component/UserList'); 
 
-// Mock User model and bcrypt inside your test file
 const mockUser = {
   id_use: '12345',
   password: '$2b$10$examplehashedpassword',
 };
 
 const app = express();
-app.use(express.json()); // Body parser
+app.use(express.json()); 
 app.use('/', userRoutes);
 
 describe('POST /user', () => {
@@ -48,7 +47,6 @@ describe('POST /user', () => {
     expect(res.body).toEqual({ success: false, message: 'Incorrect password' });
   });
 
-  // Test rate limiting
   it('should rate limit excessive requests', async () => {
     for (let i = 0; i < 5; i++) {
       await request(app).post('/user').send({ id_use: mockUser.id_use, password: 'password' });

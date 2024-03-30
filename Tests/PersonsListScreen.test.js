@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import axios from 'axios';
-import PersonListScreen from '../component/PersonListScreen';
+import PersonListScreen from '../component/PersonsListScreen';
 import { useNavigation } from '@react-navigation/native';
 
 jest.mock('axios');
@@ -24,7 +24,6 @@ it('fetches and displays persons', async () => {
   
     expect(axios.get).toHaveBeenCalledWith('YOUR_API_ENDPOINT/persons');
     
-    // Verify that all person names are displayed
     for (const person of mockPersons) {
       expect(await findByText(person.name)).toBeTruthy();
     }

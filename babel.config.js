@@ -1,9 +1,8 @@
 module.exports = function(api) {
   api.cache(true);
 
-  const presets = [
-    'babel-preset-expo'
-  ];
+  const presets = [['babel-preset-expo']
+  ["module:metro-react-native-babel-preset"]];
 
   const plugins = [
     // Explicitly set the "loose" option for these plugins to silence the warning

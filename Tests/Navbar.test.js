@@ -38,7 +38,6 @@ describe('NavBar Component', () => {
       const eventsOption = getByText("אירועים");
       const settingsOption = getByText("הגדרות");
   
-      // Simulate pressing the "Home" navigation option
       fireEvent.press(homeOption);
       expect(mockNavigate).toHaveBeenCalledWith('Home', {
         userDetails: expect.objectContaining({
@@ -48,7 +47,6 @@ describe('NavBar Component', () => {
         }),
       });
   
-      // Simulate pressing the "Chat" navigation option
       fireEvent.press(chatOption);
       expect(mockNavigate).toHaveBeenCalledWith('Users', {
         userDetails: expect.objectContaining({
@@ -58,7 +56,6 @@ describe('NavBar Component', () => {
         }),
       });
   
-      // Add similar tests for "Events" and "Settings" options if needed
       fireEvent.press(eventsOption);
       expect(mockNavigate).toHaveBeenCalledWith('Events', expect.any(Object));
   
