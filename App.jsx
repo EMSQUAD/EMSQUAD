@@ -28,16 +28,14 @@ import SettingsPage from "./component/Settings";
 import AddUserScreen from "./component/AddUser";
 import AddTaskScreen from "./component/AddTasks";
 import EditProfileScreen from "./component/EditProfile";
-// import SettingsSolider from "./component/SettingsSolider";
 import SettingsSoliderPage from "./component/SettingsSolider";
+import StatusSwitchCommander from "./component/StatusCommander";
+
 const Stack = createNativeStackNavigator();
 const App = () => {
-  // const [showAvailable, setShowAvailable] = useState(true);
-
   const updateShowAvailable = () => {
     setShowAvailable((prev) => !prev);
   };
-  // const [showAvailable, setShowAvailable] = useState(true);
   useEffect(() => {}, []);
 
   return (
@@ -53,7 +51,6 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            // component={(props) => <HomeScreen {...props} />}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -80,10 +77,6 @@ const App = () => {
           <Stack.Screen
             name="List"
             component={Listteam}
-            // component={(props) => <Listteam {...props} updateShowAvailable={updateShowAvailable} />}
-            // component={(props) => (
-            // <Listteam {...props} showAvailable={showAvailable} />
-            // )}
             options={{
               headerShown: true,
               headerStyle: { backgroundColor: "black" },
@@ -94,18 +87,8 @@ const App = () => {
                 fontWeight: "bold",
               },
               headerBackTitle: "חזור",
-              // headerRight: () => (
-              //   <TouchableOpacity onPress={() => updateShowAvailable()}>
-              //     <MaterialCommunityIcons
-              //       name="filter-variant"
-              //       size={24}
-              //       color="white"
-              //     />
-              //   </TouchableOpacity>
-              // ),
             }}
           />
-          {/* {(props) => <Listteam {...props} showAvailable={showAvailable} />} */}
 
           <Stack.Screen
             name="Events"
@@ -138,6 +121,11 @@ const App = () => {
           <Stack.Screen
             name="Status"
             component={StatusSwitch}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="StatusCommander"
+            component={StatusSwitchCommander}
             options={{ headerShown: false }}
           />
 
@@ -234,7 +222,6 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-
         </Stack.Navigator>
       </NavigationContainer>
     </View>
@@ -250,12 +237,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginLeft: 10, // Adjust the margin to position the image to the right of the text
+    marginLeft: 10,
   },
   headerTitle: {
     color: "black",
-    fontSize: 18, // You might want to adjust the size depending on your needs
-    // Add additional styling as needed for alignment or font properties
+    fontSize: 18,
   },
 });
 
