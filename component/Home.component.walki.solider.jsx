@@ -16,8 +16,9 @@ import NavBar from "./NavbarSoliser";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
+import WalkieTalkiePTT from "./walkieTalkie.component";
 
-export default function Home({ navigation, route }) {
+export default function HomeWalkiSolider({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   const pressTimer = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -84,41 +85,13 @@ export default function Home({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPressOut={handleButtonPressOut}>
-        <Image
-          source={require("../assets/images/symbol_solider.png")}
-          style={[styles.backgroundImage, { width: 200, height: 200 }]}
-        />
-      </TouchableOpacity>
+    
+    <View style={styles.WalkieTalkieButton}>
+             <WalkieTalkiePTT />
+        </View>
+ 
 
-      <TouchableOpacity style={styles.seconderyLeftButton}  onPress={() =>
-          navigation.navigate("HomeWalkiSolider", { userDetails: userDetails })
-        }>
-        
-        <Image
-          source={require("../assets/images/walkie-talkie.png")}
-          style={styles.buttonLeftImageSmall}
-          
-        />
-        <Text style={styles.buttonLeftTextSmall}>ווקי טוקי</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.seconderyRightButton}
-        onPress={() =>
-          navigation.navigate("Status", { userDetails: userDetails })
-        }
-      >
-        <AntDesign name="loading1" size={30} color="white" />
-        <Text style={styles.buttonLeftTextSmall}>סטטוס</Text>
-      </TouchableOpacity>
-
-      {/* <TouchableOpacity style={styles.seconderyRightButton}>
-        <Feather name="repeat" size={30} color="white" />
-        <Text style={styles.buttonRightTextSmall}>ס.עבודה</Text>
-      </TouchableOpacity> */}
-
-
-      {alarmActive && (
+      {/* {alarmActive && (
         <TouchableOpacity
           onPress={stopAlarm}
           style={[styles.stpButtonContainer, { zIndex: 999 }]}
@@ -127,7 +100,7 @@ export default function Home({ navigation, route }) {
             <Text style={styles.stpButtonText}>Stop Alarm</Text>
           </View>
         </TouchableOpacity>
-      )}
+      )} */}
 
       <Header userDetails={userDetails} />
       <Training />
@@ -217,8 +190,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonLeftImageSmall: {
-    width: 20,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   buttonLeftTextSmall: {
     color: "white",
@@ -335,4 +308,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 30,
   },
+  WalkieTalkieButton:{
+    // position: "",
+    top: 200,
+    // left: 115,
+    // width: 205,
+    
+    // height: 200,
+    borderRadius: 40,
+    borderColor: "pink",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+
+  }
 });

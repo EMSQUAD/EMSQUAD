@@ -31,6 +31,8 @@ import AddTaskScreen from "./component/AddTasks";
 import EditProfileScreen from "./component/EditProfile";
 import SettingsSoliderPage from "./component/SettingsSolider";
 import StatusSwitchCommander from "./component/StatusCommander";
+import HomeWalkiCommander from "./component/Home.component.walki";
+import HomeWalkiSolider from "./component/Home.component.walki.solider";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -69,8 +71,6 @@ const App = () => {
             component={HomeScreenSoliderWalkie}
             options={{ headerShown: false }}
           />
-
-
 
           <Stack.Screen
             name="Users"
@@ -234,6 +234,17 @@ const App = () => {
               },
               headerBackTitle: "חזור",
             }}
+          />
+
+          <Stack.Screen
+            name="HomeWalkiCommander"
+            component={HomeWalkiCommander}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeWalkiSolider"
+            component={HomeWalkiSolider}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
