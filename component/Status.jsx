@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Switch } from "react-native-elements";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Header from "./Header";
-import NavBar from "./Navbar";
+import NavBar from "./NavbarSoliser";
 import Axios from "axios";
 
 const StatusSwitch = () => {
@@ -51,11 +51,11 @@ const StatusSwitch = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{isAvailable ? "זמינה" : "לא זמינה"}</Text>
+        <Text style={styles.title}>{isAvailable ? "זמין" : "לא זמין"}</Text>
         <Switch value={isAvailable} onValueChange={handleSwitchToggle} />
       </View>
       <Header userDetails={userDetails} />
-      <NavBar navigation={navigation} />
+      <NavBar navigation={navigation} route={route}  />
     </View>
   );
 };
