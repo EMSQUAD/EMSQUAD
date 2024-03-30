@@ -3,10 +3,10 @@ import { View, Text, StyleSheet } from "react-native";
 import { Switch } from "react-native-elements";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Header from "./Header";
-import NavBar from "./NavbarSoliser";
+import NavBar from "./Navbar";
 import Axios from "axios";
 
-const StatusSwitch = () => {
+const StatusSwitchCommander = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [isAvailable, setAvailable] = useState(false);
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StatusSwitch;
+export default StatusSwitchCommander;

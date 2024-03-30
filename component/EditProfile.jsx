@@ -21,11 +21,11 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState(userDetails.password || "");
   const [image, setImage] = useState(userDetails.image);
   const handleSubmit = async () => {
-    if (!userDetails.id) { 
-      Alert.alert('Error', 'User ID is missing.');
+    if (!userDetails.id) {
+      Alert.alert("Error", "User ID is missing.");
       return;
     }
-  
+
     try {
       const payload = {
         first_name: firstName,
@@ -35,9 +35,9 @@ const EditProfileScreen = ({ route, navigation }) => {
         password,
         image,
       };
-  
-      const url = `https://server-ems-rzdd.onrender.com/user/${userDetails.id}`; 
-  
+
+      const url = `https://server-ems-rzdd.onrender.com/user/${userDetails.id}`;
+
       const response = await fetch(url, {
         method: "PUT",
         headers: {
@@ -45,7 +45,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log(result);
@@ -54,14 +54,19 @@ const EditProfileScreen = ({ route, navigation }) => {
       } else {
         const errorMessage = await response.text();
         console.error("Response error:", errorMessage);
-        Alert.alert('Error', 'An error occurred while updating the profile. Please try again.');
+        Alert.alert(
+          "Error",
+          "An error occurred while updating the profile. Please try again."
+        );
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      Alert.alert('Error', 'An unexpected error occurred. Please check your connection and try again.');
+      console.error("Error updating profile:", error);
+      Alert.alert(
+        "Error",
+        "An unexpected error occurred. Please check your connection and try again."
+      );
     }
   };
-  
 
   return (
     <View style={styles.container}>
