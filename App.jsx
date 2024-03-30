@@ -21,6 +21,9 @@ import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
+import socket from "./utils/socket";
+
 import StatusSwitch from "./component/Status";
 import ChatScreen from "./component/ChatScreen";
 import UserProfileScreen from "./component/UserProfile";
@@ -44,6 +47,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="WalkieTalkie"
+            component={WalkieTalkiePTT}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }}
@@ -58,6 +66,13 @@ const App = () => {
             component={HomeScreenSolider}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="HomeSoliderWalkie"
+            component={HomeScreenSoliderWalkie}
+            options={{ headerShown: false }}
+          />
+
+
 
           <Stack.Screen
             name="Users"
@@ -105,8 +120,7 @@ const App = () => {
               headerBackTitle: "חזור",
             }}
           />
-
-          <Stack.Screen
+          {/* <Stack.Screen
             name="WalkieTalkie"
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}

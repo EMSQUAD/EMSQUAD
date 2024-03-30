@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
-    "developmentClient": true,
+    "developmentClient": {"silentLaunch": true},
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -18,8 +18,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.roeydev.emsquad",
+      "jsEngine": "jsc",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "android": {
@@ -27,16 +30,14 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "jsEngine": "hermes",
       "package": "com.roeydev.emsquad"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "extra": {
       "eas": {}
-    },
-    "hermes": {
-      "enabled": false
     },
     "owner": "roeydev"
   }
