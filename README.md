@@ -24,8 +24,8 @@ EMSQUAD is built to run on iOS devices using Expo. Follow these steps to get sta
    
 Install Dependencies
 Navigate to the cloned repository's directory and install the required dependencies:
-cd EMSQUAD
-npm install
+- cd EMSQUAD
+- npm install
 
 Start the Application
 Once the dependencies are installed, you can start the application with:
