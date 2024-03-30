@@ -1,14 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons"; 
+import { AntDesign } from "@expo/vector-icons";
 const DropdownMenu = ({ closeMenu }) => {
   const navigation = useNavigation();
 
   const handleLogout = () => {
     console.log("User logged out!");
-    // Implement your logout logic if needed
-    // Navigate to the login screen
     navigation.reset({
       index: 0,
       routes: [{ name: "Login" }],
@@ -30,7 +28,6 @@ const DropdownMenu = ({ closeMenu }) => {
       <TouchableOpacity onPress={handleLogout}>
         <Text style={styles.menuItem}>יציאה מהאפליקציה</Text>
       </TouchableOpacity>
-      {/* Add more menu items if needed */}
     </View>
   );
 };
@@ -48,34 +45,28 @@ const styles = StyleSheet.create({
   menuItem: {
     fontSize: 16,
     paddingVertical: 10,
-    textAlign: "right"
+    textAlign: "right",
   },
 
   closeButton: {
     fontSize: 16,
     paddingVertical: 10,
-    textAlign: "right", // Align text to the right for RTL
+    textAlign: "right",
   },
   icon: {
     fontSize: 20,
     paddingRight: 5,
-    textAlign: "right", // Align text to the right for RTL
+    textAlign: "right",
   },
   rowContainer: {
-    // display: "flex",
-    // flexDirection: "row",
     flexDirection: "row-reverse",
-    // alignItems: "right",
     alignItems: "flex-end",
-    // textAlign: "right", // Align text to the right for RTL
-
   },
   text: {
     fontSize: 16,
     textAlign: "right",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
-
 });
 
 export default DropdownMenu;

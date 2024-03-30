@@ -11,26 +11,15 @@ import {
   Alert,
   Platform,
 } from "react-native";
-// import * as Notifications from "expo-notifications";
 import { loadSound, playSound, stopSound } from "./SoundUtils";
 import Training from "./Training";
 import PersonalTraking from "./PersonalTraking";
 import Header from "./Header";
 import NavBar from "./Navbar";
 import jsonData from "../server/db/message.json";
-// import { Notifications } from 'expo';
 import axios from "axios";
 
 const BASE_URL = "https://server-ems-rzdd.onrender.com/user";
-// const Card = ({ name, description,width, onPress}) => (
-// <TouchableOpacity onPress={onPress}>
-//     <View style={[styles.card, { width: width }]}>
-//       <Text style={[styles.cardTitle, { textAlign: 'right' }]}>{name}</Text>
-//       <Text style={[styles.cardDescription, { textAlign: 'right' }]}>{description}</Text>
-//     </View>
-//   </TouchableOpacity>
-// );
-
 const Card = ({ name, description, selected, onSelect, width }) => (
   <TouchableOpacity
     style={[
@@ -48,55 +37,56 @@ const Card = ({ name, description, selected, onSelect, width }) => (
 
 export const sendData = async () => {
   try {
-      const response = await fetch('https://server-ems-rzdd.onrender.com/user');
-      const jsonResponse = await response.json();
-      
-      if (jsonResponse && Array.isArray(jsonResponse.data)) {
-          const updatePromises = jsonResponse.data.filter(user => user.liveEvent === "No").map(user => {
-              // Log the first name and liveEvent field of each user being updated
-              console.log(`Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`);
+    const response = await fetch("https://server-ems-rzdd.onrender.com/user");
+    const jsonResponse = await response.json();
 
-              return fetch(`https://server-ems-rzdd.onrender.com/user/${user._id}`, {
-                  method: 'PUT',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      liveEvent: "Yes",
-                  }),
-              });
-          });
-          
-          await Promise.all(updatePromises);
-          console.log('All applicable users updated successfully.');
-          console.log(`Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`);
+    if (jsonResponse && Array.isArray(jsonResponse.data)) {
+      const updatePromises = jsonResponse.data
+        .filter((user) => user.liveEvent === "No")
+        .map((user) => {
+          console.log(
+            `Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`
+          );
 
-      } else {
-          console.log('No users need updating or unexpected response structure.');
-      }
+          return fetch(
+            `https://server-ems-rzdd.onrender.com/user/${user._id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                liveEvent: "Yes",
+              }),
+            }
+          );
+        });
+
+      await Promise.all(updatePromises);
+      console.log("All applicable users updated successfully.");
+      console.log(
+        `Updating user: ${user.first_name}, liveEvent: ${user.liveEvent}`
+      );
+    } else {
+      console.log("No users need updating or unexpected response structure.");
+    }
   } catch (error) {
-      console.error('Error updating users:', error);
+    console.error("Error updating users:", error);
   }
 };
-
-
-
-
-
 
 export default function Home({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
-  
+
   const pressTimer = useRef(null);
   const { userDetails } = route.params;
 
   const handleCardSelect = (index) => {
     setSelectedCardIndex(index);
     setSelectedMessage(jsonData[index]);
-    // You can perform additional actions here if needed
   };
 
   const stopAlarm = async () => {
@@ -118,7 +108,7 @@ export default function Home({ navigation, route }) {
     console.log("Pressed");
     console.log("Alarm sent...");
   };
-    
+
   const openModal = () => {
     setModalVisible(true);
   };
@@ -135,41 +125,36 @@ export default function Home({ navigation, route }) {
     return calculatedWidth;
   };
 
-
-
-
   const sendSelectedMessage = async (selectedMessage) => {
     try {
       if (!selectedMessage) {
-        console.error('No selected message to send.');
+        console.error("No selected message to send.");
         return;
       }
-  
+
       const data = {
         message: selectedMessage.name,
-        // Add any other data you want to send to the server
       };
-  
-      console.log('Sending message:', data);
-      const response = await axios.put(`${BASE_URL}/update-soldier-messages`, data);
-      console.log('Response from server:', response.data);
-      Alert.alert('התראה נשלחה בהצלחה');
+
+      console.log("Sending message:", data);
+      const response = await axios.put(
+        `${BASE_URL}/update-soldier-messages`,
+        data
+      );
+      console.log("Response from server:", response.data);
+      Alert.alert("התראה נשלחה בהצלחה");
     } catch (error) {
-      console.error('Error sending message:', error.message);
-      Alert.alert('Error', 'Failed to send alerts to users');
+      console.error("Error sending message:", error.message);
+      Alert.alert("Error", "Failed to send alerts to users");
     }
   };
-  
 
   useEffect(() => {
-    // console.log('HomeScreen height:', Dimensions.get('window').height);
-    // loadSound();
-
     return () => {
       stopSound();
     };
   }, []);
-  // console.log("userDetails:", userDetails);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -243,7 +228,9 @@ export default function Home({ navigation, route }) {
             <View style={styles.buttonRow}>
               <TouchableOpacity
                 style={{ ...styles.openButton, backgroundColor: "#FF0000" }}
-                onPress={() => sendSelectedMessage (selectedMessage,closeModal())}
+                onPress={() =>
+                  sendSelectedMessage(selectedMessage, closeModal())
+                }
               >
                 <Text style={styles.textStyle}>שלח</Text>
               </TouchableOpacity>
@@ -265,7 +252,6 @@ export default function Home({ navigation, route }) {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -433,4 +419,3 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
-
