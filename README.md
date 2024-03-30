@@ -29,7 +29,7 @@ Navigate to the cloned repository's directory and install the required dependenc
 
 Start the Application
 Once the dependencies are installed, you can start the application with:
-npm start
+- npm start
 
 Run on an iOS Device
 To run the app on your iOS device, download the Expo Go app from the App Store. Scan the QR code provided by the Expo developer tools with your iOS device to open the application.
