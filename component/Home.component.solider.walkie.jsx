@@ -33,7 +33,7 @@ const Card = ({ name, description, selected, onSelect, width }) => (
   </TouchableOpacity>
 );
 
-export default function Home({ navigation, route }) {
+export default function HomeScreenSoliderWalkie({ navigation, route }) {
   const [alarmActive, setAlarmActive] = useState(false);
   //   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);

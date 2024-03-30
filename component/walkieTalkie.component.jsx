@@ -13,7 +13,7 @@ import {
 import { Audio } from 'expo-av';
 import socket from "../utils/socket";
 import * as FileSystem from 'expo-file-system';
-import { Buffer } from 'buffer';
+
 
 
 const WalkieTalkiePTT = () => {

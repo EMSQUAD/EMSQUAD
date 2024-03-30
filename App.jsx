@@ -19,6 +19,7 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
+import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StatusSwitch from "./component/Status";
@@ -43,11 +44,11 @@ const App = () => {
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="WalkieTalkie"
             component={WalkieTalkiePTT}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="Login"
             component={LoginScreen}
