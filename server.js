@@ -61,14 +61,14 @@ app.use(bodyParser.json());
 // const {userRouter} = require('./server/router/user.router');
 // app.use('/user', userRouter);
 
-const {userRouter}=require('./server/router/user.router');
-app.use('/user',userRouter);
+const { userRouter } = require('./server/router/user.router');
+app.use('/user', userRouter);
 
+const { eventRouter } = require('./server/router/event.router');
+app.use('/event', eventRouter);
 
-
-const{eventRouter}=require('./server/router/event.router');
-app.use('/event',eventRouter);
-
+const { walkieRouter } = require('./server/router/walkie.router');
+app.use('/walkie', walkieRouter);
 
 app.post('/user', async (req, res) => {
     const { id_use, password } = req.body;
@@ -140,7 +140,7 @@ app.post('/user', async (req, res) => {
 //             },
 //             body: audioData
 //         });
-        
+
 //         if (response.ok) {
 //             res.sendStatus(200);
 //         } else {
@@ -154,6 +154,6 @@ app.post('/user', async (req, res) => {
 // });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
 

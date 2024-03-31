@@ -19,6 +19,7 @@ import EventListComponent from "./component/DisplayEvents.component";
 import WalkieTalkiePTT from "./component/walkieTalkie.component";
 import LoginScreen from "./component/Login";
 import HomeScreenSolider from "./component/Home.component.solider";
+import HomeScreenSoliderWalkie from "./component/Home.component.solider.walkie";
 import Listteam from "./component/Listteam";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StatusSwitch from "./component/Status";
@@ -30,6 +31,8 @@ import AddTaskScreen from "./component/AddTasks";
 import EditProfileScreen from "./component/EditProfile";
 import SettingsSoliderPage from "./component/SettingsSolider";
 import StatusSwitchCommander from "./component/StatusCommander";
+import HomeWalkiCommander from "./component/Home.component.walki";
+import HomeWalkiSolider from "./component/Home.component.walki.solider";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -43,6 +46,11 @@ const App = () => {
       <StatusBar hidden translucent backgroundColor="transparent" />
       <NavigationContainer>
         <Stack.Navigator>
+          {/* <Stack.Screen
+            name="WalkieTalkie"
+            component={WalkieTalkiePTT}
+            options={{ headerShown: false }}
+          /> */}
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -56,6 +64,11 @@ const App = () => {
           <Stack.Screen
             name="HomeSolider"
             component={HomeScreenSolider}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeSoliderWalkie"
+            component={HomeScreenSoliderWalkie}
             options={{ headerShown: false }}
           />
 
@@ -221,6 +234,17 @@ const App = () => {
               },
               headerBackTitle: "חזור",
             }}
+          />
+
+          <Stack.Screen
+            name="HomeWalkiCommander"
+            component={HomeWalkiCommander}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeWalkiSolider"
+            component={HomeWalkiSolider}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -175,12 +175,16 @@ export default function Home({ navigation, route }) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.seconderyLeftButton} onPress={press}>
+      <TouchableOpacity style={styles.seconderyLeftButton}  onPress={() =>
+          navigation.navigate("HomeWalkiCommander", { userDetails: userDetails })
+        }>
+        
         <Image
-          source={require("../assets/images/kangaroo.png")}
+          source={require("../assets/images/walkie-talkie.png")}
           style={styles.buttonLeftImageSmall}
+          
         />
-        <Text style={styles.buttonLeftTextSmall}>תרגיל</Text>
+        <Text style={styles.buttonLeftTextSmall}>ווקי טוקי</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -307,7 +311,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonLeftImageSmall: {
-    width: 40,
+    width: 20,
     height: 40,
   },
   buttonLeftTextSmall: {
